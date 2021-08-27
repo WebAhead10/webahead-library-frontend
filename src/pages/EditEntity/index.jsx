@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useParams } from "react-router-dom"
 import axios from "axios"
 import "./style.css"
@@ -16,6 +16,8 @@ const EditEntity = () => {
   const [viewer, setViewer] = useState(null)
   const [cropMode, setCropMode] = useState(false)
   const [coords, setCoords] = useState([])
+  const [cropModeDots, setCropModeDots] = useState([])
+
   const params = useParams()
 
   const fetchNewspaper = async (id) => {
@@ -53,39 +55,7 @@ const EditEntity = () => {
     }
   }
 
-  // Setup the viewer and the viewer's options
-  useEffect(() => {
-    const newspaperId = params.id
-    fetchNewspaper(newspaperId)
-
-    return () => {
-      viewer && viewer.destroy()
-    }
-  }, [])
-
-  // Adds a click event for the viewer to get the coords
-  useEffect(() => {
-    const canvasClickHandler = function (event) {
-      if (cropMode) {
-        var { x, y } = viewer.viewport.pointFromPixel(event.position)
-
-        setCoords((prevCoords) => [
-          ...prevCoords,
-          {
-            x: Math.round((x + Number.EPSILON) * 100) / 100,
-            y: Math.round((y + Number.EPSILON) * 100) / 100,
-          },
-        ])
-      }
-    }
-
-    if (viewer) {
-      viewer.removeHandler("canvas-click", canvasClickHandler)
-      viewer.addHandler("canvas-click", canvasClickHandler)
-    }
-  }, [viewer, cropMode])
-
-  const onCropModeClip = () => {
+  const drawOverlay = useCallback(() => {
     if (cropMode) {
       const overlay = document.createElement("div")
       overlay.classList.add("overlay")
@@ -104,23 +74,91 @@ const EditEntity = () => {
           maxTop - minTop
         )
       )
+
+      cropModeDots.forEach((element) => viewer.removeOverlay(element))
+
+      setCropModeDots([])
       setCoords([])
     }
-    setCropMode(!cropMode)
-  }
+  }, [cropMode, coords, viewer, setCropModeDots, cropModeDots])
+
+  // Setup the viewer and the viewer's options
+  useEffect(() => {
+    const newspaperId = params.id
+    fetchNewspaper(newspaperId)
+
+    return () => {
+      viewer && viewer.destroy()
+    }
+  }, [])
+
+  // Adds a click event for the viewer to get the coords
+  useEffect(() => {
+    const canvasClickHandler = function (event) {
+      if (cropMode) {
+        var { x, y } = viewer.viewport.pointFromPixel(event.position)
+        const overlayCorner = document.createElement("div")
+        overlayCorner.classList.add("overlayCorner")
+
+        const viewerX = Math.round((x + Number.EPSILON) * 100) / 100
+        const viewerY = Math.round((y + Number.EPSILON) * 100) / 100
+
+        viewer.addOverlay(
+          overlayCorner,
+          new OpenSeadragon.Rect(viewerX - 8, viewerY - 8, 10, 10)
+        )
+
+        // Remove the red dots after adding the overlay
+        setCropModeDots((prevCropModeDots) => [
+          ...prevCropModeDots,
+          overlayCorner,
+        ])
+
+        setCoords((prevCoords) => [
+          ...prevCoords,
+          {
+            x: viewerX,
+            y: viewerY,
+          },
+        ])
+      }
+    }
+
+    if (viewer) {
+      viewer.removeHandler("canvas-click", canvasClickHandler)
+      viewer.addHandler("canvas-click", canvasClickHandler)
+    }
+  }, [viewer, cropMode])
+
+  useEffect(() => {
+    if (coords.length === 4) {
+      drawOverlay()
+      setCropMode(false)
+    }
+
+    if (coords.length > 4) {
+      setCoords([])
+    }
+  }, [coords, drawOverlay])
 
   return (
     <div>
       <div
         id="openSeaDragon"
         style={{
+          border: cropMode ? "6px solid red" : "1px solid black",
           height: "75vh",
           width: "85vw",
           margin: "auto",
         }}
       />
 
-      <button onClick={onCropModeClip}>Crop mode</button>
+      <button
+        onClick={() => setCropMode(!cropMode)}
+        style={{ marginTop: "30px" }}
+      >
+        Crop mode
+      </button>
     </div>
   )
 }

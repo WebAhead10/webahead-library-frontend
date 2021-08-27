@@ -1,21 +1,3 @@
 .App {
   text-align: center;
 }
-
-.a:hover {
-  background-color: blue;
-}
-
-.a {
-  position: absolute;
-  opacity: 0.5;
-  left: 0;
-  top: 0;
-  cursor: pointer;
-}
-
-.overlay {
-  background-color: blue;
-  opacity: 0.2;
-  cursor: pointer;
-}

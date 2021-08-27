@@ -1,0 +1,11 @@
+.overlay {
+  background-color: blue;
+  opacity: 0.2;
+  cursor: pointer;
+}
+
+.overlayCorner {
+  background-color: red;
+  opacity: 1;
+  border-radius: 50%;
+}
