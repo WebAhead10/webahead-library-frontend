@@ -1,0 +1,70 @@
+.headerInfo {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  background-color: #bfbfbf9c;
+  top: 0;
+  z-index: 100;
+}
+.headerInfo__logo {
+  width: 100px;
+  object-fit: contain;
+  margin: 0 20px;
+  margin-top: 3px;
+}
+.headerInfo__searchIcon {
+  padding: 5px;
+  height: 22px !important;
+  background-color: #cd9042;
+  position: relative;
+  right: 20px;
+  border-radius: 0 25px 25px 0;
+}
+.headerInfo__search {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  border: radius 25px;
+}
+.headerInfo__searchInput {
+  height: 12px;
+  padding: 10px;
+  margin-left: 10px;
+  border: none;
+  width: 30%;
+  border-radius: 25px;
+  outline: none;
+}
+
+.headerInfo__option {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 10px;
+  align-content: center;
+  margin-right: 10px;
+  width: 90vw;
+}
+.headerInfo__optionLineOne {
+  margin-left: 15px;
+}
+
+.headerInfo__nav {
+  display: flex;
+  justify-content: space-evenly;
+}
+.headerInfo__buttons {
+  align-self: center;
+}
+.loginButton {
+  margin-right: -110px;
+  margin-left: 20px;
+  border-radius: 25px;
+  outline: none;
+  border: none;
+}
+.signupButton{
+    border-radius: 25px;
+    outline: none;
+    border: none;
+}
