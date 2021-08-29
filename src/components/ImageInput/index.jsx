@@ -9,17 +9,21 @@ const ImageInput = ({ height, width, text, fileTypes, onError, onChange }) => {
 
   const upload = async (files) => {
     try {
+      const newspaperName = "Haaretz_5_july_1918_" + Date.now()
       // save the first page to prepare the db for the rest of the pages
       const result = await axios.post(
         `${process.env.REACT_APP_API_URL}/upload`,
         {
           file: files[0],
           index: 0,
-          newspaperName: "Haaretz_5_july_1918",
+          newspaperName: newspaperName,
         }
       )
 
-      if (!result.data.success) throw new Error("First page fail upload")
+      if (!result.data.success) {
+        onError(result.data.message)
+        setLoading(false)
+      }
 
       const pagesResult = await Promise.all(
         files.slice(1).map((file, i) =>
@@ -27,12 +31,14 @@ const ImageInput = ({ height, width, text, fileTypes, onError, onChange }) => {
             file,
             // add 1 to the index just so the page numbers would be correct
             index: i + 1,
-            newspaperName: "Haaretz_5_july_1918",
+            newspaperName: newspaperName,
+            isNewPage: true,
           })
         )
       )
 
       if (pagesResult.every(({ data }) => data.success)) {
+        console.log(pagesResult[0])
         onChange(pagesResult[0].data.newspaperId)
       }
     } catch (err) {
