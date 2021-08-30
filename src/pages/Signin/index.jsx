@@ -1,0 +1,70 @@
+import "./style.css"
+import React, { useState } from "react"
+import axios from "axios"
+import { useHistory } from "react-router-dom"
+
+
+
+const Signin = () => {
+  const [userData, setUserData] = useState({
+    email: "",
+    password: "",
+  })
+  const history = useHistory();
+  const onChange =
+    (stateKey) =>
+      ({ target }) =>
+        setUserData({ ...userData, [stateKey]: target.value })
+
+  const onSubmit = () => {
+    axios
+      .post(process.env.REACT_APP_API_URL + "/signin", userData)
+      .then((res) => {
+        if (!res.data.success) {
+          console.log("error 1");
+        } else {
+          localStorage.setItem("token", res.data.token)
+          history.push("/")
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
+  return (
+    <div className="container">
+      <h1>LOGIN</h1>
+      <form action="/" method="GET" className="form">
+
+        <label htmlFor="email">
+          Email
+          <input
+            name="email"
+            placeholder="  Type your Email"
+            type="email"
+            onChange={onChange("username")}
+            value={userData.username}
+          />
+
+        </label><br />
+
+        <label htmlFor="">
+          Password
+          <input
+            name="password"
+            className="password"
+            type="password"
+            placeholder="  Type your password"
+            onChange={onChange("password")}
+            value={userData.password}
+          />
+        </label>
+
+        <input type="button" value="Submit" onClick={onSubmit} />
+      </form>
+    </div>
+  )
+}
+
+export default Signin
