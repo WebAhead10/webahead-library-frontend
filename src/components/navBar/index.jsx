@@ -1,24 +1,31 @@
 import React from "react";
-import "./style.css";
-function index() {
+import { Nav, NavLink, Bars, NavMenu } from "./NavbarElements";
+function NavBar() {
   return (
-    <div className="navbar_container">
-      <ul>
-        <li>
-          <a class="active" href="/">
-            الصفحة الرئيسية
-          </a>
-        </li>
-        <li>
-          <a href="article">مقالات</a>
-        </li>
-        <li className='lastNav'>
-          <a href="aboutUs">من نحن</a>
-        </li>
-      </ul>
-      <hr></hr>
-    </div>
+    <>
+      <Nav>
+        <NavMenu>
+          <NavLink to="/newspaper" activeStyle>
+            الصحف المتاحة
+          </NavLink>
+          <NavLink to="/about" activeStyle>
+            من نحن
+          </NavLink>
+          <NavLink to="/contact-us" activeStyle>
+            تواصل معنا
+          </NavLink>
+        </NavMenu>
+        <Bars />
+        <NavLink to="/">
+          <img
+            src="https://i.imagesup.co/images2/e4a3432b6e4a13fcfd7ece0be9b28495e46a3b8a.png"
+            width="200px"
+            alt="logo"
+          />
+        </NavLink>
+      </Nav>
+    </>
   );
 }
 
-export default index;
+export default NavBar;

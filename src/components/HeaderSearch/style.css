@@ -23,18 +23,20 @@
 }
 .header__search {
   display: flex;
-  flex: 1;
   align-items: center;
   border: radius 25px;
+  margin-right: auto;
+  width: 350px;
 }
 .header__searchInput {
   height: 12px;
   padding: 10px;
   margin-left: 10px;
   border: none;
-  width: 30%;
+  width: 90%;
   border-radius: 25px;
   outline: none;
+  padding-right:2vw;
 }
 
 .header__option {
