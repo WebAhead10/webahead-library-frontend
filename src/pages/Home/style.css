@@ -1,0 +1,66 @@
+.home_container {
+  display: flex;
+  justify-content: space-between;
+}
+.rightSide {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.search_per_day {
+  align-self: flex-end;
+  margin-right: 10vw;
+}
+.firstRow {
+  margin-top: 50px;
+  width: 25vw;
+  display: flex;
+  justify-content: space-between;
+  align-self: flex-end;
+  margin-right: 10vw;
+}
+.firstRow {
+  margin-top: 50px;
+  width: 25vw;
+  display: flex;
+  justify-content: space-between;
+  align-self: flex-end;
+  margin-right: 10vw;
+}
+.secondRow {
+  margin-top: 150px;
+  width: 25vw;
+  display: flex;
+  justify-content: space-between;
+  align-self: flex-end;
+  margin-right: 10vw;
+}
+
+.circle {
+  background-color: antiquewhite;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+}
+.item {
+  height: 12vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.leftSide {
+  margin-top: 20px;
+  margin-left: 15vw;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+}
+.box {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+}
+.articleOfTheDay {
+  margin-top: 20vh;
+}
