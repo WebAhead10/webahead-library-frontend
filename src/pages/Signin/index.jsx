@@ -10,7 +10,9 @@ const Signin = () => {
     email: "",
     password: "",
   })
+
   const history = useHistory();
+
   const onChange =
     (stateKey) =>
       ({ target }) =>
@@ -33,9 +35,9 @@ const Signin = () => {
   }
 
   return (
-    <div className="container">
+    <div className="signin">
       <h1>LOGIN</h1>
-      <form action="/" method="GET" className="form">
+      <form action="/" method="POST" className="form">
 
         <label htmlFor="email">
           Email
@@ -49,7 +51,7 @@ const Signin = () => {
 
         </label><br />
 
-        <label htmlFor="">
+        <label htmlFor="password">
           Password
           <input
             name="password"
