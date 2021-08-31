@@ -23,7 +23,9 @@ const Signin = () => {
       .post(process.env.REACT_APP_API_URL + "/signin", userData)
       .then((res) => {
         if (!res.data.success) {
-          console.log("error 1");
+          console.log("response success state returne false");
+          // TODO what to do here 
+          // ! ask mario
         } else {
           localStorage.setItem("token", res.data.token)
           history.push("/")
@@ -45,8 +47,8 @@ const Signin = () => {
             name="email"
             placeholder="  Type your Email"
             type="email"
-            onChange={onChange("username")}
-            value={userData.username}
+            onChange={onChange("email")}
+            value={userData.email}
           />
 
         </label><br />
