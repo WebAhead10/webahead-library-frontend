@@ -7,6 +7,9 @@
 .news {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 7%;
 }
 
 .pic {
@@ -14,4 +17,26 @@
     height: 150px;
     border: 1px black solid;
     border-radius: 8px;
+    box-shadow: rgb(82, 82, 82) 0px 2px 6px 0px ;
+    z-index: 999;
+}
+
+.click {
+    display: flex;
+    flex-direction: column;
+    transition: 0.5s;
+}
+
+.click:hover  {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.click:active{
+    
+    transform: scale(1.1);
+}
+
+.publisherName {
+    text-shadow: rgba(83, 83, 83, 0.712) 0px 1px 4px;
 }

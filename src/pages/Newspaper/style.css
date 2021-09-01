@@ -1,4 +1,18 @@
+body {
+    height: 100vh;
+    margin: 0;
+    background-color: rgb(255, 238, 206);
+}
+
 .news-container {
+    margin: 0 auto;
+    margin-top: 2.5% ;
+    width: 80%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.news-container  > div{
+    width: 23%;
 }
