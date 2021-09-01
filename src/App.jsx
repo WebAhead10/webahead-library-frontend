@@ -1,23 +1,15 @@
-<<<<<<< HEAD
 import "./App.css"
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import EditEntity from "./pages/EditEntity"
 import UploadPDF from "./pages/UploadPDF"
 import Signin from "./pages/Signin"
 import AddAdmin from "./pages/AddAdmin"
-
-=======
-import "./App.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import EditEntity from "./pages/EditEntity";
-import UploadPDF from "./pages/UploadPDF";
 import Home from "./pages/Home";
 import HeaderSearch from "./components/HeaderSearch";
-import HeaderInfo from "./components/HeaderInfo";
+import HeaderInfo from "./components/HeaderInfo/Index";
 import NavBar from "./components/navBar";
 import ArticleData from "./components/ArticleData/ArticleData";
-import Signin from "./pages/Signin";
->>>>>>> main
+
 
 function App() {
   return (

@@ -53,7 +53,7 @@ const Signin = () => {
 
         </label><br />
 
-        <label htmlFor="password">
+        <label atmlFor="password">
           Password
           <input
             name="password"
