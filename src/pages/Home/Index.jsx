@@ -1,6 +1,13 @@
 import React from "react";
+import { useContext } from "react";
+import { UserContext } from "../../UserContext";
+
 import "./style.css";
-function index() {
+function Home() {
+  const context = useContext(UserContext);
+
+  console.log(context);
+
   return (
     <div className="home_container">
       <div className="rightSide">
@@ -49,7 +56,7 @@ function index() {
               cols="50"
               placeholder="العب يلا"
             ></textarea>
-            <input className='submit' type="submit" value="Submit" />
+            <input className="submit" type="submit" value="Submit" />
             <span className="articleOfTheDay">جريدة اليوم</span>
           </div>
         </form>
@@ -58,4 +65,4 @@ function index() {
   );
 }
 
-export default index;
+export default Home;
