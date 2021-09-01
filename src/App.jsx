@@ -9,6 +9,8 @@ import NavBar from "./components/navBar";
 import Newspaper from "./pages/Newspaper/index";
 
 import ArticleData from "./components/ArticleData/ArticleData";
+import Signin from "./pages/Signin";
+
 function App() {
   return (
     <div className="App">
@@ -24,6 +26,7 @@ function App() {
           <Route exact path="/newspaper/" >
             <Newspaper />
             </ Route>
+          <Route exact path="/signin" component={Signin} />
         </Switch>
       </Router>
     </div>
