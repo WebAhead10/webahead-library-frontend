@@ -8,6 +8,7 @@ import HeaderInfo from "./components/HeaderInfo";
 import NavBar from "./components/navBar";
 import Newspaper from "./pages/Newspaper/index";
 
+import ArticleData from "./components/ArticleData/ArticleData";
 function App() {
   return (
     <div className="App">
@@ -17,6 +18,7 @@ function App() {
         <NavBar />
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route path="/hassan" component={ArticleData} />
           <Route exact path="/uploadPdf" component={UploadPDF} />
           <Route path="/newspaper/edit/:id" component={EditEntity} />
           <Route exact path="/newspaper/" >
