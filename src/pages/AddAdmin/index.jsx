@@ -10,33 +10,45 @@ const AddAdmin = () => {
     confirmPassword: "",
   });
 
+  const [error, setError] = useState("");
+
   const history = useHistory();
 
   const onChange =
     (stateKey) =>
-    ({ target }) =>
-    setNewAdmin({ ...newAdmin, [stateKey]: target.value });
+    ({ target }) => {
+      setNewAdmin({ ...newAdmin, [stateKey]: target.value });
+    };
 
-  const onSubmit = () => {
-    axios
-      .post(process.env.REACT_APP_API_URL + "/addadmin", newAdmin)
-      .then((res) => {
-        if (!res.data.success) {
-            // res.send();
-            console.log("something went wrong");
-        } else {
-          history.push("/");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const matchedPassword = () => 
+    newAdmin.password === newAdmin.confirmPassword;
+  
+
+  const sendData = () => {
+    setError("");
+    if (!matchedPassword()) {
+      setError("passwords dont match, check and start again");
+      return;
+    }
+      axios
+        .post(process.env.REACT_APP_API_URL + "/addadmin", newAdmin)
+        .then((res) => {
+          if (!res.data.success) {
+            setError("something went wrong");
+          } else {
+            history.push("/");
+          }
+        })
+        .catch((err) => {
+          setError("axios problem: " + err.message);
+        });
+    
   };
 
   return (
     <div className="addAdmin">
-      <form action="/" method="POST" className="form">
-          <h1>Add Admin</h1>
+      <form className="form">
+        <h1>Add Admin</h1>
         <label htmlFor="email">
           Email :
           <input
@@ -45,9 +57,9 @@ const AddAdmin = () => {
             type="email"
             onChange={onChange("email")}
             value={newAdmin.email}
+            required
           />
         </label>
-
 
         <label htmlFor="password">
           Password :
@@ -58,8 +70,9 @@ const AddAdmin = () => {
             placeholder="  Type admin password"
             onChange={onChange("password")}
             value={newAdmin.password}
+            required
           />
-        </label> 
+        </label>
 
         <label htmlFor="confirmPassword">
           confirm Password :
@@ -70,10 +83,12 @@ const AddAdmin = () => {
             placeholder=" Re-Type admin password"
             onChange={onChange("confirmPassword")}
             value={newAdmin.confirmPassword}
+            required
           />
         </label>
 
-        <input type="button" value="Add" onClick={onSubmit} />
+        <input type="button" value="Add" onClick={sendData} />
+        <span className="errorMsg">{error}</span>
       </form>
     </div>
   );
