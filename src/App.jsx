@@ -1,19 +1,23 @@
+import React, { useState } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import EditEntity from "./pages/EditEntity";
 import UploadPDF from "./pages/UploadPDF";
 import Home from "./pages/Home";
+import NewspaperCalendar from "./pages/NewspaperCalendar";
 import HeaderSearch from "./components/HeaderSearch";
 import HeaderInfo from "./components/HeaderInfo";
 import NavBar from "./components/navBar";
-import Newspaper from "./pages/Newspaper/index";
-
-import ArticleData from "./components/ArticleData/ArticleData";
+import Newspaper from "./pages/Newspaper";
+import ArticleData from "./pages/ArticleData";
 import Signin from "./pages/Signin";
+import { UserContext } from "./UserContext";
 
 function App() {
+  const [value, setValue] = useState([]);
   return (
     <div className="App">
+      <UserContext.Provider value={{ value, setValue }}>
       <Router>
         <HeaderInfo />
         <HeaderSearch />
@@ -24,12 +28,19 @@ function App() {
           <Route exact path="/uploadPdf" component={UploadPDF} />
           <Route path="/newspaper/edit/:id" component={EditEntity} />
           <Route exact path="/newspaper/" >
-            <Newspaper />
-            </ Route>
+            <Newspaper /></ Route>
+            <Route exact path="/signin" component={Signin} />
+            <Route exact path="/calander" component={NewspaperCalendar} />
           <Route exact path="/signin" component={Signin} />
         </Switch>
       </Router>
+       
+      </UserContext.Provider>
     </div>
+
+
+
+
   );
 }
 

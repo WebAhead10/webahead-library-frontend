@@ -1,7 +1,13 @@
 import React from "react";
-import "./style.css";
+import { useContext } from "react";
+import { UserContext } from "../../UserContext";
 
+import "./style.css";
 function Home() {
+  const context = useContext(UserContext);
+
+  console.log(context);
+
   return (
     <div className="home_container">
       <div className="rightSide">
@@ -50,7 +56,7 @@ function Home() {
               cols="50"
               placeholder="العب يلا"
             ></textarea>
-            <input className='submit' type="submit" value="Submit" />
+            <input className="submit" type="submit" value="Submit" />
             <span className="articleOfTheDay">جريدة اليوم</span>
           </div>
         </form>
