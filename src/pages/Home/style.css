@@ -1,0 +1,81 @@
+.home_container {
+  display: flex;
+  justify-content: space-between;
+}
+.rightSide {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.search_per_day {
+  align-self: flex-end;
+  margin-right: 10vw;
+}
+.home-row {
+  margin-top: 50px;
+  width: 30vw;
+  display: flex;
+  justify-content: space-between;
+  align-self: flex-end;
+  margin-right: 2vw;
+}
+.submit {
+  width: fit-content;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background-color: #cd9042;
+  margin: auto;
+  margin-top: 6vh;
+  padding: 6px 20px;
+  font-size: 30px;
+}
+.submit:hover {
+  background-color: #f58e08;
+  transition: all 0.2s ease-in-out;
+}
+.home-row:nth-child(1) {
+  margin-top: 150px;
+}
+
+.circle {
+  background-color: antiquewhite;
+  width: 10vw;
+  height: 10vw;
+  border-radius: 50%;
+}
+.item {
+  display: flex;
+  height: 30vh;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 2vw;
+}
+.leftSide {
+  margin-top: 20px;
+  margin-left: 5%;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form label {
+  font-size: 25px;
+}
+
+.box {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+}
+
+.box textarea {
+  width: 30vw;
+  height: 20vh;
+  font-size: 20px;
+}
+
+.articleOfTheDay {
+  margin-top: 20vh;
+}

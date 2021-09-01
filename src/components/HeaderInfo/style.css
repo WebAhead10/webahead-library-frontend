@@ -1,0 +1,23 @@
+.headerInfo {
+  display: flex;
+  height: 60px;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  background-color: #ffffff;
+}
+.headerInfo__buttons{
+  width:10vw;
+  display: flex;
+  justify-content: space-evenly;
+}
+.signupButton{
+  border-radius: 25px;
+  outline:none;
+  border:none;
+}
+.loginButton{
+  border-radius: 25px;
+  outline:none;
+  border:none;
+}
