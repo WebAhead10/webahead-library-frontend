@@ -13,6 +13,9 @@ function index() {
           <a href="article">مقالات</a>
         </li>
         <li className='lastNav'>
+          <a href="newspaper">الصحف</a>
+        </li>
+        <li className='lastNav'>
           <a href="aboutUs">من نحن</a>
         </li>
       </ul>

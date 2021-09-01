@@ -1,0 +1,17 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.news {
+    display: flex;
+    flex-direction: column;
+}
+
+.pic {
+    width: 150px;
+    height: 150px;
+    border: 1px black solid;
+    border-radius: 8px;
+}

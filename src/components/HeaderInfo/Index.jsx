@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-function Index() {
+function HeaderInfo() {
   return (
     <div className="headerInfo">
       <div className="headerInfo__nav">
@@ -15,4 +15,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default HeaderInfo;

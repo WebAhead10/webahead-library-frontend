@@ -1,6 +1,7 @@
 import React from "react";
 import "./style.css";
-function index() {
+
+function Home() {
   return (
     <div className="home_container">
       <div className="leftSide">
@@ -58,4 +59,4 @@ function index() {
   );
 }
 
-export default index;
+export default Home;
