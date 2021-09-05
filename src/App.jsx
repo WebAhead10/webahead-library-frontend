@@ -6,7 +6,7 @@ import UploadPDF from "./pages/UploadPDF";
 import Home from "./pages/Home";
 import NewspaperCalendar from "./pages/NewspaperCalendar";
 import HeaderSearch from "./components/HeaderSearch";
-import HeaderInfo from "./components/HeaderInfo";
+import HeaderInfo from "./components/HeaderInfo/Isndex";
 import NavBar from "./components/navBar";
 import ArticleData from "./pages/ArticleData";
 import Signin from "./pages/Signin";
