@@ -5,10 +5,10 @@ function NewspaperSquare(props) {
     return (
         <div>
             <div className="news" >
-                <div className="click">
+                <a className="click" href="/hassan">
                 <img className="pic" src={props.imgUrl} alt="" style={props.style} />
             <b className="publisherName" >{props.name}</b>
-                </div>
+                </a>
             </div>
         </div>
     )
