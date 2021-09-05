@@ -16,7 +16,9 @@ const ImageInput = ({ height, width, text, fileTypes, onError, onChange }) => {
         {
           file: files[0],
           index: 0,
-          newspaperName: newspaperName,
+          publisher_id: 2,
+          published_date: "2021-09-05",
+          newspaperName: "HAREEAT",
         }
       )
 
@@ -31,7 +33,9 @@ const ImageInput = ({ height, width, text, fileTypes, onError, onChange }) => {
             file,
             // add 1 to the index just so the page numbers would be correct
             index: i + 1,
-            newspaperName: newspaperName,
+            publisher_id: 2,
+            published_date: "2021-09-05",
+            newspaperName: "HAREEAT",
             isNewPage: true,
           })
         )

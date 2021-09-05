@@ -37,7 +37,9 @@ const EditEntity = () => {
           id: "openSeaDragon",
           tileSources: result.data.pages.map(
             ({ name, pagename }) =>
-              `${bucketRoot}/${name}/${pagename}/${pagename}.dzi`
+              `${bucketRoot}/${
+                pagename.split("_")[0]
+              }/${pagename}/${pagename}.dzi`
           ),
           animationTime: 0.5,
           immediateRender: true,

@@ -1,13 +1,13 @@
-import "./App.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import EditEntity from "./pages/EditEntity";
-import UploadPDF from "./pages/UploadPDF";
-import Home from "./pages/Home";
-import HeaderSearch from "./components/HeaderSearch";
-import HeaderInfo from "./components/HeaderInfo";
-import NavBar from "./components/navBar";
-import ArticleData from "./components/ArticleData/ArticleData";
-import Signin from "./pages/Signin";
+import "./App.css"
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import EditEntity from "./pages/EditEntity"
+import UploadPDF from "./pages/UploadPDF"
+import Home from "./pages/Home"
+import HeaderSearch from "./components/HeaderSearch"
+import HeaderInfo from "./components/HeaderInfo"
+import NavBar from "./components/navBar"
+import ArticleData from "./components/ArticleData/ArticleData"
+import Signin from "./pages/Signin"
 
 function App() {
   return (
@@ -25,7 +25,7 @@ function App() {
         </Switch>
       </Router>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
