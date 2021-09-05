@@ -18,7 +18,7 @@ const ImageInput = ({ height, width, text, fileTypes, onError, onChange }) => {
           index: 0,
           publisher_id: 2,
           published_date: "2021-09-05",
-          newspaperName: "HAREEAT",
+          newspaperName: "2021-09-5_publisher-2",
         }
       )
 
@@ -35,7 +35,7 @@ const ImageInput = ({ height, width, text, fileTypes, onError, onChange }) => {
             index: i + 1,
             publisher_id: 2,
             published_date: "2021-09-05",
-            newspaperName: "HAREEAT",
+            newspaperName: "2021-09-5_publisher-2",
             isNewPage: true,
           })
         )
