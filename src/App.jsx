@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import "./App.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import EditEntity from "./pages/EditEntity";
-import UploadPDF from "./pages/UploadPDF";
+import "./App.css"
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import UploadPDF from "./pages/UploadPDF"
+import Signin from "./pages/Signin"
+import AddAdmin from "./pages/AddAdmin"
 import Home from "./pages/Home";
 import NewspaperCalendar from "./pages/NewspaperCalendar";
 import HeaderSearch from "./components/HeaderSearch";
-import HeaderInfo from "./components/HeaderInfo";
+import HeaderInfo from "./components/HeaderInfo/Index";
 import NavBar from "./components/navBar";
 import Newspaper from "./pages/Newspaper";
 import ArticleData from "./pages/ArticleData";
-import Signin from "./pages/Signin";
 import { UserContext } from "./UserContext";
+
 
 function App() {
   const [value, setValue] = useState([]);
@@ -32,6 +34,7 @@ function App() {
             <Route exact path="/signin" component={Signin} />
             <Route exact path="/calander" component={NewspaperCalendar} />
           <Route exact path="/signin" component={Signin} />
+          <Route exact path="/addadmin" component={AddAdmin} />
         </Switch>
       </Router>
        
