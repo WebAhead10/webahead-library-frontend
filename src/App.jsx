@@ -5,7 +5,7 @@ import EditEntity from "./pages/EditEntity";
 import UploadPDF from "./pages/UploadPDF";
 import Home from "./pages/Home";
 import NewspaperCalendar from "./pages/NewspaperCalendar";
-import HeaderSearch from "./components/HeaderSearch/Isndex";
+import HeaderSearch from "./components/HeaderSearch";
 import HeaderInfo from "./components/HeaderInfo";
 import NavBar from "./components/navBar";
 import ArticleData from "./pages/ArticleData";
