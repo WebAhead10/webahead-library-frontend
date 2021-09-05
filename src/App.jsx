@@ -9,7 +9,7 @@ import Home from "./pages/Home";
 import HeaderSearch from "./components/HeaderSearch";
 import HeaderInfo from "./components/HeaderInfo";
 import NavBar from "./components/navBar";
-import ArticleData from "./components/ArticleData/ArticleData";
+import ArticleData from "./pages/ArticleData";
 import Signin from "./pages/Signin";
 import AddAdmin from "./pages/AddAdmin";
 
