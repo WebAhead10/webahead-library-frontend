@@ -3,7 +3,7 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import EditEntity from "./pages/EditEntity";
 import UploadPDF from "./pages/UploadPDF";
-import Home from "./pages/Home";
+import Home from "./pages/Home/Isndex";
 import NewspaperCalendar from "./pages/NewspaperCalendar";
 import HeaderSearch from "./components/HeaderSearch";
 import HeaderInfo from "./components/HeaderInfo";
