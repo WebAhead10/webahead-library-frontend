@@ -8,6 +8,7 @@ import HeaderInfo from "./components/HeaderInfo"
 import NavBar from "./components/navBar"
 import ArticleData from "./components/ArticleData/ArticleData"
 import Signin from "./pages/Signin"
+import AddAdmin from "./pages/AddAdmin"
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route exact path="/uploadPdf" component={UploadPDF} />
           <Route path="/newspaper/edit/:id" component={EditEntity} />
           <Route exact path="/signin" component={Signin} />
+          <Route exact path="/addadmin" component={AddAdmin} />
         </Switch>
       </Router>
     </div>
