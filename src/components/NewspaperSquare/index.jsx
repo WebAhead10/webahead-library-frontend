@@ -3,7 +3,7 @@ import "./style.css"
 
 function NewspaperSquare(props) {
   return (
-    <div>
+    <div className="newspaper-square">
       <div className="news">
         <a className="click" href="/hassan">
           <img className="pic" src={props.logo} alt="" style={props.style} />
