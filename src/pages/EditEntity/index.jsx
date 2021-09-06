@@ -18,6 +18,7 @@ const EditEntity = () => {
   const [coords, setCoords] = useState([])
   const [cropModeDots, setCropModeDots] = useState([])
   const [articleOverlays, setArticleOverlays] = useState([])
+  const [final, setFinal] = useState([])
 
   const params = useParams()
   const history = useHistory()
@@ -59,44 +60,6 @@ const EditEntity = () => {
     }
   }
 
-  const drawOverlay = useCallback(() => {
-    if (cropMode) {
-      const overlay = document.createElement("span")
-      overlay.classList.add("overlay")
-
-      const minLeft = Math.min(...coords.map(({ x }) => x))
-      const minTop = Math.min(...coords.map(({ y }) => y))
-      const maxLeft = Math.max(...coords.map(({ x }) => x))
-      const maxTop = Math.max(...coords.map(({ y }) => y))
-
-      viewer.addOverlay(
-        overlay,
-        new OpenSeadragon.Rect(
-          minLeft,
-          minTop,
-          maxLeft - minLeft,
-          maxTop - minTop
-        )
-      )
-      cropModeDots.forEach((element) => viewer.removeOverlay(element))
-      console.log(coords)
-      console.log(cropModeDots)
-      setArticleOverlays((prevCoords) => [...prevCoords, coords])
-      setCropModeDots([])
-      setCoords([])
-    }
-  }, [cropMode, coords, viewer, setCropModeDots, cropModeDots])
-
-  // reset the choices
-  const emptyOverlay = useCallback(() => {
-    if (cropMode) {
-      document.querySelectorAll("span").forEach(function (a) {
-        a.remove()
-      })
-    }
-  }, [cropMode])
-
-  // Setup the viewer and the viewer's options
   useEffect(() => {
     const newspaperId = params.id
     fetchNewspaper(newspaperId)
@@ -105,51 +68,74 @@ const EditEntity = () => {
       viewer && viewer.destroy()
     }
   }, [])
+  var selectionMode = true
 
-  // Adds a click event for the viewer to get the coords
-  useEffect(() => {
-    const canvasClickHandler = function (event) {
-      if (cropMode) {
-        var { x, y } = viewer.viewport.pointFromPixel(event.position)
-        const overlayCorner = document.createElement("span")
-        overlayCorner.classList.add("overlayCorner")
+  // reset the choices
 
+  const hassan = () => {
+    var drag
+    viewer.setMouseNavEnabled(false)
+
+    new OpenSeadragon.MouseTracker({
+      element: viewer.element,
+      pressHandler: function (event) {
+        if (!selectionMode) {
+          return
+        }
+
+        var overlayElement = document.createElement("div")
+        overlayElement.style.background = "rgba(255, 0, 0, 0.3)"
+        var viewportPos = viewer.viewport.pointFromPixel(event.position)
         viewer.addOverlay(
-          overlayCorner,
-          new OpenSeadragon.Rect(x - 8, y - 8, 10, 10)
+          overlayElement,
+          new OpenSeadragon.Rect(viewportPos.x, viewportPos.y, 0, 0)
         )
 
-        // Remove the red dots after adding the overlay
-        setCropModeDots((prevCropModeDots) => [
-          ...prevCropModeDots,
-          overlayCorner,
-        ])
+        drag = {
+          overlayElement: overlayElement,
+          startPos: viewportPos,
+        }
+      },
 
-        setCoords((prevCoords) => [...prevCoords, { x, y }])
-      }
-    }
+      dragHandler: function (event) {
+        if (!drag) {
+          return
+        }
+        var viewportPos = viewer.viewport.pointFromPixel(event.position)
+        var diffX = viewportPos.x - drag.startPos.x
+        var diffY = viewportPos.y - drag.startPos.y
 
-    if (viewer) {
-      viewer.removeHandler("canvas-click", canvasClickHandler)
-      viewer.addHandler("canvas-click", canvasClickHandler)
-    }
-  }, [viewer, cropMode])
+        var location = new OpenSeadragon.Rect(
+          Math.min(drag.startPos.x, drag.startPos.x + diffX),
+          Math.min(drag.startPos.y, drag.startPos.y + diffY),
+          Math.abs(diffX),
+          Math.abs(diffY)
+        )
 
-  useEffect(() => {
-    if (coords.length === 4) {
-      drawOverlay()
-    }
+        viewer.updateOverlay(drag.overlayElement, location)
 
-    if (coords.length > 4) {
-      setCoords([])
-    }
-  }, [coords, drawOverlay])
+        setArticleOverlays((prevCoords) => [...prevCoords, location])
+      },
+      releaseHandler: function (event) {
+        drag = null
+        selectionMode = true
+        viewer.setMouseNavEnabled(false)
+
+        setArticleOverlays((prevCoords) => {
+          setFinal((pp) => [...pp, prevCoords[prevCoords.length - 1]])
+          return []
+        })
+      },
+    })
+  }
+  const unique = new Set(final)
+  const uniqueArray = [...unique]
 
   const onSubmit = () => {
     axios
       .post(
         process.env.REACT_APP_API_URL + "/newspaper/coords/" + params.id,
-        articleOverlays
+        uniqueArray
       )
       .then((res) => {
         if (!res.data.success) throw new Error("Failed")
@@ -162,16 +148,19 @@ const EditEntity = () => {
   }
 
   const reset = () => {
-    while (articleOverlays.length > 0) {
-      articleOverlays.shift()
+    while (uniqueArray.length > 0) {
+      uniqueArray.shift()
     }
-    console.log(coords.length)
-    setArticleOverlays([])
-    emptyOverlay()
-    setCropMode(false)
-    setCropModeDots([])
-    console.log(articleOverlays)
+    if (selectionMode) {
+      document.querySelectorAll("div").forEach(function (a) {
+        a.remove()
+      })
+    }
   }
+  const showmeresult = () => {
+    console.log(uniqueArray)
+  }
+
   return (
     <div>
       <div
@@ -195,6 +184,12 @@ const EditEntity = () => {
       </button>
       <button onClick={reset} style={{ marginTop: "30px" }}>
         reset
+      </button>
+      <button onClick={hassan} style={{ marginTop: "30px" }}>
+        draw
+      </button>
+      <button onClick={showmeresult} style={{ marginTop: "30px" }}>
+        show
       </button>
     </div>
   )
