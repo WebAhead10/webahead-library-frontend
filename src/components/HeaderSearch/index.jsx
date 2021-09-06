@@ -1,7 +1,7 @@
 import React from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import "./style.css";
-function index() {
+function HeaderSearch() {
   return (
     <div className="header">
       <div className="header__nav">
@@ -17,4 +17,4 @@ function index() {
   );
 }
 
-export default index;
+export default HeaderSearch;

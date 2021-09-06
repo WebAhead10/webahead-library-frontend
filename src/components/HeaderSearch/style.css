@@ -23,7 +23,7 @@
 .header__search {
   display: flex;
   align-items: center;
-  border: radius 25px;
+  border-radius: 25px;
   margin-right: auto;
   width: 25vw;
 }

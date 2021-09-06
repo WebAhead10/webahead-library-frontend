@@ -6,10 +6,9 @@
     display: flex;
     flex-direction: column;
 }
-input{
+.password{
     margin-top:2vh;
 }
 .errorMsg{
-    color:red;
-    
+    color:red;   
 }
