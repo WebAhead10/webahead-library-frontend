@@ -4,13 +4,13 @@ import { useParams, useHistory } from "react-router-dom"
 import axios from "axios"
 import "./style.css"
 
-const findCenterPoint = function (arr) {
-  var x = arr.map(({ x }) => x)
-  var y = arr.map(({ y }) => y)
-  var cx = (Math.min(...x) + Math.max(...x)) / 2
-  var cy = (Math.min(...y) + Math.max(...y)) / 2
-  return [cx, cy]
-}
+// const findCenterPoint = function (arr) {
+//   var x = arr.map(({ x }) => x)
+//   var y = arr.map(({ y }) => y)
+//   var cx = (Math.min(...x) + Math.max(...x)) / 2
+//   var cy = (Math.min(...y) + Math.max(...y)) / 2
+//   return [cx, cy]
+// }
 
 const EditEntity = () => {
   const [viewer, setViewer] = useState(null)
@@ -61,7 +61,7 @@ const EditEntity = () => {
 
   const drawOverlay = useCallback(() => {
     if (cropMode) {
-      const overlay = document.createElement("div")
+      const overlay = document.createElement("span")
       overlay.classList.add("overlay")
 
       const minLeft = Math.min(...coords.map(({ x }) => x))
@@ -78,13 +78,23 @@ const EditEntity = () => {
           maxTop - minTop
         )
       )
-
       cropModeDots.forEach((element) => viewer.removeOverlay(element))
+      console.log(coords)
+      console.log(cropModeDots)
       setArticleOverlays((prevCoords) => [...prevCoords, coords])
       setCropModeDots([])
       setCoords([])
     }
   }, [cropMode, coords, viewer, setCropModeDots, cropModeDots])
+
+  // reset the choices
+  const emptyOverlay = useCallback(() => {
+    if (cropMode) {
+      document.querySelectorAll("span").forEach(function (a) {
+        a.remove()
+      })
+    }
+  }, [cropMode])
 
   // Setup the viewer and the viewer's options
   useEffect(() => {
@@ -101,7 +111,7 @@ const EditEntity = () => {
     const canvasClickHandler = function (event) {
       if (cropMode) {
         var { x, y } = viewer.viewport.pointFromPixel(event.position)
-        const overlayCorner = document.createElement("div")
+        const overlayCorner = document.createElement("span")
         overlayCorner.classList.add("overlayCorner")
 
         viewer.addOverlay(
@@ -134,7 +144,6 @@ const EditEntity = () => {
       setCoords([])
     }
   }, [coords, drawOverlay])
-  console.log(coords)
 
   const onSubmit = () => {
     axios
@@ -152,6 +161,17 @@ const EditEntity = () => {
     history.push("/")
   }
 
+  const reset = () => {
+    while (articleOverlays.length > 0) {
+      articleOverlays.shift()
+    }
+    console.log(coords.length)
+    setArticleOverlays([])
+    emptyOverlay()
+    setCropMode(false)
+    setCropModeDots([])
+    console.log(articleOverlays)
+  }
   return (
     <div>
       <div
@@ -172,6 +192,9 @@ const EditEntity = () => {
       </button>
       <button onClick={onSubmit} style={{ marginTop: "30px" }}>
         submit
+      </button>
+      <button onClick={reset} style={{ marginTop: "30px" }}>
+        reset
       </button>
     </div>
   )
