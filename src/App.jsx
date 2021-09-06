@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import NewspaperCalendar from "./pages/NewspaperCalendar";
 import { UserContext } from "./UserContext";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -24,12 +23,10 @@ function App() {
           <NavBar />
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/hassan" component={ArticleData} />
             <Route exact path="/uploadPdf" component={UploadPDF} />
             <Route path="/newspaper/edit/:id" component={EditEntity} />
             <Route exact path="/signin" component={Signin} />
             <Route exact path="/addadmin" component={AddAdmin} />
-            <Route exact path="/calander" component={NewspaperCalendar} />
           </Switch>
         </Router>
       </UserContext.Provider>
