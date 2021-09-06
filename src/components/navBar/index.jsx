@@ -1,19 +1,13 @@
-import React from "react";
-import { Nav, NavLink, Bars, NavMenu } from "./NavbarElements";
+import React from "react"
+import { Nav, NavLink, Bars, NavMenu } from "./NavbarElements"
 function NavBar() {
   return (
     <>
       <Nav>
         <NavMenu>
-          <NavLink to="/newspaper" activeStyle>
-            الصحف المتاحة
-          </NavLink>
-          <NavLink to="/about" activeStyle>
-            من نحن
-          </NavLink>
-          <NavLink to="/contact-us" activeStyle>
-            تواصل معنا
-          </NavLink>
+          <NavLink to="/newspaper">الصحف المتاحة</NavLink>
+          <NavLink to="/about">من نحن</NavLink>
+          <NavLink to="/contact-us">تواصل معنا</NavLink>
         </NavMenu>
         <Bars />
         <NavLink to="/">
@@ -25,7 +19,7 @@ function NavBar() {
         </NavLink>
       </Nav>
     </>
-  );
+  )
 }
 
-export default NavBar;
+export default NavBar

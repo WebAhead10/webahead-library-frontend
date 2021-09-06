@@ -1,0 +1,13 @@
+.news-container {
+  margin: 0 auto;
+  margin-top: 2.5%;
+  width: 80%;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.news-container > div {
+  width: 25%;
+}
