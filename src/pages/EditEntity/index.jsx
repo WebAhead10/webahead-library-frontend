@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { useParams, useHistory } from "react-router-dom"
 import axios from "axios"
 import "./style.css"
@@ -14,12 +14,8 @@ import "./style.css"
 
 const EditEntity = () => {
   const [viewer, setViewer] = useState(null)
-  const [cropMode, setCropMode] = useState(false)
-  const [coords, setCoords] = useState([])
-  const [cropModeDots, setCropModeDots] = useState([])
   const [articleOverlays, setArticleOverlays] = useState([])
   const [final, setFinal] = useState([])
-
   const params = useParams()
   const history = useHistory()
 
@@ -68,11 +64,9 @@ const EditEntity = () => {
       viewer && viewer.destroy()
     }
   }, [])
+
   var selectionMode = true
-
-  // reset the choices
-
-  const hassan = () => {
+  const drawOverly = () => {
     var drag
     viewer.setMouseNavEnabled(false)
 
@@ -83,7 +77,7 @@ const EditEntity = () => {
           return
         }
 
-        var overlayElement = document.createElement("div")
+        var overlayElement = document.createElement("span")
         overlayElement.style.background = "rgba(255, 0, 0, 0.3)"
         var viewportPos = viewer.viewport.pointFromPixel(event.position)
         viewer.addOverlay(
@@ -111,25 +105,22 @@ const EditEntity = () => {
           Math.abs(diffX),
           Math.abs(diffY)
         )
-
         viewer.updateOverlay(drag.overlayElement, location)
-
         setArticleOverlays((prevCoords) => [...prevCoords, location])
       },
       releaseHandler: function (event) {
         drag = null
-        selectionMode = true
-        viewer.setMouseNavEnabled(false)
+        selectionMode = false
+        viewer.setMouseNavEnabled(true)
 
         setArticleOverlays((prevCoords) => {
           setFinal((pp) => [...pp, prevCoords[prevCoords.length - 1]])
           return []
         })
+        console.log("this is the final =>  " + final)
       },
     })
   }
-  const unique = new Set(final)
-  const uniqueArray = [...unique]
 
   const onSubmit = () => {
     axios
@@ -148,17 +139,55 @@ const EditEntity = () => {
   }
 
   const reset = () => {
-    while (uniqueArray.length > 0) {
-      uniqueArray.shift()
+    while (viewer.currentOverlays.length > 0) {
+      viewer.currentOverlays.pop().destroy()
     }
-    if (selectionMode) {
-      document.querySelectorAll("div").forEach(function (a) {
-        a.remove()
-      })
-    }
+
+    raiseEvent("clear-overlay", {})
+    console.log(viewer.currentOverlays)
+    return viewer
   }
   const showmeresult = () => {
-    console.log(uniqueArray)
+    //! TODO: Hassan, ask mario about the undefined situation that we talked about earlier
+    console.log(viewer)
+    const unique = new Set(final)
+    const uniqueArray = [...unique]
+    if (uniqueArray.length > 1) {
+      let index = uniqueArray.indexOf(undefined)
+      uniqueArray.splice(index, 1)
+    }
+    return uniqueArray
+  }
+
+  const getHandler = (eventName) => {
+    var events = viewer.events[eventName]
+    if (!events || !events.length) {
+      return null
+    }
+    events = events.length === 1 ? [events[0]] : Array.apply(null, events)
+    return function (source, args) {
+      var i,
+        length = events.length
+      for (i = 0; i < length; i++) {
+        if (events[i]) {
+          args.eventSource = source
+          args.userData = events[i].userData
+          events[i].handler(args)
+        }
+      }
+    }
+  }
+
+  const raiseEvent = (eventName, eventArgs) => {
+    var handler = getHandler(eventName)
+
+    if (handler) {
+      if (!eventArgs) {
+        eventArgs = {}
+      }
+
+      handler(this, eventArgs)
+    }
   }
 
   return (
@@ -166,28 +195,22 @@ const EditEntity = () => {
       <div
         id="openSeaDragon"
         style={{
-          border: cropMode ? "6px solid red" : "1px solid black",
+          border: "1px solid black",
           height: "75vh",
           width: "85vw",
           margin: "auto",
         }}
       />
-
-      <button
-        onClick={() => setCropMode(!cropMode)}
-        style={{ marginTop: "30px" }}
-      >
-        Crop mode
-      </button>
       <button onClick={onSubmit} style={{ marginTop: "30px" }}>
         submit
       </button>
       <button onClick={reset} style={{ marginTop: "30px" }}>
         reset
       </button>
-      <button onClick={hassan} style={{ marginTop: "30px" }}>
+      <button onClick={drawOverly} style={{ marginTop: "30px" }}>
         draw
       </button>
+
       <button onClick={showmeresult} style={{ marginTop: "30px" }}>
         show
       </button>
