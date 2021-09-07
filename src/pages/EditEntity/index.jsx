@@ -14,8 +14,8 @@ import "./style.css"
 
 const EditEntity = () => {
   const [viewer, setViewer] = useState(null)
-  const [articleOverlays, setArticleOverlays] = useState([])
-  const [final, setFinal] = useState([])
+  const [result, setResult] = useState([])
+  const [counter, setCounter] = useState(0)
   const params = useParams()
   const history = useHistory()
 
@@ -76,9 +76,12 @@ const EditEntity = () => {
         if (!selectionMode) {
           return
         }
-
-        var overlayElement = document.createElement("span")
+        var overlayElement = document.createElement("div")
         overlayElement.style.background = "rgba(255, 0, 0, 0.3)"
+        overlayElement.setAttribute("id", `shape_${counter}`)
+        overlayElement.onclick = () => {
+          removeOverlay(overlayElement.id)
+        }
         var viewportPos = viewer.viewport.pointFromPixel(event.position)
         viewer.addOverlay(
           overlayElement,
@@ -112,12 +115,8 @@ const EditEntity = () => {
         drag = null
         selectionMode = false
         viewer.setMouseNavEnabled(true)
-
-        setArticleOverlays((prevCoords) => {
-          setFinal((pp) => [...pp, prevCoords[prevCoords.length - 1]])
-          return []
-        })
-        console.log("this is the final =>  " + final)
+        setResult([...result, viewer.currentOverlays[counter].bounds])
+        setCounter(counter + 1)
       },
     })
   }
@@ -126,7 +125,7 @@ const EditEntity = () => {
     axios
       .post(
         process.env.REACT_APP_API_URL + "/newspaper/coords/" + params.id,
-        uniqueArray
+        result
       )
       .then((res) => {
         if (!res.data.success) throw new Error("Failed")
@@ -148,15 +147,8 @@ const EditEntity = () => {
     return viewer
   }
   const showmeresult = () => {
-    //! TODO: Hassan, ask mario about the undefined situation that we talked about earlier
-    console.log(viewer)
-    const unique = new Set(final)
-    const uniqueArray = [...unique]
-    if (uniqueArray.length > 1) {
-      let index = uniqueArray.indexOf(undefined)
-      uniqueArray.splice(index, 1)
-    }
-    return uniqueArray
+    // //! TODO: Hassan, ask mario about the undefined situation that we talked about earlier
+    console.log(viewer.currentOverlays)
   }
 
   const getHandler = (eventName) => {
@@ -190,6 +182,17 @@ const EditEntity = () => {
     }
   }
 
+  const removeOverlay = (i) => {
+    var elem = document.getElementById(i)
+    elem.parentElement.removeChild(elem)
+    viewer.currentOverlays.splice(0, 1)
+
+    raiseEvent("remove-overlay", {
+      element: elem,
+    })
+
+    return viewer
+  }
   return (
     <div>
       <div
