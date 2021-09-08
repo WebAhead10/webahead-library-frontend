@@ -18,6 +18,7 @@ const EditEntity = () => {
   const [counter, setCounter] = useState(0)
   const params = useParams()
   const history = useHistory()
+  const [dragon, setDragon] = useState(null)
 
   const fetchNewspaper = async (id) => {
     try {
@@ -70,7 +71,7 @@ const EditEntity = () => {
     var drag
     viewer.setMouseNavEnabled(false)
 
-    new OpenSeadragon.MouseTracker({
+    const dragonRef = new OpenSeadragon.MouseTracker({
       element: viewer.element,
       pressHandler: function (event) {
         if (!selectionMode) {
@@ -114,10 +115,13 @@ const EditEntity = () => {
         drag = null
         selectionMode = false
         viewer.setMouseNavEnabled(true)
+
         setResult([...result, viewer.currentOverlays[counter].bounds])
         setCounter(counter + 1)
       },
     })
+
+    setDragon(dragonRef)
   }
 
   const onSubmit = () => {
@@ -142,7 +146,8 @@ const EditEntity = () => {
     }
 
     raiseEvent("clear-overlay", {})
-    console.log(viewer.currentOverlays)
+    dragon.destroy()
+    setCounter(0)
     return viewer
   }
   const showmeresult = () => {
@@ -212,7 +217,10 @@ const EditEntity = () => {
         draw
       </button>
 
-      <button onClick={showmeresult} style={{ marginTop: "30px" }}>
+      <button
+        onClick={showmeresult}
+        style={{ marginTop: "30px", marginBottom: "100px" }}
+      >
         show
       </button>
     </div>
