@@ -1,0 +1,16 @@
+.addAdmin {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+}
+.password {
+  margin-top: 2vh;
+}
+.errorMsg {
+  color: red;
+}
