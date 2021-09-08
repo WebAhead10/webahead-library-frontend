@@ -109,7 +109,6 @@ const EditEntity = () => {
           Math.abs(diffY)
         )
         viewer.updateOverlay(drag.overlayElement, location)
-        setArticleOverlays((prevCoords) => [...prevCoords, location])
       },
       releaseHandler: function (event) {
         drag = null
@@ -147,7 +146,6 @@ const EditEntity = () => {
     return viewer
   }
   const showmeresult = () => {
-    // //! TODO: Hassan, ask mario about the undefined situation that we talked about earlier
     console.log(viewer.currentOverlays)
   }
 
