@@ -71,7 +71,7 @@ const EditEntity = () => {
         var overlayElement = document.createElement("div")
         overlayElement.style.background = "rgba(255, 0, 0, 0.3)"
         overlayElement.setAttribute("id", `shape_${counter}`)
-        overlayElement.onclick = () => {
+        overlayElement.ondblclick = () => {
           removeOverlay(overlayElement.id)
         }
         var viewportPos = viewer.viewport.pointFromPixel(event.position)
