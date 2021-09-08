@@ -4,14 +4,6 @@ import { useParams, useHistory } from "react-router-dom"
 import axios from "axios"
 import "./style.css"
 
-// const findCenterPoint = function (arr) {
-//   var x = arr.map(({ x }) => x)
-//   var y = arr.map(({ y }) => y)
-//   var cx = (Math.min(...x) + Math.max(...x)) / 2
-//   var cy = (Math.min(...y) + Math.max(...y)) / 2
-//   return [cx, cy]
-// }
-
 const EditEntity = () => {
   const [viewer, setViewer] = useState(null)
   const [result, setResult] = useState([])
@@ -150,9 +142,6 @@ const EditEntity = () => {
     setCounter(0)
     return viewer
   }
-  const showmeresult = () => {
-    console.log(viewer.currentOverlays)
-  }
 
   const getHandler = (eventName) => {
     var events = viewer.events[eventName]
@@ -215,13 +204,6 @@ const EditEntity = () => {
       </button>
       <button onClick={drawOverly} style={{ marginTop: "30px" }}>
         draw
-      </button>
-
-      <button
-        onClick={showmeresult}
-        style={{ marginTop: "30px", marginBottom: "100px" }}
-      >
-        show
       </button>
     </div>
   )
