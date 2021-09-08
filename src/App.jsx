@@ -7,8 +7,7 @@ import Home from "./pages/Home"
 import HeaderSearch from "./components/HeaderSearch"
 import HeaderInfo from "./components/HeaderInfo/index"
 import NavBar from "./components/NavBar"
-import Signin from "./pages/Signin"
-import AddAdmin from "./pages/AddAdmin"
+import AdminApp from "./admin-pages/AdminApp"
 import Newspaper from "./pages/Newspaper"
 import ChooseYearMonth from "./pages/ChooseYearMonth"
 import ViewNewsPaper from "./pages/ViewNewsPaper"
@@ -17,12 +16,22 @@ import { UserContext } from "./UserContext"
 function App() {
   const [value, setValue] = useState([])
 
+  if (window.location.pathname.indexOf("/a/admin") === 0) {
+    return (
+      <div className="App">
+        <Router basename="/a/admin">
+          <AdminApp />
+        </Router>
+      </div>
+    )
+  }
+
   return (
     <div className="App">
       <UserContext.Provider value={{ value, setValue }}>
         <Router>
           <HeaderInfo />
-          <HeaderSearch />
+          {/* <HeaderSearch /> */}
           <NavBar />
           <Switch>
             <Route exact path="/" component={Home} />
