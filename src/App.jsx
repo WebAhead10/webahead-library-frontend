@@ -28,7 +28,7 @@ function App() {
             <Route path="/choose/year-month" component={ChooseYearMonth} />
             <Route path="/uploadPdf" component={UploadPDF} />
             <Route path="/newspaper/edit/:id" component={EditEntity} />
-            <Route path="/newspaper/" component={Newspaper} />
+            <Route path="/newspaper" component={Newspaper} />
             <Route path="/signin" component={Signin} />
             <Route path="/addadmin" component={AddAdmin} />
           </Switch>
