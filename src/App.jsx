@@ -11,6 +11,7 @@ import Signin from "./pages/Signin"
 import AddAdmin from "./pages/AddAdmin"
 import Newspaper from "./pages/Newspaper"
 import ChooseYearMonth from "./pages/ChooseYearMonth"
+import ViewNewsPaper from "./pages/ViewNewsPaper"
 import { UserContext } from "./UserContext"
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/newspaper/" component={Newspaper} />
             <Route path="/signin" component={Signin} />
             <Route path="/addadmin" component={AddAdmin} />
+            <Route path="/viewnewspaper/:id" component={ViewNewsPaper} />
           </Switch>
         </Router>
       </UserContext.Provider>
