@@ -9,7 +9,6 @@ const EditEntity = () => {
   const [result, setResult] = useState([])
   const [counter, setCounter] = useState(0)
   const params = useParams()
-  const history = useHistory()
   const [dragon, setDragon] = useState(null)
 
   const fetchNewspaper = async (id) => {
@@ -128,8 +127,7 @@ const EditEntity = () => {
       .catch((err) => {
         console.log(err.response.data.message)
       })
-    alert("added successfully ya habibi")
-    history.push("/")
+    alert("added successfully")
   }
 
   const reset = () => {
