@@ -9,8 +9,7 @@ const EditEntity = () => {
   const [result, setResult] = useState([])
   const [counter, setCounter] = useState(0)
   const params = useParams()
-  const history = useHistory()
-  const [dragon, setDragon] = useState()
+  const [dragon, setDragon] = useState(null)
 
   const fetchNewspaper = async (id) => {
     try {
@@ -62,62 +61,57 @@ const EditEntity = () => {
     var drag
     viewer.setMouseNavEnabled(false)
 
-    setDragon(
-      new OpenSeadragon.MouseTracker({
-        element: viewer.element,
-        pressHandler: function (event) {
-          if (!selectionMode) {
-            return
-          }
-          var overlayElement = document.createElement("div")
-          overlayElement.style.background = "rgba(250, 0, 0, 0.3)"
-          overlayElement.setAttribute("id", `shape_${counter}`)
-          overlayElement.style.cursor = "pointer"
-          overlayElement.ondblclick = () => {
-            removeOverlay(overlayElement.id)
-          }
-          var viewportPos = viewer.viewport.pointFromPixel(event.position)
-          viewer.addOverlay(
-            overlayElement,
-            new OpenSeadragon.Rect(viewportPos.x, viewportPos.y, 0, 0)
-          )
+    const dragonRef = new OpenSeadragon.MouseTracker({
+      element: viewer.element,
+      pressHandler: function (event) {
+        if (!selectionMode) {
+          return
+        }
+        var overlayElement = document.createElement("div")
+        overlayElement.style.background = "rgba(255, 0, 0, 0.3)"
+        overlayElement.setAttribute("id", `shape_${counter}`)
+        overlayElement.ondblclick = () => {
+          removeOverlay(overlayElement.id)
+        }
+        var viewportPos = viewer.viewport.pointFromPixel(event.position)
+        viewer.addOverlay(
+          overlayElement,
+          new OpenSeadragon.Rect(viewportPos.x, viewportPos.y, 0, 0)
+        )
 
-          drag = {
-            overlayElement: overlayElement,
-            startPos: viewportPos,
-          }
-        },
+        drag = {
+          overlayElement: overlayElement,
+          startPos: viewportPos,
+        }
+      },
 
-        dragHandler: function (event) {
-          if (!drag) {
-            return
-          }
-          var viewportPos = viewer.viewport.pointFromPixel(event.position)
-          var diffX = viewportPos.x - drag.startPos.x
-          var diffY = viewportPos.y - drag.startPos.y
+      dragHandler: function (event) {
+        if (!drag) {
+          return
+        }
+        var viewportPos = viewer.viewport.pointFromPixel(event.position)
+        var diffX = viewportPos.x - drag.startPos.x
+        var diffY = viewportPos.y - drag.startPos.y
 
-          var location = new OpenSeadragon.Rect(
-            Math.min(drag.startPos.x, drag.startPos.x + diffX),
-            Math.min(drag.startPos.y, drag.startPos.y + diffY),
-            Math.abs(diffX),
-            Math.abs(diffY)
-          )
-          viewer.updateOverlay(drag.overlayElement, location)
-        },
-        releaseHandler: function (event) {
-          console.log("event", event)
-          drag = null
-          selectionMode = false
-          viewer.setMouseNavEnabled(true)
-          console.log(22)
-          console.log("draogn", viewer)
-          console.log(viewer.buttons.tracker)
-          console.log("=>", viewer.currentOverlays[counter].bounds)
-          setResult([...result, viewer.currentOverlays[counter].bounds])
-          setCounter(counter + 1)
-        },
-      })
-    )
+        var location = new OpenSeadragon.Rect(
+          Math.min(drag.startPos.x, drag.startPos.x + diffX),
+          Math.min(drag.startPos.y, drag.startPos.y + diffY),
+          Math.abs(diffX),
+          Math.abs(diffY)
+        )
+        viewer.updateOverlay(drag.overlayElement, location)
+      },
+      releaseHandler: function (event) {
+        drag = null
+        selectionMode = false
+        viewer.setMouseNavEnabled(true)
+
+        setResult([...result, viewer.currentOverlays[counter].bounds])
+        setCounter(counter + 1)
+      },
+    })
+
+    setDragon(dragonRef)
   }
 
   const onSubmit = () => {
@@ -132,21 +126,16 @@ const EditEntity = () => {
       .catch((err) => {
         console.log(err.response.data.message)
       })
-    alert("added successfully ya habibi")
+    alert("added successfully")
   }
 
   const reset = () => {
-    // for (var i = 0; i < viewer.currentOverlays.l; i++) {
-    //   console.log("im here")
-    //   if (viewer.buttons.tracker[i].isTracking()) {
-    //     viewer.buttons.tracker[i].setTracking(false)
-    //     viewer.buttons.tracker[i].setTracking(true)
-    //   }
-    // }
     while (viewer.currentOverlays.length > 0) {
       viewer.currentOverlays.pop().destroy()
     }
     raiseEvent("clear-overlay", {})
+    dragon.destroy()
+    setCounter(0)
     return viewer
   }
 
@@ -201,29 +190,15 @@ const EditEntity = () => {
           margin: "auto",
         }}
       />
-      <div className="buttons">
-        <button
-          className="button"
-          onClick={onSubmit}
-          style={{ marginTop: "30px" }}
-        >
-          submit
-        </button>
-        <button
-          className="button"
-          onClick={reset}
-          style={{ marginTop: "30px" }}
-        >
-          reset
-        </button>
-        <button
-          className="button"
-          onClick={drawOverly}
-          style={{ marginTop: "30px" }}
-        >
-          draw
-        </button>
-      </div>
+      <button onClick={onSubmit} style={{ marginTop: "30px" }}>
+        submit
+      </button>
+      <button onClick={reset} style={{ marginTop: "30px" }}>
+        reset
+      </button>
+      <button onClick={drawOverly} style={{ marginTop: "30px" }}>
+        draw
+      </button>
     </div>
   )
 }

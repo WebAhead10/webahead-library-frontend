@@ -1910,8 +1910,8 @@ function OpenSeadragon( options ){
 
             if (!element.className) {
                 element.className = className;
-            } else if ( ( ' ' + element.className + ' ' ).
-                indexOf( ' ' + className + ' ' ) === -1 ) {
+            } else if ( ( ' ' + element.className + ' ' )
+                .indexOf( ' ' + className + ' ' ) === -1 ) {
                 element.className += ' ' + className;
             }
         },
@@ -4470,7 +4470,8 @@ $.EventSource.prototype = {
             event,
             i;
 
-        if ( delegate.tracking ) {
+
+        if ( delegate && delegate.tracking ) {
             for ( i = 0; i < $.MouseTracker.subscribeEvents.length; i++ ) {
                 event = $.MouseTracker.subscribeEvents[ i ];
                 $.removeEvent(
