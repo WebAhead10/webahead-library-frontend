@@ -5,34 +5,36 @@ import { useHistory } from "react-router-dom"
 function ChooseYearMonth() {
   const history = useHistory()
   const { setValue } = useContext(UserContext)
-
   return (
     <div className="rightSide">
       {[2000, 2001, 2002, 2003, 2004, 2005].map((e, index) => (
         <div key={index} className="year">
           <h2>{e}</h2>
           <div className="names_of_monthes">
-            <ul className="nav__monthes">
+            <ul
+              className="nav__monthes"
+              style={{ display: "flex", flexDirection: "row" }}
+            >
               {[
-                "يونيو",
-                "مايو",
-                "ابريل",
-                "مارس",
-                "فبراير",
                 "يناير",
-                "ديسامبر",
-                "نوفمبر",
-                "أكتوبر",
-                "سبتمبر",
-                "أغسطس",
+                "فبراير",
+                "مارس",
+                "ابريل",
+                "مايو",
+                "يونيو",
                 "يوليو",
+                "اغسطس",
+                "سبتمبر",
+                "اكتوبر",
+                "نوفمبر",
+                "ديسمبر",
               ].map((m, index) => (
                 <li
                   key={index}
-                  id="يناير"
+                  id={index}
                   onClick={() => {
-                    setValue({ m, e })
-                    history.push("/")
+                    setValue({ m, e, index })
+                    history.push("/calender")
                   }}
                   className="nav__item"
                 >

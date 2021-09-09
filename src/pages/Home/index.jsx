@@ -1,12 +1,9 @@
-import React from "react";
-import { useContext } from "react";
-import { UserContext } from "../../UserContext";
+import React from "react"
 
-import "./style.css";
+
+import "./style.css"
 function Home() {
-  const context = useContext(UserContext);
 
-  console.log(context);
 
   return (
     <div className="home_container">
@@ -47,7 +44,7 @@ function Home() {
       </div>
       <div className="leftSide">
         <form className="form">
-          <label for="title">ساعدونا في تحسين مقالتنا</label>
+          <label htmlFor="title">ساعدونا في تحسين مقالتنا</label>
           <div className="box">
             <textarea
               id="text"
@@ -62,7 +59,7 @@ function Home() {
         </form>
       </div>
     </div>
-  );
+  )
 }
 
-export default Home;
+export default Home

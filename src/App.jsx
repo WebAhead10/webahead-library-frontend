@@ -12,7 +12,7 @@ import AddAdmin from "./pages/AddAdmin"
 import Newspaper from "./pages/Newspaper"
 import ChooseYearMonth from "./pages/ChooseYearMonth"
 import { UserContext } from "./UserContext"
-
+import Calendar_ from "./pages/Calendar"
 function App() {
   const [value, setValue] = useState([])
 
@@ -31,6 +31,7 @@ function App() {
             <Route path="/newspaper" component={Newspaper} />
             <Route path="/signin" component={Signin} />
             <Route path="/addadmin" component={AddAdmin} />
+            <Route path="/calender" component={Calendar_} />
           </Switch>
         </Router>
       </UserContext.Provider>

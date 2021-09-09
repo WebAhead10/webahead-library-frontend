@@ -1,10 +1,21 @@
 /* eslint-disable no-undef */
 import { useState, useEffect } from "react"
-import { useParams, useHistory } from "react-router-dom"
-import axios from "axios"
+import Button from "@material-ui/core/Button"
+import { makeStyles } from "@material-ui/core/styles"
+import GestureIcon from "@material-ui/icons/Gesture"
+import DeleteIcon from "@material-ui/icons/Delete"
+import SendIcon from "@material-ui/icons/Send"
+import { useParams } from "react-router-dom"
 import "./style.css"
+import axios from "axios"
 
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(0.5),
+  },
+}))
 const EditEntity = () => {
+  const classes = useStyles()
   const [viewer, setViewer] = useState(null)
   const [result, setResult] = useState([])
   const [counter, setCounter] = useState(0)
@@ -70,6 +81,7 @@ const EditEntity = () => {
         var overlayElement = document.createElement("div")
         overlayElement.style.background = "rgba(255, 0, 0, 0.3)"
         overlayElement.setAttribute("id", `shape_${counter}`)
+        overlayElement.style.cursor = "pointer"
         overlayElement.ondblclick = () => {
           removeOverlay(overlayElement.id)
         }
@@ -190,15 +202,34 @@ const EditEntity = () => {
           margin: "auto",
         }}
       />
-      <button onClick={onSubmit} style={{ marginTop: "30px" }}>
-        submit
-      </button>
-      <button onClick={reset} style={{ marginTop: "30px" }}>
-        reset
-      </button>
-      <button onClick={drawOverly} style={{ marginTop: "30px" }}>
-        draw
-      </button>
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        onClick={onSubmit}
+        endIcon={<SendIcon />}
+      >
+        <span style={{ marginLeft: "10px" }}>Submit</span>
+      </Button>
+      <Button
+        variant="contained"
+        color="secondary"
+        className={classes.button}
+        onClick={reset}
+        startIcon={<DeleteIcon />}
+      >
+        <span style={{ marginRight: "10px" }}>Reset All</span>
+      </Button>
+
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        startIcon={<GestureIcon />}
+        onClick={drawOverly}
+      >
+        <span style={{ marginRight: "10px" }}>Draw</span>
+      </Button>
     </div>
   )
 }
