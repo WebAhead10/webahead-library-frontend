@@ -26,12 +26,12 @@ function App() {
         <NavBar />
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/hassan" component={ArticleData} />
+          <Route path="/newspaper/:name" component={ArticleData} />
           <Route exact path="/uploadPdf" component={UploadPDF} />
           <Route path="/newspaper/edit/:id" component={EditEntity} />
-          <Route exact path="/newspaper/" >
-            <Newspaper /></ Route>
-            <Route exact path="/signin" component={Signin} />
+          <Route exact path="/newspaper" >
+            <Newspaper />
+            </ Route>
             <Route exact path="/calander" component={NewspaperCalendar} />
           <Route exact path="/signin" component={Signin} />
           <Route exact path="/addadmin" component={AddAdmin} />

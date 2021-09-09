@@ -5,7 +5,7 @@ function NewspaperSquare(props) {
     return (
         <div>
             <div className="news" >
-                <a className="click" href="/hassan">
+                <a className="click" href={`/newspaper/${props.name}`}>
                 <img className="pic" src={props.logo} alt="" style={props.style} />
             <b className="publisherName" >{props.name}</b>
                 </a>
