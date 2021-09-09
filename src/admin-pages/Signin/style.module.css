@@ -1,0 +1,15 @@
+.signin {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+  width: 40vw;
+  height: 100%;
+  margin: auto;
+}
+
+.signin h1 {
+  font-size: 30px;
+  margin-bottom: 20px;
+}
