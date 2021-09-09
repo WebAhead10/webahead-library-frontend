@@ -1,9 +1,13 @@
 import React from "react"
-
+import { useContext } from "react"
+import { UserContext } from "../../UserContext"
+import SearchIcon from "@material-ui/icons/Search"
 
 import "./style.css"
 function Home() {
+  const context = useContext(UserContext)
 
+  console.log(context)
 
   return (
     <div className="home_container">
@@ -11,15 +15,21 @@ function Home() {
         <span className="search_per_day">نتائج اليوم</span>
         <div className="home-row">
           <div className="item">
-            <div className="circle"></div>
+            <div className="circle">
+              <SearchIcon style={{ transform: "scale(2.8)" }} />
+            </div>
             <span>1</span>
           </div>
           <div className="item">
-            <div className="circle"></div>
+            <div className="circle">
+              <SearchIcon style={{ transform: "scale(2.8)" }} />
+            </div>
             <span>2</span>
           </div>
           <div className="item">
-            <div className="circle"></div>
+            <div className="circle">
+              <SearchIcon style={{ transform: "scale(2.8)" }} />
+            </div>
             <span>3</span>
           </div>
           <div className="item">

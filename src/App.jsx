@@ -7,8 +7,7 @@ import Home from "./pages/Home"
 import HeaderSearch from "./components/HeaderSearch"
 import HeaderInfo from "./components/HeaderInfo/index"
 import NavBar from "./components/NavBar"
-import Signin from "./pages/Signin"
-import AddAdmin from "./pages/AddAdmin"
+import AdminApp from "./admin-pages/AdminApp"
 import Newspaper from "./pages/Newspaper"
 import ChooseYearMonth from "./pages/ChooseYearMonth"
 import { UserContext } from "./UserContext"
@@ -16,12 +15,22 @@ import Calendar_ from "./pages/Calendar"
 function App() {
   const [value, setValue] = useState([])
 
+  if (window.location.pathname.indexOf("/a/admin") === 0) {
+    return (
+      <div className="App">
+        <Router basename="/a/admin">
+          <AdminApp />
+        </Router>
+      </div>
+    )
+  }
+
   return (
     <div className="App">
       <UserContext.Provider value={{ value, setValue }}>
         <Router>
           <HeaderInfo />
-          <HeaderSearch />
+          {/* <HeaderSearch /> */}
           <NavBar />
           <Switch>
             <Route exact path="/" component={Home} />
@@ -29,9 +38,8 @@ function App() {
             <Route path="/uploadPdf" component={UploadPDF} />
             <Route path="/newspaper/edit/:id" component={EditEntity} />
             <Route path="/newspaper" component={Newspaper} />
-            <Route path="/signin" component={Signin} />
-            <Route path="/addadmin" component={AddAdmin} />
-            <Route path="/calender" component={Calendar_} />
+            {/* A not found component needed here */}
+            {/* <Route  component={NotFound} /> */}
           </Switch>
         </Router>
       </UserContext.Provider>
