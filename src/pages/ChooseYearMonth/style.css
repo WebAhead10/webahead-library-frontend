@@ -22,15 +22,13 @@
 .nav__monthes > * {
   flex: 1 1 120px;
 }
-.nav__item {
-  margin: 10px;
-  float: right;
-  border-left: 1px solid #bbb;
-}
 .nav__item:last-child {
   border-right: none;
 }
 .nav__item {
+  margin: 10px;
+  float: right;
+  border-left: 1px solid #bbb;
   display: block;
   color: rgb(255, 255, 255);
   background-color: rgb(196, 152, 41);
@@ -38,4 +36,15 @@
   padding: 14px 16px;
   text-decoration: none;
   cursor: pointer;
+}
+
+.disabled__nav__item {
+  margin: 10px;
+  border-left: 1px solid #bbb;
+  display: block;
+  color: rgb(255, 255, 255);
+  background-color: rgb(168, 168, 168);
+  text-align: center;
+  padding: 14px 16px;
+  cursor: auto;
 }

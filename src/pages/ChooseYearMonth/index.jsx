@@ -1,10 +1,13 @@
-import React, { useContext } from "react"
-import "./style.css"
-import { UserContext } from "../../UserContext"
-import { useHistory } from "react-router-dom"
+import React, { useContext } from "react";
+import "./style.css";
+import { UserContext } from "../../UserContext";
+import { useHistory } from "react-router-dom";
+
+const data = [{ date: "01/09/2002" }, { date: "18/08/2002" }];
+
 function ChooseYearMonth() {
-  const history = useHistory()
-  const { setValue } = useContext(UserContext)
+  const history = useHistory();
+  const { setValue } = useContext(UserContext);
 
   return (
     <div className="rightSide">
@@ -14,27 +17,31 @@ function ChooseYearMonth() {
           <div className="names_of_monthes">
             <ul className="nav__monthes">
               {[
-                "يونيو",
-                "مايو",
-                "ابريل",
-                "مارس",
-                "فبراير",
                 "يناير",
-                "ديسامبر",
-                "نوفمبر",
-                "أكتوبر",
-                "سبتمبر",
-                "أغسطس",
+                "فبراير",
+                "مارس",
+                "ابريل",
+                "مايو",
+                "يونيو",
                 "يوليو",
+                "أغسطس",
+                "سبتمبر",
+                "أكتوبر",
+                "نوفمبر",
+                "ديسامبر",
               ].map((m, index) => (
                 <li
                   key={index}
-                  id="يناير"
+                  className={`${
+                    m === "أكتوبر" ? "disabled__nav__item" : "nav__item"
+                  }`}
                   onClick={() => {
-                    setValue({ m, e })
-                    history.push("/")
+                    if (m !== "أكتوبر") {
+                        setValue({ m, e })
+                      history.push('/')
+                    }
+                    
                   }}
-                  className="nav__item"
                 >
                   {m}
                 </li>
@@ -44,7 +51,7 @@ function ChooseYearMonth() {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
-export default ChooseYearMonth
+export default ChooseYearMonth;

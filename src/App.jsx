@@ -35,7 +35,7 @@ function App() {
           <NavBar />
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/choose/year-month" component={ChooseYearMonth} />
+            <Route path="/choose/year-month/:name" component={ChooseYearMonth} />
             <Route path="/uploadPdf" component={UploadPDF} />
             <Route path="/newspaper/edit/:id" component={EditEntity} />
             <Route path="/viewnewspaper/:id" component={ViewNewsPaper} />

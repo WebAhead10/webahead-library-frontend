@@ -1,15 +1,26 @@
 /* eslint-disable no-undef */
+<<<<<<< HEAD
 import React,{ useState, useEffect, useCallback } from "react"
+=======
+import { useState, useEffect } from "react"
+>>>>>>> origin/main
 import { useParams } from "react-router-dom"
 import axios from "axios"
+import { v4 as uuidv4 } from "uuid"
+
 import "./style.css"
+
+const STATUS_NAVIGATING = "nagivating"
+const STATUS_DRAWING = "drawing"
+const STATUS_DRAWING_NAV = "drawing-navigation"
 
 const EditEntity = () => {
   const [viewer, setViewer] = useState(null)
-  const [result, setResult] = useState([])
-  const [counter, setCounter] = useState(0)
+  const [overlays, setOverlays] = useState([])
   const params = useParams()
-  const [dragon, setDragon] = useState(null)
+  const [mouseTracker, setMouseTracker] = useState(null)
+  const [error, setError] = useState("")
+  const [editStatus, setEditStatus] = useState(STATUS_NAVIGATING)
 
   const fetchNewspaper = async (id) => {
     try {
@@ -58,24 +69,27 @@ const EditEntity = () => {
     }
   }, [])
 
-  var selectionMode = true
-  const drawOverly = () => {
-    var drag
-    viewer.setMouseNavEnabled(false)
+  var drag
 
-    const dragonRef = new OpenSeadragon.MouseTracker({
+  const drawOverly = () => {
+    if (!viewer || editStatus !== STATUS_NAVIGATING) return null
+
+    viewer.setMouseNavEnabled(false)
+    setEditStatus(STATUS_DRAWING)
+
+    const mouseTrackerListeners = new OpenSeadragon.MouseTracker({
       element: viewer.element,
       pressHandler: function (event) {
-        if (!selectionMode) {
-          return
-        }
-        var overlayElement = document.createElement("div")
+        const overlayElement = document.createElement("div")
         overlayElement.style.background = "rgba(255, 0, 0, 0.3)"
-        overlayElement.setAttribute("id", `shape_${counter}`)
+        overlayElement.setAttribute("id", `overlay_${uuidv4()}`)
+
         overlayElement.ondblclick = () => {
-          removeOverlay(overlayElement.id)
+          removeOverlay(overlayElement.id.split("_")[1])
         }
-        var viewportPos = viewer.viewport.pointFromPixel(event.position)
+
+        const viewportPos = viewer.viewport.pointFromPixel(event.position)
+
         viewer.addOverlay(
           overlayElement,
           new OpenSeadragon.Rect(viewportPos.x, viewportPos.y, 0, 0)
@@ -88,9 +102,8 @@ const EditEntity = () => {
       },
 
       dragHandler: function (event) {
-        if (!drag) {
-          return
-        }
+        if (!drag) return
+
         var viewportPos = viewer.viewport.pointFromPixel(event.position)
         var diffX = viewportPos.x - drag.startPos.x
         var diffY = viewportPos.y - drag.startPos.y
@@ -104,105 +117,123 @@ const EditEntity = () => {
         viewer.updateOverlay(drag.overlayElement, location)
       },
       releaseHandler: function (event) {
-        drag = null
-        selectionMode = false
-        viewer.setMouseNavEnabled(true)
+        // the bounds property also contains some methods, which might be useful
+        // in the future, maybe not save but to have more control over
+        // a specific overlay
 
-        setResult([...result, viewer.currentOverlays[counter].bounds])
-        setCounter(counter + 1)
+        const lastIndex = viewer.currentOverlays.length - 1
+        const {
+          bounds: { x, y, height = 0, width = 0 },
+          element,
+        } = viewer.currentOverlays[lastIndex] || { bounds: {} }
+
+        if (width < 10 || height < 10) {
+          removeOverlay(element.id.split("_")[1])
+          return
+        }
+
+        const newOverlay = { x, y, height, width }
+        console.log("newOverlay", newOverlay)
+        setOverlays((prevOverlays) => [
+          ...prevOverlays,
+          {
+            overlay: newOverlay,
+            id: element.id,
+            saved: false,
+          },
+        ])
       },
     })
 
-    setDragon(dragonRef)
+    setMouseTracker(mouseTrackerListeners)
   }
 
-  const onSubmit = () => {
-    axios
-      .post(
-        process.env.REACT_APP_API_URL + "/newspaper/coords/" + params.id,
-        result
-      )
-      .then((res) => {
-        if (!res.data.success) throw new Error("Failed")
-      })
-      .catch((err) => {
-        console.log(err.response.data.message)
-      })
-    alert("added successfully")
-  }
+  const onSubmit = async (overlays, id) => {
+    if (!overlays.length) return
 
-  const reset = () => {
-    while (viewer.currentOverlays.length > 0) {
-      viewer.currentOverlays.pop().destroy()
-    }
-
-    raiseEvent("clear-overlay", {})
-    dragon.destroy()
-    setCounter(0)
-    return viewer
-  }
-
-  const getHandler = (eventName) => {
-    var events = viewer.events[eventName]
-    if (!events || !events.length) {
-      return null
-    }
-    events = events.length === 1 ? [events[0]] : Array.apply(null, events)
-    return function (source, args) {
-      var i,
-        length = events.length
-      for (i = 0; i < length; i++) {
-        if (events[i]) {
-          args.eventSource = source
-          args.userData = events[i].userData
-          events[i].handler(args)
+    try {
+      const res = await axios.post(
+        process.env.REACT_APP_API_URL + "/newspaper/coords/" + id,
+        {
+          overlays: overlays
+            .filter(({ saved }) => !saved)
+            .map((overlay) => ({
+              ...overlay,
+              saved: undefined,
+            })),
         }
+      )
+
+      if (!res.data.success) {
+        setError(res.data.message)
+        return
       }
+
+      setOverlays((prevOverlays) =>
+        prevOverlays.map((overlay) => {
+          const overlayElement = document.getElementById(overlay.id)
+
+          overlayElement.style.background = "rgba(0, 0, 255, 0.3)"
+          overlayElement.ondblclick = () => {}
+
+          return { ...overlay, saved: true, rendered: false }
+        })
+      )
+      // alert("added successfully")
+      mouseTracker.destroy()
+
+      drag = null
+      viewer.setMouseNavEnabled(true)
+      setEditStatus(STATUS_NAVIGATING)
+      console.log("saved")
+    } catch (err) {
+      setError("Error has occured")
+      console.error(err)
     }
   }
 
-  const raiseEvent = (eventName, eventArgs) => {
-    var handler = getHandler(eventName)
+  const removeOverlay = (overlayId) => {
+    viewer.removeOverlay(`overlay_${overlayId}`)
 
-    if (handler) {
-      if (!eventArgs) {
-        eventArgs = {}
-      }
-
-      handler(this, eventArgs)
-    }
+    setOverlays((prevOverlays) =>
+      prevOverlays.filter(({ id }) => id !== `overlay_${overlayId}`)
+    )
   }
 
-  const removeOverlay = (i) => {
-    var elem = document.getElementById(i)
-    elem.parentElement.removeChild(elem)
-    viewer.currentOverlays.splice(0, 1)
-
-    raiseEvent("remove-overlay", {
-      element: elem,
-    })
-
-    return viewer
+  const updateDrawingStatus = (status, enableMouse) => {
+    setEditStatus(status)
+    viewer.setMouseNavEnabled(enableMouse)
   }
+
   return (
-    <div>
-      <div
-        id="openSeaDragon"
-        style={{
-          border: "1px solid black",
-          height: "75vh",
-          width: "85vw",
-          margin: "auto",
-        }}
-      />
-      <button onClick={onSubmit} style={{ marginTop: "30px" }}>
-        submit
+    <div className="edit-entity-container">
+      {editStatus !== STATUS_NAVIGATING && (
+        <div>
+          <button
+            onClick={() => updateDrawingStatus(STATUS_DRAWING_NAV, true)}
+            disabled={editStatus === STATUS_DRAWING_NAV}
+            className="button edit-entity-button"
+          >
+            Enable mouse
+          </button>
+          <button
+            onClick={() => updateDrawingStatus(STATUS_DRAWING, false)}
+            disabled={editStatus === STATUS_DRAWING}
+            className="button edit-entity-button"
+          >
+            Enable Draw
+          </button>
+        </div>
+      )}
+      <div id="openSeaDragon" className="edit-entity-viewer" />
+      <button
+        onClick={() => onSubmit(overlays, params.id)}
+        className="button edit-entity-button"
+      >
+        Submit
       </button>
-      <button onClick={reset} style={{ marginTop: "30px" }}>
-        reset
-      </button>
-      <button onClick={drawOverly} style={{ marginTop: "30px" }}>
-        draw
+      <button className="button edit-entity-button" onClick={drawOverly}>
+        Draw
       </button>
     </div>
   )
