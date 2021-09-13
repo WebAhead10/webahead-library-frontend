@@ -1,35 +1,26 @@
 /* eslint-disable no-undef */
-import React ,{ useState, useEffect, useCallback } from "react"
-import { useParams } from "react-router-dom"
-import axios from "axios"
-import "./style.css"
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import "./style.css";
 
-const findCenterPoint = function (arr) {
-  var x = arr.map(({ x }) => x)
-  var y = arr.map(({ y }) => y)
-  var cx = (Math.min(...x) + Math.max(...x)) / 2
-  var cy = (Math.min(...y) + Math.max(...y)) / 2
-  return [cx, cy]
-}
-
-const viewNewsPaper = () => {
-  const [viewer, setViewer] = useState(null)
-  const [viewText, setViewText] = useState(false)
-
-  const params = useParams()
+const ViewNewsPaper = () => {
+  const [viewer, setViewer] = useState(null);
+  const [viewText, setViewText] = useState(false);
+  const params = useParams();
 
   const fetchNewspaper = async (id) => {
     try {
       const result = await axios.get(
-        `${process.env.REACT_APP_API_URL}/viewnewspaper/${id}`
-      )
+        `${process.env.REACT_APP_API_URL}/newspaper/${id}`
+      );
 
-      if (!result.data.success) throw new Error("Failed")
+      if (!result.data.success) throw new Error("Failed");
 
       const bucketRoot =
-        "https://feuerstein-form-website-uploads.s3.eu-central-1.amazonaws.com/misc"
+        "https://feuerstein-form-website-uploads.s3.eu-central-1.amazonaws.com/misc";
 
-      viewer && viewer.destroy()
+      viewer && viewer.destroy();
       setViewer(
         OpenSeadragon({
           id: "openSeaDragon",
@@ -49,21 +40,75 @@ const viewNewsPaper = () => {
           showNavigator: false,
           gestureSettingsMouse: { clickToZoom: false },
         })
-      )
+      );
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-  // Setup the viewer and the viewer's options
   useEffect(() => {
-    const newspaperId = params.id
-    fetchNewspaper(newspaperId)
+    const newspaperId = params.id;
+    fetchNewspaper(newspaperId);
 
     return () => {
-      viewer && viewer.destroy()
+      viewer && viewer.destroy();
+    };
+  }, []);
+
+  const fetchCoords = async (id) => {
+    try {
+      const result = await axios.get(
+        `${process.env.REACT_APP_API_URL}/newspaper/coords/${id}`
+      );
+      if (!result.data.success) throw new Error("Failed");
+      const coordsArr = result.data.pages;
+      coordsArr.forEach((element) => {
+        const coords = element.coords;
+        coords.forEach((crd) => {
+          var overlayElement = document.createElement("div");
+          overlayElement.style.border = "thin solid rgba(255,0,0,0.3)";
+          overlayElement.setAttribute("class", `overlay ${element.id}`);
+          overlayElement.style.cursor = 'pointer';
+          overlayElement.addEventListener("mouseenter", () => {
+            var elements = document.getElementsByClassName(element.id);
+            for (var i = 0; i < elements.length; i++) {
+              elements[i].style.backgroundColor = "rgba(0,0,255,0.3)";
+            }
+          });
+          overlayElement.addEventListener("mouseout", () => {
+            var elements = document.getElementsByClassName(element.id);
+            for (var i = 0; i < elements.length; i++) {
+              elements[i].style.backgroundColor = "";
+            }
+          });
+          overlayElement.addEventListener("click", () => {
+            // TODO: add a div to show the text that is connected to the article
+
+            try {
+            } catch (err) {
+              console.log(err);
+            }
+          });
+
+          viewer.addOverlay(
+            overlayElement,
+            new OpenSeadragon.Rect(crd.x, crd.y, crd.width, crd.height)
+          );
+        });
+      });
+    } catch (error) {
+      console.log(error);
     }
-  }, [])
+  };
+
+  useEffect(() => {
+    const newspaperId = params.id;
+    fetchCoords(newspaperId);
+
+    return () => {
+      viewer && viewer.destroy();
+    };
+  }, [viewer]);
 
   return (
     <div>
@@ -76,15 +121,8 @@ const viewNewsPaper = () => {
           margin: "auto",
         }}
       />
-
-      <button
-        onClick={() => setViewText(!viewText)}
-        style={{ marginTop: "30px" }}
-      >
-        Show text
-      </button>
     </div>
-  )
-}
+  );
+};
 
-export default viewNewsPaper
+export default ViewNewsPaper;

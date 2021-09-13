@@ -28,7 +28,7 @@ const EditEntity = () => {
           id: "openSeaDragon",
           tileSources: result.data.pages.map(
             ({ name, pagename }) =>
-              `${bucketRoot}/${
+            `${bucketRoot}/${
                 pagename.split("_")[0]
               }/${pagename}/${pagename}.dzi`
           ),
@@ -46,6 +46,7 @@ const EditEntity = () => {
     } catch (error) {
       console.log(error)
     }
+
   }
 
   useEffect(() => {
