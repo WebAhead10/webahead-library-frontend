@@ -77,7 +77,7 @@ const EditEntity = () => {
       pressHandler: function (event) {
         const overlayElement = document.createElement("div")
         overlayElement.style.background = "rgba(255, 0, 0, 0.3)"
-        overlayElement.setAttribute("id", `shape_${uuidv4()}`)
+        overlayElement.setAttribute("id", `overlay_${uuidv4()}`)
 
         overlayElement.ondblclick = () => {
           removeOverlay(overlayElement.id.split("_")[1])
@@ -149,7 +149,14 @@ const EditEntity = () => {
     try {
       const res = await axios.post(
         process.env.REACT_APP_API_URL + "/newspaper/coords/" + id,
-        overlays.map((overlay) => ({ ...overlay, saved: undefined }))
+        {
+          overlays: overlays
+            .filter(({ saved }) => !saved)
+            .map((overlay) => ({
+              ...overlay,
+              saved: undefined,
+            })),
+        }
       )
 
       if (!res.data.success) {
@@ -181,10 +188,10 @@ const EditEntity = () => {
   }
 
   const removeOverlay = (overlayId) => {
-    viewer.removeOverlay(`shape_${overlayId}`)
+    viewer.removeOverlay(`overlay_${overlayId}`)
 
     setOverlays((prevOverlays) =>
-      prevOverlays.filter(({ id }) => id !== `shape_${overlayId}`)
+      prevOverlays.filter(({ id }) => id !== `overlay_${overlayId}`)
     )
   }
 
