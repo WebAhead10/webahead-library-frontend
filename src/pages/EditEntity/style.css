@@ -1,9 +1,3 @@
-.overlay {
-  background-color: blue;
-  opacity: 0.2;
-  cursor: pointer;
-}
-
 .edit-entity-viewer {
   border: 1px solid black;
   height: 75vh;
