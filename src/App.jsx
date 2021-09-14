@@ -11,6 +11,7 @@ import AdminApp from "./admin-pages/AdminApp"
 import Newspaper from "./pages/Newspaper"
 import ChooseYearMonth from "./pages/ChooseYearMonth"
 import { UserContext } from "./UserContext"
+import ViewNewsPaper from "./pages/ViewNewsPaper"
 
 function App() {
   const [value, setValue] = useState([])
@@ -34,10 +35,14 @@ function App() {
           <NavBar />
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/choose/year-month/:name" component={ChooseYearMonth} />
+            <Route
+              path="/choose/year-month/:name"
+              component={ChooseYearMonth}
+            />
             <Route path="/uploadPdf" component={UploadPDF} />
             <Route path="/newspaper/edit/:id" component={EditEntity} />
-            <Route exact path="/newspaper" component={Newspaper} />
+            <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
+            <Route path="/newspaper" component={Newspaper} />
             {/* A not found component needed here */}
             {/* <Route  component={NotFound} /> */}
           </Switch>

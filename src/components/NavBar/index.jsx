@@ -2,7 +2,7 @@ import React from "react"
 import { Nav, NavLink, Bars, NavMenu } from "./NavbarElements"
 function NavBar() {
   return (
-    <>
+    <div>
       <Nav>
         <NavMenu>
           <NavLink to="/newspaper">الصحف المتاحة</NavLink>
@@ -18,7 +18,7 @@ function NavBar() {
           />
         </NavLink>
       </Nav>
-    </>
+    </div>
   )
 }
 

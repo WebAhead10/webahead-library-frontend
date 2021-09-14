@@ -1,7 +1,7 @@
 import BulkImageInput from "../../components/ImageInput"
 import { useHistory } from "react-router-dom"
 import "./style.css"
-import { useState } from "react"
+import React,{ useState } from "react"
 
 const UploadPDF = () => {
   const history = useHistory()
