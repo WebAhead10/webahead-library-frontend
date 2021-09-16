@@ -1,4 +1,4 @@
-.year {
+.date-container {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -7,6 +7,32 @@
   margin-bottom: 0.5rem;
   padding: 0.25rem 0.25rem 0 0.25rem;
 }
+
+.choose-year-top {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  margin-top: 20px;
+}
+
+.choose-year-top .date-dropdown-container {
+  font-size: 26px;
+  margin: 0px 10px;
+}
+
+.choose-year-top .date-dropdown-container span {
+  font-size: 28px;
+  margin: 0px 5px;
+}
+
+.choose-year-top .date-dropdown-container .date-dropdown {
+  font-size: 26px;
+  padding: 8px 20px;
+  border-radius: 8px;
+  user-select: none;
+  outline: none;
+}
+
 .nav__monthes {
   border-bottom: 1px solid #b8b8b8;
   display: flex;
@@ -19,15 +45,17 @@
   overflow: hidden;
   background-color: rgb(255, 255, 255);
 }
+
 .nav__monthes > * {
   flex: 1 1 120px;
 }
+
 .nav__item:last-child {
   border-right: none;
 }
+
 .nav__item {
   margin: 10px;
-  float: right;
   border-left: 1px solid #bbb;
   display: block;
   color: rgb(255, 255, 255);
@@ -36,6 +64,7 @@
   padding: 14px 16px;
   text-decoration: none;
   cursor: pointer;
+  font-size: 18px;
 }
 
 .disabled__nav__item {
@@ -47,4 +76,5 @@
   text-align: center;
   padding: 14px 16px;
   cursor: auto;
+  font-size: 18px;
 }

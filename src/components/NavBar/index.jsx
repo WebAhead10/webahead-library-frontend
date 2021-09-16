@@ -1,5 +1,6 @@
 import React from "react"
-import { Nav, NavLink, Bars, NavMenu } from "./NavbarElements"
+import { Nav, NavLink, NavMenu } from "./NavbarElements"
+import SearchIcon from "@material-ui/icons/Search"
 function NavBar() {
   return (
     <div>
@@ -9,7 +10,10 @@ function NavBar() {
           <NavLink to="/about">من نحن</NavLink>
           <NavLink to="/contact-us">تواصل معنا</NavLink>
         </NavMenu>
-        <Bars />
+        <div className="header__search">
+          <SearchIcon className="header__searchIcon" />
+          <input type="text" className="header__searchInput" />
+        </div>
         <NavLink to="/">
           <img
             src="https://i.imagesup.co/images2/e4a3432b6e4a13fcfd7ece0be9b28495e46a3b8a.png"
