@@ -9,7 +9,7 @@ const ViewNewsPaper = () => {
   const [viewer, setViewer] = useState(null)
   const [viewText, setViewText] = useState(false)
   const [textArticle, setTextArticle] = useState("")
-  const [selectedId , setSelectedId] = useState("")
+  const [selectedId, setSelectedId] = useState("")
   const params = useParams()
 
   const fetchNewspaper = async (id) => {
@@ -58,17 +58,18 @@ const ViewNewsPaper = () => {
     }
   }, [])
 
+  
+
   const fetchCoords = useCallback(
     async (id) => {
       try {
         const result = await axios.get(
           `${process.env.REACT_APP_API_URL}/newspaper/coords/${id}`
         )
-
         if (!result.data.success) throw new Error("Failed")
 
         const coordsArr = result.data.pages
-        coordsArr.forEach(({ coords, id ,content}) => {
+        coordsArr.forEach(({ coords, id}) => {
           coords.forEach(({ overlay }) => {
             const overlayElement = document.createElement("div")
             overlayElement.style.cursor = "pointer"
@@ -91,10 +92,9 @@ const ViewNewsPaper = () => {
 
             overlayElement.addEventListener("click", () => {
               // TODO: add a div to show the text that is connected to the article
-                setViewText(true);
-                setTextArticle(content);
-                setSelectedId(id);
-              
+              setViewText(false)
+              setSelectedId(id)
+              setViewText(true)
             })
 
             viewer.addOverlay(
@@ -133,8 +133,14 @@ const ViewNewsPaper = () => {
           margin: "auto",
         }}
       />
-      
-      {viewText && <ShowContent textArticle={textArticle} articleId={selectedId} setViewText={setViewText}/>}
+
+      {viewText && (
+        <ShowContent
+          textArticle={textArticle}
+          articleId={selectedId}
+          setViewText={setViewText}
+        />
+      )}
     </div>
   )
 }
