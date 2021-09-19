@@ -6,11 +6,9 @@
   margin-top: 20px;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 }
-.search_per_day {
-  align-self: flex-end;
-  margin-right: 10vw;
-}
+
 .home-row {
   margin-top: 50px;
   width: 30vw;
@@ -26,16 +24,13 @@
   outline: none;
   background-color: #cd9042;
   margin: auto;
-  margin-top: 6vh;
+  margin-top: 2vh;
   padding: 6px 20px;
   font-size: 30px;
 }
 .submit:hover {
   background-color: #f58e08;
   transition: all 0.2s ease-in-out;
-}
-.home-row:nth-child(1) {
-  margin-top: 150px;
 }
 
 .circle {
@@ -49,11 +44,16 @@
 }
 .item {
   display: flex;
-  height: 30vh;
+  height: 22vh;
   flex-direction: column;
   justify-content: space-between;
   margin-left: 2vw;
 }
+
+.item span {
+  font-size: 30px;
+}
+
 .leftSide {
   margin-top: 20px;
   margin-left: 5%;
@@ -68,17 +68,29 @@
 }
 
 .box {
-  margin-top: 50px;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
 }
 
 .box textarea {
   width: 30vw;
-  height: 20vh;
+  height: 15vh;
   font-size: 20px;
 }
 
+.articleOfTheDayContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
 .articleOfTheDay {
-  margin-top: 20vh;
+  font-size: 30px;
+}
+
+.articleOfTheDayImage {
+  margin-top: 30px;
+  width: 300px;
 }

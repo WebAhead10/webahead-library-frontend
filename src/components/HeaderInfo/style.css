@@ -5,19 +5,27 @@
   align-items: center;
   position: sticky;
   background-color: #ffffff;
+  margin-right: 20px;
 }
-.headerInfo__buttons{
-  width:10vw;
+.headerInfo__buttons {
+  width: 20vw;
   display: flex;
   justify-content: space-evenly;
 }
-.signupButton{
-  border-radius: 25px;
-  outline:none;
-  border:none;
+.authButton {
+  border-radius: 8px;
+  font-size: 22px;
+  padding: 4px 10px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: -5px 4px #888888;
+  transition: all 0.4s;
+  background-color: #cd9042;
+  color: white;
 }
-.loginButton{
-  border-radius: 25px;
-  outline:none;
-  border:none;
+
+.authButton:hover {
+  box-shadow: 0px 0px #888888;
+  transform: scale(0.9);
 }

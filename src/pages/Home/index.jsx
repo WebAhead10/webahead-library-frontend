@@ -2,6 +2,9 @@ import React from "react"
 import { useContext } from "react"
 import { UserContext } from "../../UserContext"
 import SearchIcon from "@material-ui/icons/Search"
+import HappyIcon from "@material-ui/icons/SentimentVerySatisfied"
+import SettingsIcon from "@material-ui/icons/Settings"
+import ShareIcon from "@material-ui/icons/Share"
 
 import "./style.css"
 function Home() {
@@ -12,7 +15,6 @@ function Home() {
   return (
     <div className="home_container">
       <div className="rightSide">
-        <span className="search_per_day">نتائج اليوم</span>
         <div className="home-row">
           <div className="item">
             <div className="circle">
@@ -22,18 +24,20 @@ function Home() {
           </div>
           <div className="item">
             <div className="circle">
-              <SearchIcon style={{ transform: "scale(2.8)" }} />
+              <HappyIcon style={{ transform: "scale(2.8)" }} />
             </div>
             <span>2</span>
           </div>
           <div className="item">
             <div className="circle">
-              <SearchIcon style={{ transform: "scale(2.8)" }} />
+              <ShareIcon style={{ transform: "scale(2.8)" }} />
             </div>
             <span>3</span>
           </div>
           <div className="item">
-            <div className="circle"></div>
+            <div className="circle">
+              <SettingsIcon style={{ transform: "scale(2.8)" }} />
+            </div>
             <span>4</span>
           </div>
         </div>
@@ -64,7 +68,14 @@ function Home() {
               placeholder="العب يلا"
             ></textarea>
             <input className="submit" type="submit" value="Submit" />
-            <span className="articleOfTheDay">جريدة اليوم</span>
+            <div className="articleOfTheDayContainer">
+              <span className="articleOfTheDay">جريدة اليوم</span>
+              <img
+                className="articleOfTheDayImage"
+                src="https://www.maan-ctr.org/magazine/files/image/photos/issue117/topics/5/4.jpg"
+                alt=""
+              />
+            </div>
           </div>
         </form>
       </div>

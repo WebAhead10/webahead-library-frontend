@@ -1,57 +1,111 @@
-import React, { useContext } from "react";
-import "./style.css";
-import { UserContext } from "../../UserContext";
-import { useHistory } from "react-router-dom";
+import { useContext, useState } from "react"
+import "./style.css"
+import { UserContext } from "../../UserContext"
+import { useHistory } from "react-router-dom"
 
-const data = [{ date: "01/09/2002" }, { date: "18/08/2002" }];
+const months = [
+  "يناير",
+  "فبراير",
+  "مارس",
+  "ابريل",
+  "مايو",
+  "يونيو",
+  "يوليو",
+  "أغسطس",
+  "سبتمبر",
+  "أكتوبر",
+  "نوفمبر",
+  "ديسامبر",
+]
+const years = [2000, 2001, 2002, 2003, 2004, 2005]
 
 function ChooseYearMonth() {
-  const history = useHistory();
-  const { setValue } = useContext(UserContext);
+  const history = useHistory()
+  const { setValue } = useContext(UserContext)
+  const [year, setYear] = useState("")
+  const [month, setMonth] = useState("")
 
   return (
-    <div className="rightSide">
-      {[2000, 2001, 2002, 2003, 2004, 2005].map((e, index) => (
-        <div key={index} className="year">
-          <h2>{e}</h2>
-          <div className="names_of_monthes">
-            <ul className="nav__monthes">
-              {[
-                "يناير",
-                "فبراير",
-                "مارس",
-                "ابريل",
-                "مايو",
-                "يونيو",
-                "يوليو",
-                "أغسطس",
-                "سبتمبر",
-                "أكتوبر",
-                "نوفمبر",
-                "ديسامبر",
-              ].map((m, index) => (
-                <li
-                  key={index}
-                  className={`${
-                    m === "أكتوبر" ? "disabled__nav__item" : "nav__item"
-                  }`}
-                  onClick={() => {
-                    if (m !== "أكتوبر") {
-                        setValue({ m, e })
-                      history.push('/')
+    <div>
+      <div className="choose-year-top">
+        <label className="date-dropdown-container" htmlFor="dropdown-year">
+          <span>سنة: </span>
+          <select
+            className="date-dropdown"
+            id="dropdown-year"
+            onChange={({ target }) => setYear(target.value)}
+            value={year}
+          >
+            <option value="" selected></option>
+            {years.map((currentYear) => (
+              <option value={currentYear}>{currentYear}</option>
+            ))}
+          </select>
+        </label>
+        <label className="date-dropdown-container" htmlFor="dropdown-month">
+          <span>شهر: </span>
+          <select
+            className="date-dropdown"
+            id="dropdown-month"
+            onChange={({ target }) => setMonth(target.value)}
+            value={month}
+          >
+            <option value="" selected></option>
+            {months.map((currentMonth) => (
+              <option
+                value={currentMonth}
+                disabled={
+                  currentMonth === "أكتوبر" || currentMonth === "فبراير"
+                }
+              >
+                {currentMonth}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <button
+          className="button"
+          style={{ margin: "0px 10px" }}
+          onClick={() => {
+            setValue({ month, year })
+            history.push("/")
+          }}
+        >
+          اذهب
+        </button>
+      </div>
+      <div>
+        {years.map((e, index) => (
+          <div key={index} className="date-container">
+            <h2>{e}</h2>
+            <div className="names_of_monthes">
+              <ul className="nav__monthes">
+                {months.map((m, index) => (
+                  <li
+                    key={index}
+                    className={
+                      m === "أكتوبر" || m === "فبراير"
+                        ? "disabled__nav__item"
+                        : "nav__item"
                     }
-                    
-                  }}
-                >
-                  {m}
-                </li>
-              ))}
-            </ul>
+                    onClick={() => {
+                      if (m !== "أكتوبر") {
+                        setValue({ month: m, year: e })
+                        history.push("/")
+                      }
+                    }}
+                  >
+                    {m}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
-  );
+  )
 }
 
-export default ChooseYearMonth;
+export default ChooseYearMonth
