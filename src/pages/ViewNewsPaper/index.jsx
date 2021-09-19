@@ -8,7 +8,6 @@ import ShowContent from "./ShowContent"
 const ViewNewsPaper = () => {
   const [viewer, setViewer] = useState(null)
   const [viewText, setViewText] = useState(false)
-  const [textArticle, setTextArticle] = useState("")
   const [selectedId, setSelectedId] = useState("")
   const params = useParams()
 
