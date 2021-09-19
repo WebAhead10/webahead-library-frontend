@@ -136,7 +136,6 @@ const ViewNewsPaper = () => {
 
       {viewText && (
         <ShowContent
-          textArticle={textArticle}
           articleId={selectedId}
           setViewText={setViewText}
         />

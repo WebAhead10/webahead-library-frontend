@@ -1,7 +1,7 @@
 import React,{useState , useEffect} from 'react'
 import axios from "axios"
 import "./style.css"
-const ShowContent = ({textArticle, articleId ,setViewText}) => {
+const ShowContent = ({ articleId ,setViewText}) => {
     const [text,setText] = useState("")
 
     const fetchContent = async (coordsId) => {
