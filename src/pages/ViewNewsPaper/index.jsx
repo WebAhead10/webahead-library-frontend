@@ -7,8 +7,7 @@ import ShowContent from "./ShowContent"
 
 const ViewNewsPaper = () => {
   const [viewer, setViewer] = useState(null)
-  const [viewText, setViewText] = useState(false)
-  const [selectedId, setSelectedId] = useState("")
+  const [selectedId, setSelectedId] = useState(null)
   const params = useParams()
 
   const fetchNewspaper = async (id) => {
@@ -57,8 +56,6 @@ const ViewNewsPaper = () => {
     }
   }, [])
 
-  
-
   const fetchCoords = useCallback(
     async (id) => {
       try {
@@ -68,7 +65,7 @@ const ViewNewsPaper = () => {
         if (!result.data.success) throw new Error("Failed")
 
         const coordsArr = result.data.pages
-        coordsArr.forEach(({ coords, id}) => {
+        coordsArr.forEach(({ coords, id }) => {
           coords.forEach(({ overlay }) => {
             const overlayElement = document.createElement("div")
             overlayElement.style.cursor = "pointer"
@@ -90,10 +87,7 @@ const ViewNewsPaper = () => {
             })
 
             overlayElement.addEventListener("click", () => {
-              // TODO: add a div to show the text that is connected to the article
-              setViewText(false)
               setSelectedId(id)
-              setViewText(true)
             })
 
             viewer.addOverlay(
@@ -126,18 +120,15 @@ const ViewNewsPaper = () => {
       <div
         id="openSeaDragon"
         style={{
-          border: viewText ? "2px solid blue" : "1px solid black",
+          border: selectedId ? "2px solid blue" : "1px solid black",
           height: "75vh",
           width: "85vw",
           margin: "auto",
         }}
       />
 
-      {viewText && (
-        <ShowContent
-          articleId={selectedId}
-          setViewText={setViewText}
-        />
+      {selectedId && (
+        <ShowContent articleId={selectedId} close={setSelectedId} />
       )}
     </div>
   )
