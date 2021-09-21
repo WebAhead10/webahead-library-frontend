@@ -15,7 +15,7 @@ import ViewNewsPaper from "./pages/ViewNewsPaper"
 import Calendar from "./pages/Calendar"
 
 function App() {
-  const [value, setValue] = useState([])
+  const [value, setValue] = useState({})
 
   if (window.location.pathname.indexOf("/a/admin") === 0) {
     return (
@@ -43,7 +43,7 @@ function App() {
             <Route path="/edit/newspaper/:id" component={EditEntity} />
             <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
             <Route path="/newspaper" component={Newspaper} />
-            <Route path="/calender" component={Calendar} />
+            <Route path="/calendar" component={Calendar} />
             {/* <Route path="/aa" component={TileContent} /> */}
             {/* A not found component needed here */}
             {/* <Route  component={NotFound} /> */}
