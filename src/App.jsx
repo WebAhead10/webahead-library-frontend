@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import EditEntity from "./pages/EditEntity"
 import "./App.css"
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
-import UploadPDF from "./pages/UploadPDF"
 import Home from "./pages/Home"
 import HeaderSearch from "./components/HeaderSearch"
 import HeaderInfo from "./components/HeaderInfo/index"
@@ -39,7 +38,6 @@ function App() {
               path="/choose/year-month/:name"
               component={ChooseYearMonth}
             />
-            <Route path="/uploadPdf" component={UploadPDF} />
             <Route path="/edit/newspaper/:id" component={EditEntity} />
             <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
             <Route path="/newspaper" component={Newspaper} />

@@ -1,10 +1,11 @@
 import { useHistory } from "react-router-dom"
+import style from "./style.module.css"
 
 const Dashboard = () => {
   const history = useHistory()
 
   return (
-    <div>
+    <div className={style.dashboardContainer}>
       <button className="button" onClick={() => history.push("/addadmin")}>
         Add admin
       </button>
