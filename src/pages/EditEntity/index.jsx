@@ -58,6 +58,7 @@ const EditEntity = () => {
       console.log(error)
     }
   }
+  console.log(viewer)
 
   useEffect(() => {
     const newspaperId = params.id

@@ -3,6 +3,7 @@ import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
 import { useContext } from "react"
 import { UserContext } from "../../UserContext"
+import TileContent from "../../components/TileContent"
 function Calendar_() {
   const context = useContext(UserContext)
   console.log(context.value)
@@ -17,6 +18,13 @@ function Calendar_() {
         value={value}
         locale="ar"
         calendarType="ISO 8601"
+        tileContent={({ activeStartDate, date, view }) =>
+          view === "month" && date.getDay() === 0 ? (
+            <p>
+              <TileContent></TileContent>
+            </p>
+          ) : null
+        }
       />
     </div>
   )

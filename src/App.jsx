@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import UploadPDF from "./pages/UploadPDF"
 import Home from "./pages/Home"
 import HeaderSearch from "./components/HeaderSearch"
+import TileContent from "./components/TileContent"
 import HeaderInfo from "./components/HeaderInfo/index"
 import NavBar from "./components/NavBar"
 import AdminApp from "./admin-pages/AdminApp"
@@ -38,6 +39,8 @@ function App() {
             <Route path="/uploadPdf" component={UploadPDF} />
             <Route path="/newspaper/edit/:id" component={EditEntity} />
             <Route path="/newspaper" component={Newspaper} />
+            <Route path="/calender" component={Calendar_} />
+            <Route path="/aa" component={TileContent} />
             {/* A not found component needed here */}
             {/* <Route  component={NotFound} /> */}
           </Switch>
