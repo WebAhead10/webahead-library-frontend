@@ -9,6 +9,7 @@ import HeaderInfo from "./components/HeaderInfo/index"
 import NavBar from "./components/NavBar"
 import AdminApp from "./admin-pages/AdminApp"
 import Newspaper from "./pages/Newspaper"
+import TagsAdmin from "./admin-pages/TagsAdmin"
 import ChooseYearMonth from "./pages/ChooseYearMonth"
 import { UserContext } from "./UserContext"
 import ViewNewsPaper from "./pages/ViewNewsPaper"
@@ -43,6 +44,8 @@ function App() {
             <Route path="/newspaper/edit/:id" component={EditEntity} />
             <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
             <Route path="/newspaper" component={Newspaper} />
+            <Route path="/add/tag" component={TagsAdmin} />
+
             {/* A not found component needed here */}
             {/* <Route  component={NotFound} /> */}
           </Switch>
