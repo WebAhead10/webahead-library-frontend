@@ -40,7 +40,7 @@ function App() {
               component={ChooseYearMonth}
             />
             <Route path="/uploadPdf" component={UploadPDF} />
-            <Route path="/newspaper/edit/:id" component={EditEntity} />
+            <Route path="/edit/newspaper/:id" component={EditEntity} />
             <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
             <Route path="/newspaper" component={Newspaper} />
             {/* A not found component needed here */}
