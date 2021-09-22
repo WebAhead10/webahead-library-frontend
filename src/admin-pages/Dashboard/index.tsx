@@ -6,6 +6,8 @@ const Dashboard = () => {
 
   return (
     <div className={style.dashboardContainer}>
+      <h1>Webahead library management</h1>
+      <br />
       <button className="button" onClick={() => history.push("/addadmin")}>
         Add admin
       </button>
@@ -15,6 +17,8 @@ const Dashboard = () => {
       <button className="button" onClick={() => history.push("/documents")}>
         Manage documents/newspaper
       </button>
+      <br />
+      <br />
     </div>
   )
 }

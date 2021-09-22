@@ -1,5 +1,4 @@
 .tag-input {
-  background-color: rgb(245, 241, 209);
   font-weight: bold;
   border: 3px solid black;
   min-width: 140px;
@@ -7,8 +6,8 @@
   margin: 5vh;
   font-size: 22px;
   border-radius: 8px;
-  cursor: pointer;
   text-align: center;
+  user-select: none;
 }
 
 .tag-ul {
@@ -21,15 +20,18 @@
 
 .tag-li {
   margin: 0.5em;
-}
-
-.tag-span {
-  background-color: rgb(245, 241, 209);
-  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
   border: 3px solid black;
   min-width: 140px;
   padding: 5px;
-  font-size: 18px;
   border-radius: 8px;
-  cursor: pointer;
+}
+
+.tag-span {
+  font-weight: bold;
+  font-size: 18px;
+  margin: auto;
 }

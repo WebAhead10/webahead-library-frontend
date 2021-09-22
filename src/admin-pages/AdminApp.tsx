@@ -5,6 +5,7 @@ import AddAdmin from "./AddAdmin"
 import Dashboard from "./Dashboard"
 import ManageDocument from "./ManageDocument"
 import ManageDocuments from "./ManageDocuments"
+import TagsAdmin from "./TagsAdmin"
 import "./style.css"
 
 function AdminApp() {
@@ -26,6 +27,7 @@ function AdminApp() {
         <Route path="/addadmin" component={AddAdmin} />
         <Route path="/manage/document" component={ManageDocument} />
         <Route path="/documents" component={ManageDocuments} />
+        <Route path="/tags" component={TagsAdmin} />
         {/* A not found component needed here */}
         {/* <Route  component={NotFound} /> */}
       </Switch>

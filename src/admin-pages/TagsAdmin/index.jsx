@@ -50,9 +50,7 @@ function AddTag() {
     setTags(tags.filter((tag, index) => index !== indexToRemove))
     console.log(tags[indexToRemove])
     axios
-      .post(process.env.REACT_APP_API_URL + "/deleteTag", {
-        tag_name: tags[indexToRemove],
-      })
+      .post(process.env.REACT_APP_API_URL + "/deleteTag", tags[indexToRemove])
       .then((res) => {
         if (!res.data.success) {
           // setError("Something went wrong")
@@ -67,11 +65,17 @@ function AddTag() {
       })
   }
   return (
-    <div className="container">
+    <div
+      className="container"
+      style={{
+        padding: "20px 0px",
+      }}
+    >
+      <h1>Manage Tags</h1>
       <input
         className="tag-input"
         type="text"
-        placeholder="Press enter to add tag"
+        placeholder=""
         onKeyUp={addTags}
       ></input>
       <div className="tags">
@@ -80,9 +84,9 @@ function AddTag() {
             <li key={index} className="tag-li">
               <DeleteIcon
                 onClick={() => removeTags(index)}
-                style={{ transform: "scale(1)" }}
+                style={{ transform: "scale(1.2)", cursor: "pointer" }}
               />
-              <span className="tag-span">{tag}</span>
+              <span className="tag-span">{tag.name}</span>
             </li>
           ))}
         </ul>

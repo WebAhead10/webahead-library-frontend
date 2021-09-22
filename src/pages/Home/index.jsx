@@ -65,7 +65,7 @@ function Home() {
               name="text"
               rows="4"
               cols="50"
-              placeholder="العب يلا"
+              placeholder=""
             ></textarea>
             <input className="submit" type="submit" value="Submit" />
             <div className="articleOfTheDayContainer">

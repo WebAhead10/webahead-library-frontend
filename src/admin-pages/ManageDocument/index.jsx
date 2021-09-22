@@ -95,6 +95,9 @@ const UploadPDFDocument = () => {
 
   return (
     <div className="upload-container">
+      <h1>Add a document</h1>
+      <br />
+      <br />
       <div className="top-form">
         <div className="critical-details-form">
           <label className="document-detail">
