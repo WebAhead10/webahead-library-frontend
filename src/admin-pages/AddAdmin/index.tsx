@@ -36,12 +36,12 @@ const AddAdmin: FunctionComponent = () => {
       return
     }
     axios
-      .post(process.env.REACT_APP_API_URL + "/addadmin", newAdmin)
+      .post(process.env.REACT_APP_API_URL + "/admin/signup", newAdmin)
       .then((res) => {
         if (!res.data.success) {
           setError("Something went wrong")
         } else {
-          history.push("/a/admin")
+          history.push("/")
         }
       })
       .catch((err) => {

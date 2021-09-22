@@ -19,13 +19,13 @@ const Signin = () => {
 
   const onClick = () => {
     axios
-      .post(process.env.REACT_APP_API_URL + "/signin", userData)
+      .post(process.env.REACT_APP_API_URL + "/admin/signin", userData)
       .then((res) => {
         if (!res.data.success) {
           setError("Something went wrong")
         } else {
           localStorage.setItem("token", res.data.token)
-          history.push("/admin/dashboard")
+          history.push("/")
         }
       })
       .catch((err) => {
