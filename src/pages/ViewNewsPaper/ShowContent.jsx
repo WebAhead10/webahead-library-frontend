@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import "./style.css"
+import Tags from "./Tags"
+
 const ShowContent = ({ articleId, close }) => {
   const [text, setText] = useState("")
 
@@ -38,14 +40,15 @@ const ShowContent = ({ articleId, close }) => {
 
   return (
     <div className="ShowTextDiv">
-      <button onClick={() => close()}>X</button>
+      <button className="button view-newspaper-button" onClick={() => close()}>Close</button>
+      <Tags articleId={articleId} />
       <textarea
-        rows="28"
-        cols="40"
+        rows="23"
+        cols="30"
         value={text}
         onChange={(e) => setText(e.target.value)}
       ></textarea>
-      <button onClick={() => updateArticleText()}>update text</button>
+      <button className="button view-newspaper-button" onClick={() => updateArticleText()}>Update text</button>
     </div>
   )
 }
