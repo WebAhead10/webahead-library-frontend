@@ -2,23 +2,33 @@
 import React from "react"
 import axios from "axios"
 import Dropzone from "./Dropzone"
+import { v4 as uuidv4 } from "uuid"
 
-const ImageInput = ({ height, width, text, fileTypes, onError, onChange }) => {
+const ImageInput = ({
+  height,
+  width,
+  text,
+  fileTypes,
+  onError,
+  onChange,
+  publisherId,
+  date,
+}) => {
   const [error, setError] = React.useState("")
   const [loading, setLoading] = React.useState(false)
+  const newspaperName = `${date}-publisherId-${publisherId}-${uuidv4()}`
 
   const upload = async (files) => {
     try {
-      const newspaperName = "Haaretz_5_july_1918_" + Date.now()
       // save the first page to prepare the db for the rest of the pages
       const result = await axios.post(
         `${process.env.REACT_APP_API_URL}/upload`,
         {
           file: files[0],
           index: 0,
-          publisher_id: 2,
-          published_date: "2021-09-05",
-          newspaperName: "2021-09-5_publisher-2",
+          publisher_id: publisherId,
+          published_date: date,
+          newspaperName,
         }
       )
 
@@ -33,9 +43,9 @@ const ImageInput = ({ height, width, text, fileTypes, onError, onChange }) => {
             file,
             // add 1 to the index just so the page numbers would be correct
             index: i + 1,
-            publisher_id: 2,
-            published_date: "2021-09-05",
-            newspaperName: "2021-09-5_publisher-2",
+            publisher_id: publisherId,
+            published_date: date,
+            newspaperName: newspaperName,
             isNewPage: true,
           })
         )
