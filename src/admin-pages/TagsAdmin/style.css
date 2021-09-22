@@ -1,0 +1,35 @@
+.tag-input {
+  background-color: rgb(245, 241, 209);
+  font-weight: bold;
+  border: 3px solid black;
+  min-width: 140px;
+  padding: 5px;
+  margin: 5vh;
+  font-size: 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.tag-ul {
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  justify-content: center;
+  text-align: center;
+}
+
+.tag-li {
+  margin: 0.5em;
+}
+
+.tag-span {
+  background-color: rgb(245, 241, 209);
+  font-weight: bold;
+  border: 3px solid black;
+  min-width: 140px;
+  padding: 5px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
