@@ -24,25 +24,25 @@ function AddTag() {
 
   const addTags = (event) => {
     if (event.key === "Enter" && event.target.value !== "") {
-      setTags([...tags, event.target.value])
       axios
         .post(process.env.REACT_APP_API_URL + "/addTag", {
-          tag_name: event.target.value,
+          tag: event.target.value,
         })
         .then((res) => {
           if (!res.data.success) {
             // setError("Something went wrong")
+            event.target.value = ""
           } else {
-            console.log(res)
+            setTags([...tags, { name: event.target.value, id: res.data.tagId }])
+            event.target.value = ""
             // history.push("/a/admin")
           }
         })
         .catch((err) => {
+          event.target.value = ""
           // setError("Failed: " + err.message)
           console.log("error", err.message)
         })
-
-      event.target.value = ""
     }
   }
 
