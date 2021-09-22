@@ -40,15 +40,28 @@ const ShowContent = ({ articleId, close }) => {
 
   return (
     <div className="ShowTextDiv">
-      <button className="button view-newspaper-button" onClick={() => close()}>Close</button>
+      <button
+        className="button view-newspaper-button"
+        style={{ margin: "10px", marginRight: "auto" }}
+        onClick={() => close()}
+      >
+        Close
+      </button>
       <Tags articleId={articleId} />
       <textarea
         rows="23"
         cols="30"
         value={text}
+        style={{ margin: "0px 10px" }}
         onChange={(e) => setText(e.target.value)}
       ></textarea>
-      <button className="button view-newspaper-button" onClick={() => updateArticleText()}>Update text</button>
+      <button
+        className="button view-newspaper-button"
+        onClick={() => updateArticleText()}
+        style={{ margin: "auto", marginTop: "10px" }}
+      >
+        Update text
+      </button>
     </div>
   )
 }
