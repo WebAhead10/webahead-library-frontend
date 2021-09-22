@@ -16,7 +16,7 @@ const ImageInput = ({
 }) => {
   const [error, setError] = React.useState("")
   const [loading, setLoading] = React.useState(false)
-  const newspaperName = `${date}_publisherId-${publisherId}_${uuidv4()}`
+  const newspaperName = `${date}-publisherId-${publisherId}-${uuidv4()}`
 
   const upload = async (files) => {
     try {

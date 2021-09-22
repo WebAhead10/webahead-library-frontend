@@ -34,7 +34,7 @@ function Calendar_() {
           ) {
             return (
               <div className="calendar-tileContent">
-                <span onClick={() => history.push("/view/newspaper/1")}>
+                <span onClick={() => history.push("/view/newspaper/2")}>
                   Here
                 </span>
               </div>
