@@ -1,10 +1,35 @@
-.main-container{
-    display: flex;
-    flex-direction: row;
+.main-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
-.ShowTextDiv{
-    float:right ;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+.ShowTextDiv {
+  width: 30%;
+  height: 70%;
+  float: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.singularTag {
+  width: fit-content;
+  background-color: rgba(255, 255, 255, 0.315);
+  border: 2px solid black;
+  padding: 2px 5px;
+  margin-right: 4px;
+  border-radius: 8px;
+}
+.multipleTags {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.view-newspaper-button {
+  width: 120px;
+  font-size: 18px;
+  padding: 4px 10px;
 }
