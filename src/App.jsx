@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import EditEntity from "./pages/EditEntity"
 import "./App.css"
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
-import UploadPDF from "./pages/UploadPDF"
 import Home from "./pages/Home"
 import HeaderSearch from "./components/HeaderSearch"
 import HeaderInfo from "./components/HeaderInfo/index"
@@ -13,9 +12,10 @@ import TagsAdmin from "./admin-pages/TagsAdmin"
 import ChooseYearMonth from "./pages/ChooseYearMonth"
 import { UserContext } from "./UserContext"
 import ViewNewsPaper from "./pages/ViewNewsPaper"
+import Calendar from "./pages/Calendar"
 
 function App() {
-  const [value, setValue] = useState([])
+  const [value, setValue] = useState({})
 
   if (window.location.pathname.indexOf("/a/admin") === 0) {
     return (
@@ -40,12 +40,12 @@ function App() {
               path="/choose/year-month/:name"
               component={ChooseYearMonth}
             />
-            <Route path="/uploadPdf" component={UploadPDF} />
             <Route path="/edit/newspaper/:id" component={EditEntity} />
             <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
             <Route path="/newspaper" component={Newspaper} />
             <Route path="/add/tag" component={TagsAdmin} />
-
+            <Route path="/calendar" component={Calendar} />
+            {/* <Route path="/aa" component={TileContent} /> */}
             {/* A not found component needed here */}
             {/* <Route  component={NotFound} /> */}
           </Switch>

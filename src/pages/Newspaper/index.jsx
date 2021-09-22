@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import NewspaperSquare from "../../components/NewspaperSquare/index"
+import NewspaperSquare from "../../components/NewspaperSquare"
 import axios from "axios"
 import "./style.css"
 const API_URL = process.env.REACT_APP_API_URL

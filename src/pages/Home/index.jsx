@@ -58,7 +58,7 @@ function Home() {
       </div>
       <div className="leftSide">
         <form className="form">
-          <label for="title">ساعدونا في تحسين مقالتنا</label>
+          <label htmlFor="title">ساعدونا في تحسين مقالتنا</label>
           <div className="box">
             <textarea
               id="text"

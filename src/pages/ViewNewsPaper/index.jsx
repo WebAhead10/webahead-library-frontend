@@ -3,10 +3,11 @@ import React, { useState, useEffect, useCallback } from "react"
 import { useParams } from "react-router-dom"
 import axios from "axios"
 import "./style.css"
+import ShowContent from "./ShowContent"
 
 const ViewNewsPaper = () => {
   const [viewer, setViewer] = useState(null)
-  const [viewText, setViewText] = useState(false)
+  const [selectedId, setSelectedId] = useState(null)
   const params = useParams()
 
   const fetchNewspaper = async (id) => {
@@ -61,7 +62,6 @@ const ViewNewsPaper = () => {
         const result = await axios.get(
           `${process.env.REACT_APP_API_URL}/newspaper/coords/${id}`
         )
-
         if (!result.data.success) throw new Error("Failed")
 
         const coordsArr = result.data.pages
@@ -87,12 +87,7 @@ const ViewNewsPaper = () => {
             })
 
             overlayElement.addEventListener("click", () => {
-              // TODO: add a div to show the text that is connected to the article
-
-              try {
-              } catch (err) {
-                console.log(err)
-              }
+              setSelectedId(id)
             })
 
             viewer.addOverlay(
@@ -121,16 +116,20 @@ const ViewNewsPaper = () => {
   }, [viewer, params.id, fetchCoords])
 
   return (
-    <div>
+    <div className="main-container">
       <div
         id="openSeaDragon"
         style={{
-          border: viewText ? "2px solid blue" : "1px solid black",
+          border: selectedId ? "2px solid blue" : "1px solid black",
           height: "75vh",
           width: "85vw",
           margin: "auto",
         }}
       />
+
+      {selectedId && (
+        <ShowContent articleId={selectedId} close={setSelectedId} />
+      )}
     </div>
   )
 }

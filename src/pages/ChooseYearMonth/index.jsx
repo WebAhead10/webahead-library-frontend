@@ -1,7 +1,7 @@
 import { useContext, useState } from "react"
 import "./style.css"
 import { UserContext } from "../../UserContext"
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 
 const months = [
   "يناير",
@@ -21,7 +21,8 @@ const years = [2000, 2001, 2002, 2003, 2004, 2005]
 
 function ChooseYearMonth() {
   const history = useHistory()
-  const { setValue } = useContext(UserContext)
+  const params = useParams()
+  const { setValue, value } = useContext(UserContext)
   const [year, setYear] = useState("")
   const [month, setMonth] = useState("")
 
@@ -68,8 +69,8 @@ function ChooseYearMonth() {
           className="button"
           style={{ margin: "0px 10px" }}
           onClick={() => {
-            setValue({ month, year })
-            history.push("/")
+            setValue({ newspaper: params.name, month, year })
+            history.push("/calendar")
           }}
         >
           اذهب
@@ -91,8 +92,8 @@ function ChooseYearMonth() {
                     }
                     onClick={() => {
                       if (m !== "أكتوبر") {
-                        setValue({ month: m, year: e })
-                        history.push("/")
+                        setValue({ newspaper: params.name, month: m, year: e })
+                        history.push("/calendar")
                       }
                     }}
                   >

@@ -37,3 +37,59 @@ body {
     transform: rotate(360deg);
   }
 }
+
+input[type="date"] {
+  position: relative;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  height: auto;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
+}
+
+/* .react-calendar__month-view__days {
+  width: 80%;
+}
+*/
+
+.react-calendar__month-view__weekdays {
+  margin-bottom: 20px;
+}
+
+.react-calendar__month-view {
+  width: 80%;
+  margin: auto;
+  margin-top: 20px;
+}
+
+.day-tile {
+  height: 60px;
+  background-color: white;
+  border: 1px solid black;
+  font-size: 20px;
+}
+
+.calendar-tileContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calendar-tileContent span {
+  margin-top: 5px;
+  text-decoration: underline;
+  cursor: pointer;
+  color: blue;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
