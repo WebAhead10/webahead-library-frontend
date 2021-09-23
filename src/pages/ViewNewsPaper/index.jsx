@@ -2,8 +2,8 @@
 import { useState, useEffect, useCallback } from "react"
 import { useParams } from "react-router-dom"
 import axios from "axios"
-import "./style.css"
-import ShowContent from "./ShowContent"
+import style from "./style.module.css"
+import ShowContent from "./components/ShowContent"
 
 const ViewNewsPaper = () => {
   const [viewer, setViewer] = useState(null)
@@ -116,7 +116,7 @@ const ViewNewsPaper = () => {
   }, [viewer, params.id, fetchCoords])
 
   return (
-    <div className="main-container">
+    <div className={style["main-container"]}>
       <div
         id="openSeaDragon"
         style={{

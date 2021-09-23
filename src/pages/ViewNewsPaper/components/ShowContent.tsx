@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
-import "./style.css"
+import style from "../style.module.css"
 import Tags from "./Tags"
 
-const ShowContent = ({ articleId, close }) => {
+interface ShowContentProps {
+  articleId: number
+  close: Function
+}
+
+const ShowContent = ({ articleId, close }: ShowContentProps) => {
   const [text, setText] = useState("")
 
-  const fetchContent = async (coordsId) => {
+  const fetchContent = async (coordsId: number) => {
     try {
       const result = await axios.get(
         `${process.env.REACT_APP_API_URL}/newspaper/content/${coordsId}`
@@ -39,7 +44,7 @@ const ShowContent = ({ articleId, close }) => {
   }
 
   return (
-    <div className="ShowTextDiv">
+    <div className={style["ShowTextDiv"]}>
       <button
         className="button view-newspaper-button"
         style={{ margin: "10px", marginRight: "auto" }}
@@ -49,8 +54,8 @@ const ShowContent = ({ articleId, close }) => {
       </button>
       <Tags articleId={articleId} />
       <textarea
-        rows="23"
-        cols="30"
+        rows={23}
+        cols={30}
         value={text}
         style={{ margin: "0px 10px" }}
         onChange={(e) => setText(e.target.value)}

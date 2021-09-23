@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useHistory } from "react-router-dom"
-import NewspaperSquare from "../../components/NewspaperSquare"
+import NewspaperSquare from "../../components/PublisherSquare"
 import axios from "axios"
 import style from "./style.module.css"
 const API_URL = process.env.REACT_APP_API_URL
@@ -47,7 +47,7 @@ const ManageDocuments = () => {
           <NewspaperSquare
             name={publisher.name}
             style={{
-              objectFit: (index + 1) % 4 === 0 ? "cover" : "",
+              objectFit: (index + 1) % 4 === 0 ? "cover" : "fill",
               background: (index + 1) % 5 === 0 ? "white" : "",
             }}
             logo={publisher.logo}

@@ -1,35 +1,23 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
-import Tag from "./Tag"
 const API_URL = process.env.REACT_APP_API_URL
 
-const Tags = ({ articleId }) => {
+interface TagsProps {
+  articleId: number
+}
+
+interface SelectedTags {
+  id: number
+  name: string
+}
+
+const Tags = ({ articleId }: TagsProps) => {
   const [tags, setTags] = useState([])
-  const [acText, setAcText] = useState("")
   const [tagAutocomplete, setTagAutocomplete] = useState("")
   const [error, setError] = useState("")
-  const [selectedTags, setSelectedTags] = useState([])
+  const [selectedTags, setSelectedTags] = useState<SelectedTags[]>([])
 
-  // useEffect(() => {
-  //   fetchAllTags("")
-  // }, [])
-
-  const fetchAllTags = async (ac) => {
-    console.log(ac)
-    try {
-      const result = await axios.post(
-        `${process.env.REACT_APP_API_URL}/autocomplete`,
-        { tag: ac }
-      )
-      if (!result.data.success) throw new Error("Failed")
-      console.log(result.data)
-      setTags(result.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const onTagClick = (tagId, tagName) => {
+  const onTagClick = (tagId: number, tagName: string) => {
     console.log(1, tagId)
     if (!tagId) return
 
@@ -42,7 +30,6 @@ const Tags = ({ articleId }) => {
       return
     }
 
-    console.log("tagId", tagId)
     // if it doesn't then add it
     setSelectedTags((prevDoc) =>
       selectedTags.concat({ id: tagId, name: tagName })
@@ -125,25 +112,6 @@ const Tags = ({ articleId }) => {
           ))}
         </div>
       </div>
-      {/* <input
-        type="text"
-        value={acText}
-        onChange={(e) => {
-          setAcText(e.target.value)
-          fetchAllTags(e.target.value)
-        }}
-      />
-      {tags &&
-        tags.map((oneTag) => {
-          return (
-            <Tag
-              key={oneTag.id}
-              tagName={oneTag.tag_name}
-              tagId={oneTag.id}
-              articleId={articleId}
-            />
-          )
-        })} */}
     </div>
   )
 }

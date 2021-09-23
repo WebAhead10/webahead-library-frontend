@@ -1,19 +1,16 @@
-import { useState } from "react"
 import Calendar from "react-calendar"
-// import "react-calendar/dist/Calendar.css"
 import { useContext } from "react"
 import { UserContext } from "../../UserContext"
 import { useHistory } from "react-router-dom"
-import "./style.css"
+import style from "./style.module.css"
 
 function Calendar_() {
   const context = useContext(UserContext)
   const history = useHistory()
 
-  console.log(context.value)
   return (
-    <div className="calendar_container">
-      <div className="year-month">
+    <div>
+      <div className={style["year-month"]}>
         <span>{context.value.newspaper}</span>
         <span>{context.value.year}</span>
         <span>{context.value.month}</span>

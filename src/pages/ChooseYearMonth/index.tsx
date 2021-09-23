@@ -1,5 +1,5 @@
 import { useContext, useState } from "react"
-import "./style.css"
+import style from "./style.module.css"
 import { UserContext } from "../../UserContext"
 import { useHistory, useParams } from "react-router-dom"
 
@@ -17,22 +17,30 @@ const months = [
   "نوفمبر",
   "ديسامبر",
 ]
-const years = [2000, 2001, 2002, 2003, 2004, 2005]
+
+interface Params {
+  name: string
+}
+
+const years = ["2000", "2001", "2002", "2003", "2004", "2005"]
 
 function ChooseYearMonth() {
   const history = useHistory()
-  const params = useParams()
-  const { setValue, value } = useContext(UserContext)
+  const params = useParams<Params>()
+  const { setValue } = useContext(UserContext)
   const [year, setYear] = useState("")
   const [month, setMonth] = useState("")
 
   return (
     <div>
-      <div className="choose-year-top">
-        <label className="date-dropdown-container" htmlFor="dropdown-year">
+      <div className={style["choose-year-top"]}>
+        <label
+          className={style["date-dropdown-container"]}
+          htmlFor="dropdown-year"
+        >
           <span>سنة: </span>
           <select
-            className="date-dropdown"
+            className={style["date-dropdown"]}
             id="dropdown-year"
             onChange={({ target }) => setYear(target.value)}
             value={year}
@@ -43,10 +51,13 @@ function ChooseYearMonth() {
             ))}
           </select>
         </label>
-        <label className="date-dropdown-container" htmlFor="dropdown-month">
+        <label
+          className={style["date-dropdown-container"]}
+          htmlFor="dropdown-month"
+        >
           <span>شهر: </span>
           <select
-            className="date-dropdown"
+            className={style["date-dropdown"]}
             id="dropdown-month"
             onChange={({ target }) => setMonth(target.value)}
             value={month}
@@ -77,27 +88,31 @@ function ChooseYearMonth() {
         </button>
       </div>
       <div>
-        {years.map((e, index) => (
-          <div key={index} className="date-container">
-            <h2>{e}</h2>
-            <div className="names_of_monthes">
-              <ul className="nav__monthes">
-                {months.map((m, index) => (
+        {years.map((currentYear, index) => (
+          <div key={index} className={style["date-container"]}>
+            <h2>{currentYear}</h2>
+            <div className={style["names_of_monthes"]}>
+              <ul className={style["nav__monthes"]}>
+                {months.map((currentMonth, index) => (
                   <li
                     key={index}
                     className={
-                      m === "أكتوبر" || m === "فبراير"
+                      currentMonth === "أكتوبر" || currentMonth === "فبراير"
                         ? "disabled__nav__item"
                         : "nav__item"
                     }
                     onClick={() => {
-                      if (m !== "أكتوبر") {
-                        setValue({ newspaper: params.name, month: m, year: e })
+                      if (currentMonth !== "أكتوبر") {
+                        setValue({
+                          newspaper: params.name,
+                          month: currentMonth,
+                          year: currentYear,
+                        })
                         history.push("/calendar")
                       }
                     }}
                   >
-                    {m}
+                    {currentMonth}
                   </li>
                 ))}
               </ul>
