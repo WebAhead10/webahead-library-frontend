@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react"
-import axios from "axios"
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 const API_URL = process.env.REACT_APP_API_URL
 
 interface TagsProps {
@@ -13,8 +13,8 @@ interface SelectedTags {
 
 const Tags = ({ articleId }: TagsProps) => {
   const [tags, setTags] = useState([])
-  const [tagAutocomplete, setTagAutocomplete] = useState("")
-  const [error, setError] = useState("")
+  const [tagAutocomplete, setTagAutocomplete] = useState('')
+  const [error, setError] = useState('')
   const [selectedTags, setSelectedTags] = useState<SelectedTags[]>([])
 
   const onTagClick = (tagId: number, tagName: string) => {
@@ -31,11 +31,9 @@ const Tags = ({ articleId }: TagsProps) => {
     }
 
     // if it doesn't then add it
-    setSelectedTags((prevDoc) =>
-      selectedTags.concat({ id: tagId, name: tagName })
-    )
+    setSelectedTags((prevDoc) => selectedTags.concat({ id: tagId, name: tagName }))
 
-    setTagAutocomplete("")
+    setTagAutocomplete('')
   }
 
   useEffect(() => {
@@ -45,7 +43,7 @@ const Tags = ({ articleId }: TagsProps) => {
       .post(`${API_URL}/autocomplete`, { tag: tagAutocomplete })
       .then((res) => {
         if (!res.data.success) {
-          setError("Failed")
+          setError('Failed')
           return
         }
 
@@ -63,9 +61,9 @@ const Tags = ({ articleId }: TagsProps) => {
           <label>
             <span
               style={{
-                marginLeft: "auto",
-                display: "flex",
-                fontSize: "20px",
+                marginLeft: 'auto',
+                display: 'flex',
+                fontSize: '20px'
               }}
             >
               تصنيف
@@ -82,14 +80,12 @@ const Tags = ({ articleId }: TagsProps) => {
             <div className="autocomplete-options-container">
               {tags.length ? (
                 tags.slice(0, 5).map(({ name, id }) => {
-                  const isTagSelected = selectedTags.find(
-                    ({ id: tagId }) => tagId === id
-                  )
+                  const isTagSelected = selectedTags.find(({ id: tagId }) => tagId === id)
 
                   return (
                     <span
                       onClick={() => !isTagSelected && onTagClick(id, name)}
-                      className={isTagSelected && "disabled-option"}
+                      className={isTagSelected && 'disabled-option'}
                     >
                       {name}
                     </span>
@@ -103,10 +99,7 @@ const Tags = ({ articleId }: TagsProps) => {
         </div>
         <div className="tag-pill-container">
           {selectedTags.map(({ name, id }) => (
-            <span
-              className="tag-pill"
-              onDoubleClick={() => onTagClick(id, name)}
-            >
+            <span className="tag-pill" onDoubleClick={() => onTagClick(id, name)}>
               {name}
             </span>
           ))}

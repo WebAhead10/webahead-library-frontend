@@ -1,5 +1,5 @@
-import SearchIcon from "@material-ui/icons/Search"
-import "./style.css"
+import SearchIcon from '@material-ui/icons/Search'
+import './style.css'
 function HeaderSearch() {
   return (
     <div className="header">

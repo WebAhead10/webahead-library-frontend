@@ -1,36 +1,24 @@
 /* eslint-disable no-undef */
-import React from "react"
-import axios from "axios"
-import Dropzone from "./Dropzone"
-import { v4 as uuidv4 } from "uuid"
+import React from 'react'
+import axios from 'axios'
+import Dropzone from './Dropzone'
+import { v4 as uuidv4 } from 'uuid'
 
-const ImageInput = ({
-  height,
-  width,
-  text,
-  fileTypes,
-  onError,
-  onChange,
-  publisherId,
-  date,
-}) => {
-  const [error, setError] = React.useState("")
+const ImageInput = ({ height, width, text, fileTypes, onError, onChange, publisherId, date }) => {
+  const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(false)
   const newspaperName = `${date}-publisherId-${publisherId}-${uuidv4()}`
 
   const upload = async (files) => {
     try {
       // save the first page to prepare the db for the rest of the pages
-      const result = await axios.post(
-        `${process.env.REACT_APP_API_URL}/upload`,
-        {
-          file: files[0],
-          index: 0,
-          publisher_id: publisherId,
-          published_date: date,
-          newspaperName,
-        }
-      )
+      const result = await axios.post(`${process.env.REACT_APP_API_URL}/upload`, {
+        file: files[0],
+        index: 0,
+        publisher_id: publisherId,
+        published_date: date,
+        newspaperName
+      })
 
       if (!result.data.success) {
         onError(result.data.message)
@@ -46,7 +34,7 @@ const ImageInput = ({
             publisher_id: publisherId,
             published_date: date,
             newspaperName: newspaperName,
-            isNewPage: true,
+            isNewPage: true
           })
         )
       )
@@ -62,7 +50,7 @@ const ImageInput = ({
 
   const prepareUpload = (file) => {
     if (file.size > 50000000) {
-      return setError("File should be below 5mb")
+      return setError('File should be below 5mb')
     }
 
     setLoading(true)
@@ -73,15 +61,15 @@ const ImageInput = ({
 
     reader.onload = async function (e) {
       try {
-        const pdfData = atob(reader.result.split(",")[1])
+        const pdfData = atob(reader.result.split(',')[1])
         const pdf = await pdfjsLib.getDocument({
-          data: pdfData,
+          data: pdfData
         }).promise
-        var pagesImage = new Array(pdf.numPages).fill("")
+        var pagesImage = new Array(pdf.numPages).fill('')
 
         // loop over the pdf pages
         for (let page = 1; page <= pdf.numPages; page++) {
-          let canvas = document.createElement("canvas")
+          let canvas = document.createElement('canvas')
           renderPage(page, canvas)
         }
 
@@ -95,18 +83,16 @@ const ImageInput = ({
 
             // render in onto a canvas
             var pageRendering = page.render({
-              canvasContext: canvas.getContext("2d"),
-              viewport: viewport,
+              canvasContext: canvas.getContext('2d'),
+              viewport: viewport
             })
 
             var completeCallback = pageRendering._internalRenderTask.callback
 
-            pageRendering._internalRenderTask.callback = async function (
-              error
-            ) {
+            pageRendering._internalRenderTask.callback = async function (error) {
               completeCallback.call(this, error)
               // turn the canvas to an image
-              let image = await canvas.toDataURL("image/png", 1.0)
+              let image = await canvas.toDataURL('image/png', 1.0)
               pagesImage[pageNumber - 1] = image
               canvas.remove()
 
@@ -135,7 +121,7 @@ const ImageInput = ({
         loading={loading}
         error={error}
       />
-      {error && <span style={{ color: "red" }}>{error}</span>}
+      {error && <span style={{ color: 'red' }}>{error}</span>}
     </div>
   )
 }

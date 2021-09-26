@@ -1,42 +1,36 @@
 /* eslint-disable no-undef */
-import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
-import axios from "axios"
-import { v4 as uuidv4 } from "uuid"
-import "./style.css"
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid'
+import './style.css'
 
-const STATUS_NAVIGATING = "nagivating"
-const STATUS_DRAWING = "drawing"
-const STATUS_DRAWING_NAV = "drawing-navigation"
+const STATUS_NAVIGATING = 'nagivating'
+const STATUS_DRAWING = 'drawing'
+const STATUS_DRAWING_NAV = 'drawing-navigation'
 
 const EditEntity = () => {
   const [viewer, setViewer] = useState(null)
   const [overlays, setOverlays] = useState([])
   const params = useParams()
   const [mouseTracker, setMouseTracker] = useState(null)
-  const [error, setError] = useState("")
+  const [error, setError] = useState('')
   const [editStatus, setEditStatus] = useState(STATUS_NAVIGATING)
 
   const fetchNewspaper = async (id) => {
     try {
-      const result = await axios.get(
-        `${process.env.REACT_APP_API_URL}/newspaper/${id}`
-      )
+      const result = await axios.get(`${process.env.REACT_APP_API_URL}/newspaper/${id}`)
 
-      if (!result.data.success) throw new Error("Failed")
+      if (!result.data.success) throw new Error('Failed')
 
-      const bucketRoot =
-        "https://feuerstein-form-website-uploads.s3.eu-central-1.amazonaws.com/misc"
+      const bucketRoot = 'https://feuerstein-form-website-uploads.s3.eu-central-1.amazonaws.com/misc'
 
       viewer && viewer.destroy()
       setViewer(
         OpenSeadragon({
-          id: "openSeaDragon",
+          id: 'openSeaDragon',
           tileSources: result.data.pages.map(
-            ({ name, pagename }) =>
-              `${bucketRoot}/${
-                pagename.split("_")[0]
-              }/${pagename}/${pagename}.dzi`
+            ({ name, pagename }) => `${bucketRoot}/${pagename.split('_')[0]}/${pagename}/${pagename}.dzi`
           ),
           animationTime: 0.5,
           immediateRender: true,
@@ -44,9 +38,9 @@ const EditEntity = () => {
           collectionMode: true,
           collectionRows: 1,
           collectionTileMargin: -150,
-          collectionLayout: "horizontal",
+          collectionLayout: 'horizontal',
           showNavigator: false,
-          gestureSettingsMouse: { clickToZoom: false },
+          gestureSettingsMouse: { clickToZoom: false }
         })
       )
     } catch (error) {
@@ -74,24 +68,21 @@ const EditEntity = () => {
     const mouseTrackerListeners = new OpenSeadragon.MouseTracker({
       element: viewer.element,
       pressHandler: function (event) {
-        const overlayElement = document.createElement("div")
-        overlayElement.style.background = "rgba(255, 0, 0, 0.3)"
-        overlayElement.setAttribute("id", `overlay_${uuidv4()}`)
+        const overlayElement = document.createElement('div')
+        overlayElement.style.background = 'rgba(255, 0, 0, 0.3)'
+        overlayElement.setAttribute('id', `overlay_${uuidv4()}`)
 
         overlayElement.ondblclick = () => {
-          removeOverlay(overlayElement.id.split("_")[1])
+          removeOverlay(overlayElement.id.split('_')[1])
         }
 
         const viewportPos = viewer.viewport.pointFromPixel(event.position)
 
-        viewer.addOverlay(
-          overlayElement,
-          new OpenSeadragon.Rect(viewportPos.x, viewportPos.y, 0, 0)
-        )
+        viewer.addOverlay(overlayElement, new OpenSeadragon.Rect(viewportPos.x, viewportPos.y, 0, 0))
 
         drag = {
           overlayElement: overlayElement,
-          startPos: viewportPos,
+          startPos: viewportPos
         }
       },
 
@@ -118,25 +109,25 @@ const EditEntity = () => {
         const lastIndex = viewer.currentOverlays.length - 1
         const {
           bounds: { x, y, height = 0, width = 0 },
-          element,
+          element
         } = viewer.currentOverlays[lastIndex] || { bounds: {} }
 
         if (width < 10 || height < 10) {
-          removeOverlay(element.id.split("_")[1])
+          removeOverlay(element.id.split('_')[1])
           return
         }
 
         const newOverlay = { x, y, height, width }
-        console.log("newOverlay", newOverlay)
+        console.log('newOverlay', newOverlay)
         setOverlays((prevOverlays) => [
           ...prevOverlays,
           {
             overlay: newOverlay,
             id: element.id,
-            saved: false,
-          },
+            saved: false
+          }
         ])
-      },
+      }
     })
 
     setMouseTracker(mouseTrackerListeners)
@@ -146,17 +137,14 @@ const EditEntity = () => {
     if (!overlays.length) return
 
     try {
-      const res = await axios.post(
-        process.env.REACT_APP_API_URL + "/newspaper/coords/" + id,
-        {
-          overlays: overlays
-            .filter(({ saved }) => !saved)
-            .map((overlay) => ({
-              ...overlay,
-              saved: undefined,
-            })),
-        }
-      )
+      const res = await axios.post(process.env.REACT_APP_API_URL + '/newspaper/coords/' + id, {
+        overlays: overlays
+          .filter(({ saved }) => !saved)
+          .map((overlay) => ({
+            ...overlay,
+            saved: undefined
+          }))
+      })
 
       if (!res.data.success) {
         setError(res.data.message)
@@ -167,7 +155,7 @@ const EditEntity = () => {
         prevOverlays.map((overlay) => {
           const overlayElement = document.getElementById(overlay.id)
 
-          overlayElement.style.background = "rgba(0, 0, 255, 0.3)"
+          overlayElement.style.background = 'rgba(0, 0, 255, 0.3)'
           overlayElement.ondblclick = () => {}
 
           return { ...overlay, saved: true, rendered: false }
@@ -179,9 +167,9 @@ const EditEntity = () => {
       drag = null
       viewer.setMouseNavEnabled(true)
       setEditStatus(STATUS_NAVIGATING)
-      console.log("saved")
+      console.log('saved')
     } catch (err) {
-      setError("Error has occured")
+      setError('Error has occured')
       console.error(err)
     }
   }
@@ -189,9 +177,7 @@ const EditEntity = () => {
   const removeOverlay = (overlayId) => {
     viewer.removeOverlay(`overlay_${overlayId}`)
 
-    setOverlays((prevOverlays) =>
-      prevOverlays.filter(({ id }) => id !== `overlay_${overlayId}`)
-    )
+    setOverlays((prevOverlays) => prevOverlays.filter(({ id }) => id !== `overlay_${overlayId}`))
   }
 
   const updateDrawingStatus = (status, enableMouse) => {
@@ -220,10 +206,7 @@ const EditEntity = () => {
         </div>
       )}
       <div id="openSeaDragon" className="edit-entity-viewer" />
-      <button
-        onClick={() => onSubmit(overlays, params.id)}
-        className="button edit-entity-button"
-      >
+      <button onClick={() => onSubmit(overlays, params.id)} className="button edit-entity-button">
         Submit
       </button>
       <button className="button edit-entity-button" onClick={drawOverly}>

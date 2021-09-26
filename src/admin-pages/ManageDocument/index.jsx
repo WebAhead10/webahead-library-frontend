@@ -1,8 +1,8 @@
-import BulkImageInput from "../../components/ImageInput"
-import { useHistory } from "react-router-dom"
-import "./style.css"
-import { useState, useEffect } from "react"
-import axios from "axios"
+import BulkImageInput from '../../components/ImageInput'
+import { useHistory } from 'react-router-dom'
+import './style.css'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 const API_URL = process.env.REACT_APP_API_URL
 
 // TODO: Connect tags to newspaper in the backend.
@@ -10,15 +10,15 @@ const API_URL = process.env.REACT_APP_API_URL
 const UploadPDFDocument = () => {
   const history = useHistory()
 
-  const [error, setError] = useState("")
+  const [error, setError] = useState('')
   const [publishers, setPublishers] = useState([])
   const [newDocument, setNewDocument] = useState({
     publisher: null,
-    date: "",
+    date: '',
     newspaperId: null,
-    tags: [],
+    tags: []
   })
-  const [tagAutocomplete, setTagAutocomplete] = useState("")
+  const [tagAutocomplete, setTagAutocomplete] = useState('')
   const [tags, setTags] = useState([])
 
   const onChange =
@@ -26,7 +26,7 @@ const UploadPDFDocument = () => {
     ({ target }) =>
       setNewDocument((prevDoc) => ({
         ...prevDoc,
-        [key]: target.value,
+        [key]: target.value
       }))
 
   const onTagClick = (tagId, tagName) => {
@@ -39,20 +39,20 @@ const UploadPDFDocument = () => {
     if (isTagSelected) {
       setNewDocument((prevDoc) => ({
         ...prevDoc,
-        tags: newDocument.tags.filter(({ id }) => id !== tagId),
+        tags: newDocument.tags.filter(({ id }) => id !== tagId)
       }))
 
       return
     }
 
-    console.log("tagId", tagId)
+    console.log('tagId', tagId)
     // if it doesn't then add it
     setNewDocument((prevDoc) => ({
       ...prevDoc,
-      tags: newDocument.tags.concat({ id: tagId, name: tagName }),
+      tags: newDocument.tags.concat({ id: tagId, name: tagName })
     }))
 
-    setTagAutocomplete("")
+    setTagAutocomplete('')
   }
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const UploadPDFDocument = () => {
       .get(`${API_URL}/publishers`)
       .then((res) => {
         if (!res.data.success) {
-          setError("Failed")
+          setError('Failed')
           return
         }
 
@@ -78,7 +78,7 @@ const UploadPDFDocument = () => {
       .post(`${API_URL}/autocomplete`, { tag: tagAutocomplete })
       .then((res) => {
         if (!res.data.success) {
-          setError("Failed")
+          setError('Failed')
           return
         }
 
@@ -102,11 +102,7 @@ const UploadPDFDocument = () => {
         <div className="critical-details-form">
           <label className="document-detail">
             <span>دار النشر</span>
-            <select
-              className="dropdown"
-              onChange={onChange("publisher")}
-              value={newDocument.publisher}
-            >
+            <select className="dropdown" onChange={onChange('publisher')} value={newDocument.publisher}>
               <option selected disabled></option>
               {publishers.map((publisher) => (
                 <option value={publisher.id}>{publisher.name}</option>
@@ -116,12 +112,7 @@ const UploadPDFDocument = () => {
 
           <label className="document-detail">
             <span>تاريخ</span>
-            <input
-              className="date-input"
-              type="date"
-              value={newDocument.date}
-              onChange={onChange("date")}
-            />
+            <input className="date-input" type="date" value={newDocument.date} onChange={onChange('date')} />
           </label>
         </div>
 
@@ -130,9 +121,9 @@ const UploadPDFDocument = () => {
             <label>
               <span
                 style={{
-                  marginLeft: "auto",
-                  display: "flex",
-                  fontSize: "20px",
+                  marginLeft: 'auto',
+                  display: 'flex',
+                  fontSize: '20px'
                 }}
               >
                 تصنيف
@@ -149,14 +140,12 @@ const UploadPDFDocument = () => {
               <div className="autocomplete-options-container">
                 {tags.length ? (
                   tags.slice(0, 5).map(({ name, id }) => {
-                    const isTagSelected = newDocument.tags.find(
-                      ({ id: tagId }) => tagId === id
-                    )
+                    const isTagSelected = newDocument.tags.find(({ id: tagId }) => tagId === id)
 
                     return (
                       <span
                         onClick={() => !isTagSelected && onTagClick(id, name)}
-                        className={isTagSelected && "disabled-option"}
+                        className={isTagSelected && 'disabled-option'}
                       >
                         {name}
                       </span>
@@ -170,10 +159,7 @@ const UploadPDFDocument = () => {
           </div>
           <div className="tag-pill-container">
             {newDocument.tags.map(({ name, id }) => (
-              <span
-                className="tag-pill"
-                onDoubleClick={() => onTagClick(id, name)}
-              >
+              <span className="tag-pill" onDoubleClick={() => onTagClick(id, name)}>
                 {name}
               </span>
             ))}
@@ -198,15 +184,9 @@ const UploadPDFDocument = () => {
       />
       {/* )} */}
 
-      <input
-        type="submit"
-        value="Submit"
-        className="button"
-        style={{ marginTop: "20px" }}
-        onClick={submitDocument}
-      />
+      <input type="submit" value="Submit" className="button" style={{ marginTop: '20px' }} onClick={submitDocument} />
 
-      {error && <span style={{ color: "red" }}>{error}</span>}
+      {error && <span style={{ color: 'red' }}>{error}</span>}
     </div>
   )
 }

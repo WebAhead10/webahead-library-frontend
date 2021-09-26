@@ -1,8 +1,8 @@
-import Calendar from "react-calendar"
-import { useContext } from "react"
-import { UserContext } from "../../UserContext"
-import { useHistory } from "react-router-dom"
-import style from "./style.module.css"
+import Calendar from 'react-calendar'
+import { useContext } from 'react'
+import { UserContext } from '../../UserContext'
+import { useHistory } from 'react-router-dom'
+import style from './style.module.css'
 
 function Calendar_() {
   const context = useContext(UserContext)
@@ -10,7 +10,7 @@ function Calendar_() {
 
   return (
     <div>
-      <div className={style["year-month"]}>
+      <div className={style['year-month']}>
         <span>{context.value.newspaper}</span>
         <span>{context.value.year}</span>
         <span>{context.value.month}</span>
@@ -24,16 +24,10 @@ function Calendar_() {
         tileClassName="day-tile"
         // tileDisabled={() => true}
         tileContent={({ activeStartDate, date, view }) => {
-          if (
-            date.getDate() === 17 ||
-            date.getDate() === 22 ||
-            date.getDate() === 4
-          ) {
+          if (date.getDate() === 17 || date.getDate() === 22 || date.getDate() === 4) {
             return (
               <div className="calendar-tileContent">
-                <span onClick={() => history.push("/view/newspaper/2")}>
-                  Here
-                </span>
+                <span onClick={() => history.push('/view/newspaper/2')}>Here</span>
               </div>
             )
           }

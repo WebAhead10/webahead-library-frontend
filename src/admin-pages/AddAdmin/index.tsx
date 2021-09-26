@@ -1,7 +1,7 @@
-import style from "./style.module.css"
-import React, { FunctionComponent, useState } from "react"
-import axios from "axios"
-import { useHistory } from "react-router-dom"
+import style from './style.module.css'
+import React, { FunctionComponent, useState } from 'react'
+import axios from 'axios'
+import { useHistory } from 'react-router-dom'
 
 interface AddAdminInfo {
   email: string
@@ -11,12 +11,12 @@ interface AddAdminInfo {
 
 const AddAdmin: FunctionComponent = () => {
   const [newAdmin, setNewAdmin] = useState<AddAdminInfo>({
-    email: "",
-    password: "",
-    confirmPassword: "",
+    email: '',
+    password: '',
+    confirmPassword: ''
   })
 
-  const [error, setError] = useState("")
+  const [error, setError] = useState('')
 
   const history = useHistory()
 
@@ -29,23 +29,23 @@ const AddAdmin: FunctionComponent = () => {
   const matchedPassword = () => newAdmin.password === newAdmin.confirmPassword
 
   const onClick = () => {
-    setError("")
+    setError('')
 
     if (!matchedPassword()) {
-      setError("passwords dont match, check and start again")
+      setError('passwords dont match, check and start again')
       return
     }
     axios
-      .post(process.env.REACT_APP_API_URL + "/admin/signup", newAdmin)
+      .post(process.env.REACT_APP_API_URL + '/admin/signup', newAdmin)
       .then((res) => {
         if (!res.data.success) {
-          setError("Something went wrong")
+          setError('Something went wrong')
         } else {
-          history.push("/")
+          history.push('/')
         }
       })
       .catch((err) => {
-        setError("Failed: " + err.message)
+        setError('Failed: ' + err.message)
       })
   }
 
@@ -55,25 +55,13 @@ const AddAdmin: FunctionComponent = () => {
       <br />
       <label htmlFor="email" className="label-input-combo">
         Email :
-        <input
-          name="email"
-          type="email"
-          onChange={onChange("email")}
-          value={newAdmin.email}
-          required
-        />
+        <input name="email" type="email" onChange={onChange('email')} value={newAdmin.email} required />
       </label>
       <br />
 
       <label htmlFor="password" className="label-input-combo">
         Password :
-        <input
-          name="password"
-          type="password"
-          onChange={onChange("password")}
-          value={newAdmin.password}
-          required
-        />
+        <input name="password" type="password" onChange={onChange('password')} value={newAdmin.password} required />
       </label>
       <br />
 
@@ -82,7 +70,7 @@ const AddAdmin: FunctionComponent = () => {
         <input
           name="confirmPassword"
           type="password"
-          onChange={onChange("confirmPassword")}
+          onChange={onChange('confirmPassword')}
           value={newAdmin.confirmPassword}
           required
         />

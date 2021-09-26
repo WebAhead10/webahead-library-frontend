@@ -1,4 +1,4 @@
-import { createContext } from "react"
+import { createContext } from 'react'
 
 export interface UserContextType {
   month: string
@@ -14,8 +14,8 @@ interface ContextArg {
 export const UserContext = createContext<ContextArg>({
   setValue: (obj: UserContextType) => null,
   value: {
-    month: "",
-    year: "",
-    newspaper: "",
-  },
+    month: '',
+    year: '',
+    newspaper: ''
+  }
 })
