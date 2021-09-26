@@ -174,9 +174,6 @@ const UploadPDFDocument = () => {
       <BulkImageInput
         width="300px"
         height="300px"
-        text="NO_TEXT"
-        date={newDocument.date}
-        publisherId={newDocument.publisher}
         onChange={(newspaperId) => {
           // history.push(`/newspaper/edit/${newspaperId}`)
         }}

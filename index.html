@@ -1,53 +1,8 @@
 <html>
+
 <body>
     <!-- <canvas id="pdf-viewer" style="border:1px solid black"></canvas> -->
     <div id="pdf-viewer"></div>
-    <!-- Use latest PDF.js build from Github -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
-
-    <script type="text/javascript">
-
-        pdfjsLib.disableWorker = false;
-        var currPage = 1;
-        var thePDF = null;
-        var numPages = 0;
-
-        document.body.style.display = 'flex'
-
-
-        pdfjsLib.getDocument('/src/article.pdf').promise.then(function (pdf) {
-            thePdf = pdf;
-            viewer = document.getElementById('pdf-viewer');
-
-            for (page = 1;page <= pdf.numPages;page++) {
-                canvas = document.createElement("canvas");
-                canvas.className = 'pdf-page-canvas';
-                // viewer.appendChild(canvas);
-                renderPage(page, canvas);
-            }
-
-            function renderPage(pageNumber, canvas) {
-                pdf.getPage(pageNumber).then(function (page) {
-                    viewport = page.getViewport({ scale: 1 });
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-                    var pageRendering = page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
-
-                    var completeCallback = pageRendering._internalRenderTask.callback;
-                    pageRendering._internalRenderTask.callback = function (error) {
-                        //Step 2: what you want to do before calling the complete method                  
-                        completeCallback.call(this, error);
-                        //Step 3: do some more stuff
-                        let img = document.createElement('img')
-                        img.src = canvas.toDataURL('image/png')
-                        viewer.appendChild(img);
-                    };
-
-                });
-            }
-        });
-
-    </script>
 
 </body>
 

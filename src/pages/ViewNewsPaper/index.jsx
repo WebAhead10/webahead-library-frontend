@@ -23,7 +23,7 @@ const ViewNewsPaper = () => {
         OpenSeadragon({
           id: 'openSeaDragon',
           tileSources: result.data.pages.map(
-            ({ name, pagename }) => `${bucketRoot}/${pagename.split('_')[0]}/${pagename}/${pagename}.dzi`
+            ({ name, pagename, newspaperkey }) => `${bucketRoot}/${newspaperkey}/${pagename}/${pagename}.dzi`
           ),
           animationTime: 0.5,
           immediateRender: true,

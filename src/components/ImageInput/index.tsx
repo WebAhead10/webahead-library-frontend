@@ -4,20 +4,40 @@ import axios from 'axios'
 import Dropzone from './Dropzone'
 import { v4 as uuidv4 } from 'uuid'
 
-const ImageInput = ({ height, width, text, fileTypes, onError, onChange, publisherId, date }) => {
+let pdfjs = require('pdfjs-dist')
+pdfjs.GlobalWorkerOptions.workerSrc = require('pdfjs-dist/build/pdf.worker.entry.js')
+
+interface ImageInputProps {
+  height: string
+  width: string
+  onError: Function
+  onChange: Function
+  setDocumentId: Function
+  documentId: number
+}
+
+interface pdfPage {
+  getViewport(data: Object): { height: number; width: number }
+  render(data: Object): { _internalRenderTask: { callback: Function } }
+}
+
+interface PageResult {
+  data: { documentId: number }
+}
+
+const ImageInput = ({ height, width, onError, onChange, setDocumentId, documentId }: ImageInputProps) => {
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(false)
-  const newspaperName = `${date}-publisherId-${publisherId}-${uuidv4()}`
+  const documentName = `${Date.now()}-${uuidv4()}`
 
-  const upload = async (files) => {
+  const upload = async (files: string[]) => {
     try {
       // save the first page to prepare the db for the rest of the pages
       const result = await axios.post(`${process.env.REACT_APP_API_URL}/upload`, {
         file: files[0],
         index: 0,
-        publisher_id: publisherId,
-        published_date: date,
-        newspaperName
+        isNewspaper: true,
+        documentName
       })
 
       if (!result.data.success) {
@@ -25,58 +45,56 @@ const ImageInput = ({ height, width, text, fileTypes, onError, onChange, publish
         setLoading(false)
       }
 
-      const pagesResult = await Promise.all(
-        files.slice(1).map((file, i) =>
+      const pagesResult: PageResult[] = await Promise.all(
+        files.slice(1).map((file, i: number) =>
           axios.post(`${process.env.REACT_APP_API_URL}/upload`, {
             file,
             // add 1 to the index just so the page numbers would be correct
             index: i + 1,
-            publisher_id: publisherId,
-            published_date: date,
-            newspaperName: newspaperName,
+            documentName: documentName,
+            id: result.data.documentId,
+            isNewspaper: true,
             isNewPage: true
           })
         )
       )
 
-      if (pagesResult.every(({ data }) => data.success)) {
+      if (pagesResult.every(({ data }: any) => data.success)) {
         console.log(pagesResult[0])
-        onChange(pagesResult[0].data.newspaperId)
+        onChange(pagesResult[0].data.documentId)
+        setDocumentId(pagesResult[0].data.documentId)
       }
     } catch (err) {
       console.log(err)
     }
   }
 
-  const prepareUpload = (file) => {
+  const prepareUpload = (file: Blob) => {
     if (file.size > 50000000) {
       return setError('File should be below 5mb')
     }
 
     setLoading(true)
 
-    pdfjsLib.disableWorker = false
+    pdfjs.disableWorker = false
 
-    var reader = new FileReader()
+    var reader = new FileReader() || {}
 
     reader.onload = async function (e) {
       try {
-        const pdfData = atob(reader.result.split(',')[1])
-        const pdf = await pdfjsLib.getDocument({
+        const pdfData = atob((reader.result as string).split(',')[1])
+
+        const pdf = await pdfjs.getDocument({
           data: pdfData
         }).promise
+        console.log(1)
+
         var pagesImage = new Array(pdf.numPages).fill('')
 
-        // loop over the pdf pages
-        for (let page = 1; page <= pdf.numPages; page++) {
-          let canvas = document.createElement('canvas')
-          renderPage(page, canvas)
-        }
-
         //   render the pdf onto a canvas so we can convert them into png images
-        function renderPage(pageNumber, canvas) {
+        const renderPage = (pageNumber: number, canvas: HTMLCanvasElement) => {
           // read the pdf page
-          pdf.getPage(pageNumber).then(function (page) {
+          pdf.getPage(pageNumber).then(function (page: pdfPage) {
             let viewport = page.getViewport({ scale: 2.5 })
             canvas.height = viewport.height
             canvas.width = viewport.width
@@ -88,8 +106,7 @@ const ImageInput = ({ height, width, text, fileTypes, onError, onChange, publish
             })
 
             var completeCallback = pageRendering._internalRenderTask.callback
-
-            pageRendering._internalRenderTask.callback = async function (error) {
+            pageRendering._internalRenderTask.callback = async function (error: any) {
               completeCallback.call(this, error)
               // turn the canvas to an image
               let image = await canvas.toDataURL('image/png', 1.0)
@@ -102,6 +119,12 @@ const ImageInput = ({ height, width, text, fileTypes, onError, onChange, publish
             }
           })
         }
+
+        // loop over the pdf pages
+        for (let page = 1; page <= pdf.numPages; page++) {
+          let canvas = document.createElement('canvas')
+          renderPage(page, canvas)
+        }
       } catch (error) {
         console.log(error)
       }
@@ -113,13 +136,12 @@ const ImageInput = ({ height, width, text, fileTypes, onError, onChange, publish
   return (
     <div>
       <Dropzone
+        value={documentId}
         width={width}
         height={height}
         prepareUpload={prepareUpload}
-        text={text}
-        fileTypes={fileTypes}
         loading={loading}
-        error={error}
+        error={!!error}
       />
       {error && <span style={{ color: 'red' }}>{error}</span>}
     </div>
