@@ -22,19 +22,3 @@
   margin-top: 5px;
   outline: none;
 }
-
-.error {
-  color: red;
-  font-weight: bold;
-}
-
-.button {
-  background-color: white;
-  font-weight: bold;
-  border: 3px solid black;
-  min-width: 140px;
-  padding: 8px 20px;
-  font-size: 22px;
-  border-radius: 8px;
-  cursor: pointer;
-}

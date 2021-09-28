@@ -1,7 +1,7 @@
 import BulkImageInput from '../../components/ImageInput'
 import { useHistory } from 'react-router-dom'
 import './style.css'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 const API_URL = process.env.REACT_APP_API_URL
 
@@ -12,25 +12,24 @@ const UploadPDFDocument = () => {
 
   const [error, setError] = useState('')
   const [publishers, setPublishers] = useState([])
-  const [newDocument, setNewDocument] = useState({
-    publisher: null,
+  const [newDocument, setNewDocument] = useState<Document_>({
+    publisher: '',
     date: '',
-    newspaperId: null,
-    tags: []
+    tags: [],
+    documentId: null
   })
   const [tagAutocomplete, setTagAutocomplete] = useState('')
   const [tags, setTags] = useState([])
 
   const onChange =
-    (key) =>
-    ({ target }) =>
+    (key: string) =>
+    ({ target }: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) =>
       setNewDocument((prevDoc) => ({
         ...prevDoc,
         [key]: target.value
       }))
 
-  const onTagClick = (tagId, tagName) => {
-    console.log(1, tagId)
+  const onTagClick = (tagId: number, tagName: string) => {
     if (!tagId) return
 
     const isTagSelected = newDocument.tags.find(({ id }) => id === tagId)
@@ -45,7 +44,6 @@ const UploadPDFDocument = () => {
       return
     }
 
-    console.log('tagId', tagId)
     // if it doesn't then add it
     setNewDocument((prevDoc) => ({
       ...prevDoc,
@@ -75,7 +73,7 @@ const UploadPDFDocument = () => {
     if (!tagAutocomplete) return
 
     axios
-      .post(`${API_URL}/autocomplete`, { tag: tagAutocomplete })
+      .get(`${API_URL}/tag/autocomplete/${tagAutocomplete}`)
       .then((res) => {
         if (!res.data.success) {
           setError('Failed')
@@ -89,8 +87,14 @@ const UploadPDFDocument = () => {
       })
   }, [tagAutocomplete])
 
-  const submitDocument = () => {
-    console.log(newDocument)
+  const submitDocument = async () => {
+    try {
+      await axios.post(`${API_URL}/newspaper`, newDocument)
+
+      history.push('/')
+    } catch (error) {
+      setError('An error has occured while saving')
+    }
   }
 
   return (
@@ -104,7 +108,7 @@ const UploadPDFDocument = () => {
             <span>دار النشر</span>
             <select className="dropdown" onChange={onChange('publisher')} value={newDocument.publisher}>
               <option selected disabled></option>
-              {publishers.map((publisher) => (
+              {publishers.map((publisher: Publisher) => (
                 <option value={publisher.id}>{publisher.name}</option>
               ))}
             </select>
@@ -170,20 +174,19 @@ const UploadPDFDocument = () => {
       <br />
       <br />
       <br />
-      {/* {newDocument.date && newDocument.publisher && ( */}
       <BulkImageInput
         width="300px"
         height="300px"
-        onChange={(newspaperId) => {
-          // history.push(`/newspaper/edit/${newspaperId}`)
+        onChange={(documentId: number) => {
+          setNewDocument({ ...newDocument, documentId })
         }}
+        documentId={newDocument.documentId}
         onError={(errorMessage) => setError(errorMessage)}
       />
-      {/* )} */}
 
       <input type="submit" value="Submit" className="button" style={{ marginTop: '20px' }} onClick={submitDocument} />
 
-      {error && <span style={{ color: 'red' }}>{error}</span>}
+      {error && <span className="error">{error}</span>}
     </div>
   )
 }

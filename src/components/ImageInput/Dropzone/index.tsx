@@ -6,7 +6,7 @@ interface StyledDropzoneProps {
   width: string
   error: boolean
   loading: boolean
-  value: string | number
+  value: number | null
   prepareUpload: Function
 }
 

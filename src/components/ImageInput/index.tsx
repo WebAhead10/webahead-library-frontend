@@ -4,30 +4,25 @@ import axios from 'axios'
 import Dropzone from './Dropzone'
 import { v4 as uuidv4 } from 'uuid'
 
+// This needs to be require and not as an import for typescript to work on
+// the package's methods and properties
 let pdfjs = require('pdfjs-dist')
 pdfjs.GlobalWorkerOptions.workerSrc = require('pdfjs-dist/build/pdf.worker.entry.js')
 
 interface ImageInputProps {
   height: string
   width: string
-  onError: Function
-  onChange: Function
-  setDocumentId: Function
-  documentId: number
+  onError(msg: string): void
+  onChange(id: number): void
+  documentId: number | null
 }
-
-interface pdfPage {
-  getViewport(data: Object): { height: number; width: number }
-  render(data: Object): { _internalRenderTask: { callback: Function } }
-}
-
 interface PageResult {
   data: { documentId: number }
 }
 
-const ImageInput = ({ height, width, onError, onChange, setDocumentId, documentId }: ImageInputProps) => {
-  const [error, setError] = React.useState('')
-  const [loading, setLoading] = React.useState(false)
+const ImageInput = ({ height, width, onError, onChange, documentId }: ImageInputProps) => {
+  const [error, setError] = React.useState<string>('')
+  const [loading, setLoading] = React.useState<boolean>(false)
   const documentName = `${Date.now()}-${uuidv4()}`
 
   const upload = async (files: string[]) => {
@@ -60,9 +55,8 @@ const ImageInput = ({ height, width, onError, onChange, setDocumentId, documentI
       )
 
       if (pagesResult.every(({ data }: any) => data.success)) {
-        console.log(pagesResult[0])
         onChange(pagesResult[0].data.documentId)
-        setDocumentId(pagesResult[0].data.documentId)
+        setLoading(false)
       }
     } catch (err) {
       console.log(err)
@@ -71,7 +65,7 @@ const ImageInput = ({ height, width, onError, onChange, setDocumentId, documentI
 
   const prepareUpload = (file: Blob) => {
     if (file.size > 50000000) {
-      return setError('File should be below 5mb')
+      return setError('File should be below 50mb')
     }
 
     setLoading(true)
@@ -105,7 +99,7 @@ const ImageInput = ({ height, width, onError, onChange, setDocumentId, documentI
               viewport: viewport
             })
 
-            var completeCallback = pageRendering._internalRenderTask.callback
+            const completeCallback = pageRendering._internalRenderTask.callback
             pageRendering._internalRenderTask.callback = async function (error: any) {
               completeCallback.call(this, error)
               // turn the canvas to an image
