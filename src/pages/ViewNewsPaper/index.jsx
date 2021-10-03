@@ -23,7 +23,7 @@ const ViewNewsPaper = () => {
         OpenSeadragon({
           id: 'openSeaDragon',
           tileSources: result.data.pages.map(
-            ({ name, pagename, newspaperkey }) => `${bucketRoot}/${newspaperkey}/${pagename}/${pagename}.dzi`
+            ({ name, pagename }) => `${bucketRoot}/${pagename.split('_')[0]}/${pagename}/${pagename}.dzi`
           ),
           animationTime: 0.5,
           immediateRender: true,
@@ -53,7 +53,7 @@ const ViewNewsPaper = () => {
   const fetchCoords = useCallback(
     async (id) => {
       try {
-        const result = await axios.get(`${process.env.REACT_APP_API_URL}/newspaper/coords/${id}`)
+        const result = await axios.get(`${process.env.REACT_APP_API_URL}/overlay/coords/${id}`)
         if (!result.data.success) throw new Error('Failed')
 
         const coordsArr = result.data.pages

@@ -13,7 +13,7 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
 
   const fetchContent = async (coordsId: number) => {
     try {
-      const result = await axios.get(`${process.env.REACT_APP_API_URL}/newspaper/content/${coordsId}`)
+      const result = await axios.get(`${process.env.REACT_APP_API_URL}/overlay/content/${coordsId}`)
 
       if (!result.data.success) throw new Error('Failed')
 
