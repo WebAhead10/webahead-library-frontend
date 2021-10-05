@@ -40,7 +40,7 @@ const Tags = ({ articleId }: TagsProps) => {
     if (!tagAutocomplete) return
 
     axios
-      .post(`${API_URL}/autocomplete`, { tag: tagAutocomplete })
+      .get(`${API_URL}/tag/autocomplete/${tagAutocomplete}`)
       .then((res) => {
         if (!res.data.success) {
           setError('Failed')
