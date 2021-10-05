@@ -27,7 +27,7 @@ function Calendar_() {
           if (date.getDate() === 17 || date.getDate() === 22 || date.getDate() === 4) {
             return (
               <div className="calendar-tileContent">
-                <span onClick={() => history.push('/view/newspaper/2')}>Here</span>
+                <span onClick={() => history.push('/view/newspaper/1')}>Here</span>
               </div>
             )
           }

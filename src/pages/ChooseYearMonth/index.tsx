@@ -86,7 +86,9 @@ function ChooseYearMonth() {
                   <li
                     key={index}
                     className={
-                      currentMonth === 'أكتوبر' || currentMonth === 'فبراير' ? 'disabled__nav__item' : 'nav__item'
+                      style[
+                        currentMonth === 'أكتوبر' || currentMonth === 'فبراير' ? 'disabled__nav__item' : 'nav__item'
+                      ]
                     }
                     onClick={() => {
                       if (currentMonth !== 'أكتوبر') {

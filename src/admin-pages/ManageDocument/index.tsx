@@ -91,7 +91,7 @@ const UploadPDFDocument = () => {
     try {
       await axios.post(`${API_URL}/newspaper`, newDocument)
 
-      history.push('/')
+      history.push(`/edit/document/${newDocument.documentId}`)
     } catch (error) {
       setError('An error has occured while saving')
     }

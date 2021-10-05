@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import './style.css'
@@ -13,6 +13,7 @@ const EditEntity = () => {
   const [viewer, setViewer] = useState(null)
   const [overlays, setOverlays] = useState([])
   const params = useParams()
+  const history = useHistory()
   const [mouseTracker, setMouseTracker] = useState(null)
   const [error, setError] = useState('')
   const [editStatus, setEditStatus] = useState(STATUS_NAVIGATING)
@@ -211,6 +212,9 @@ const EditEntity = () => {
       </button>
       <button className="button edit-entity-button" onClick={drawOverly}>
         Draw
+      </button>
+      <button className="button edit-entity-button" onClick={() => history.push(`/view/document/${params.id}`)}>
+        Manage texts
       </button>
     </div>
   )

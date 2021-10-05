@@ -7,6 +7,8 @@ import ManageDocument from './ManageDocument'
 import ManageDocuments from './ManageDocuments'
 import TagsAdmin from './TagsAdmin'
 import './style.css'
+import EditEntity from './EditEntity'
+import AdminViewNewsPaper from './AdminViewNewsPaper'
 
 function AdminApp() {
   const location = useLocation()
@@ -26,6 +28,8 @@ function AdminApp() {
         <Route path="/signin" component={Signin} />
         <Route path="/addadmin" component={AddAdmin} />
         <Route path="/manage/document" component={ManageDocument} />
+        <Route path="/edit/document/:id" component={EditEntity} />
+        <Route path="/view/document/:id" component={AdminViewNewsPaper} />
         <Route path="/documents" component={ManageDocuments} />
         <Route path="/tags" component={TagsAdmin} />
         {/* A not found component needed here */}
