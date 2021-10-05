@@ -92,3 +92,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 .react-calendar__month-view__weekdays__weekday abbr {
   text-decoration: none;
 }
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.15);
+}

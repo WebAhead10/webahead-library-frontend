@@ -53,7 +53,7 @@ const ViewNewsPaper = () => {
   const fetchCoords = useCallback(
     async (id) => {
       try {
-        const result = await axios.get(`${process.env.REACT_APP_API_URL}/newspaper/coords/${id}`)
+        const result = await axios.get(`${process.env.REACT_APP_API_URL}/overlay/coords/${id}`)
         if (!result.data.success) throw new Error('Failed')
 
         const coordsArr = result.data.pages
@@ -63,22 +63,34 @@ const ViewNewsPaper = () => {
             overlayElement.style.cursor = 'pointer'
             overlayElement.setAttribute('class', `overlay ${id}`)
 
-            overlayElement.addEventListener('mouseenter', () => {
+            const mouseEnterListener = () => {
               const elements = document.getElementsByClassName(id)
               for (var i = 0; i < elements.length; i++) {
                 elements[i].style.backgroundColor = 'rgba(0,0,255,0.3)'
               }
-            })
+            }
 
-            overlayElement.addEventListener('mouseout', () => {
+            overlayElement.addEventListener('mouseenter', mouseEnterListener)
+
+            const mouseOutListener = () => {
               const elements = document.getElementsByClassName(id)
 
               for (var i = 0; i < elements.length; i++) {
                 elements[i].style.backgroundColor = 'rgba(0,0,255,0.0)'
               }
-            })
+            }
+
+            overlayElement.addEventListener('mouseout', mouseOutListener)
 
             overlayElement.addEventListener('click', () => {
+              const elements = document.getElementsByClassName(id)
+
+              for (var i = 0; i < elements.length; i++) {
+                elements[i].removeEventListener('mouseenter', mouseEnterListener)
+                elements[i].removeEventListener('mouseout', mouseOutListener)
+                elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
+              }
+
               setSelectedId(id)
             })
 
