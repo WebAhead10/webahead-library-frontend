@@ -137,7 +137,7 @@ const EditEntity = () => {
     if (!overlays.length) return
 
     try {
-      const res = await axios.post(process.env.REACT_APP_API_URL + '/newspaper/coords/' + id, {
+      const res = await axios.post(process.env.REACT_APP_API_URL + '/overlay/coords/' + id, {
         overlays: overlays
           .filter(({ saved }) => !saved)
           .map((overlay) => ({

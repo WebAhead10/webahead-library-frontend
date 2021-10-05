@@ -53,7 +53,7 @@ const ViewNewsPaper = () => {
   const fetchCoords = useCallback(
     async (id) => {
       try {
-        const result = await axios.get(`${process.env.REACT_APP_API_URL}/newspaper/coords/${id}`)
+        const result = await axios.get(`${process.env.REACT_APP_API_URL}/overlay/coords/${id}`)
         if (!result.data.success) throw new Error('Failed')
 
         const coordsArr = result.data.pages

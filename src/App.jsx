@@ -25,7 +25,6 @@ function App() {
       </div>
     )
   }
-
   return (
     <div className="App">
       <UserContext.Provider value={{ value, setValue }}>
