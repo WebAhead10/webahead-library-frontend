@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import PublisherSquare from '../../components/PublisherSquare'
 import axios from 'axios'
 import style from './style.module.css'
@@ -34,6 +34,7 @@ function Newspaper() {
       {publisherArr.map((publisher: Publisher, index) => (
         <PublisherSquare
           name={publisher.name}
+          id={publisher.id}
           style={{
             objectFit: (index + 1) % 4 === 0 ? 'cover' : 'fill',
             background: (index + 1) % 5 === 0 ? 'white' : ''

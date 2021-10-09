@@ -1,7 +1,7 @@
-import { useContext, useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import style from './style.module.css'
-import { UserContext } from '../../UserContext'
 import { useHistory, useParams } from 'react-router-dom'
+import axios from 'axios'
 
 const months = [
   'يناير',
@@ -18,18 +18,30 @@ const months = [
   'ديسامبر'
 ]
 
-interface Params {
-  name: string
-}
-
-const years = ['2000', '2001', '2002', '2003', '2004', '2005']
-
 function ChooseYearMonth() {
   const history = useHistory()
-  const params = useParams<Params>()
-  const { setValue } = useContext(UserContext)
+  const params = useParams<NewspaperParams>()
   const [year, setYear] = useState('')
   const [month, setMonth] = useState('')
+  const [publishedDocs, setPublishedDocs] = useState<{ [key: string]: string[] }>({})
+
+  const fetchPublishDates = useCallback(async () => {
+    if (!params.publisherId) {
+      window.location.href = '/'
+    }
+
+    try {
+      const result = await axios.get(`${process.env.REACT_APP_API_URL}/publish/dates/${params.publisherId}`)
+
+      setPublishedDocs(result.data.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [params.publisherId])
+
+  useEffect(() => {
+    fetchPublishDates()
+  }, [fetchPublishDates])
 
   return (
     <div>
@@ -42,9 +54,11 @@ function ChooseYearMonth() {
             onChange={({ target }) => setYear(target.value)}
             value={year}
           >
-            <option value="" selected></option>
-            {years.map((currentYear) => (
-              <option value={currentYear}>{currentYear}</option>
+            <option value=""></option>
+            {Object.keys(publishedDocs).map((currentYear, i) => (
+              <option key={i} value={currentYear}>
+                {currentYear}
+              </option>
             ))}
           </select>
         </label>
@@ -56,9 +70,9 @@ function ChooseYearMonth() {
             onChange={({ target }) => setMonth(target.value)}
             value={month}
           >
-            <option value="" selected></option>
-            {months.map((currentMonth) => (
-              <option value={currentMonth} disabled={currentMonth === 'أكتوبر' || currentMonth === 'فبراير'}>
+            <option value=""></option>
+            {months.map((currentMonth, i) => (
+              <option key={i} value={currentMonth} disabled={!year || !publishedDocs[year].includes(currentMonth)}>
                 {currentMonth}
               </option>
             ))}
@@ -69,15 +83,14 @@ function ChooseYearMonth() {
           className="button"
           style={{ margin: '0px 10px' }}
           onClick={() => {
-            setValue({ newspaper: params.name, month, year })
-            history.push('/calendar')
+            history.push(`/calendar/${params.publisherId}/${year}/${month}`)
           }}
         >
           اذهب
         </button>
       </div>
       <div>
-        {years.map((currentYear, index) => (
+        {Object.keys(publishedDocs).map((currentYear, index) => (
           <div key={index} className={style['date-container']}>
             <h2>{currentYear}</h2>
             <div className={style['names_of_monthes']}>
@@ -86,18 +99,11 @@ function ChooseYearMonth() {
                   <li
                     key={index}
                     className={
-                      style[
-                        currentMonth === 'أكتوبر' || currentMonth === 'فبراير' ? 'disabled__nav__item' : 'nav__item'
-                      ]
+                      style[!publishedDocs[currentYear].includes(currentMonth) ? 'disabled__nav__item' : 'nav__item']
                     }
                     onClick={() => {
                       if (currentMonth !== 'أكتوبر') {
-                        setValue({
-                          newspaper: params.name,
-                          month: currentMonth,
-                          year: currentYear
-                        })
-                        history.push('/calendar')
+                        history.push(`/calendar/${params.publisherId}/${currentYear}/${currentMonth}`)
                       }
                     }}
                   >

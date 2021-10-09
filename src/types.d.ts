@@ -19,3 +19,13 @@ interface pdfPage {
   getViewport(data: Object): { height: number; width: number }
   render(data: Object): { _internalRenderTask: { callback: Function } }
 }
+
+interface NewspaperParams {
+  publisherId: string
+  year: string
+  month: string
+}
+
+interface IRandomKeys {
+  [key: string]: string
+}

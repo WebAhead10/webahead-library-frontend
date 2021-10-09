@@ -33,10 +33,10 @@ function App() {
           <NavBar />
           <Switch>
             <Route exact path="/" component={Publishers} />
-            <Route path="/choose/year-month/:name" component={ChooseYearMonth} />
+            <Route path="/choose/year-month/:publisherId" component={ChooseYearMonth} />
             <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
             <Route path="/newspaper" component={Publishers} />
-            <Route path="/calendar" component={Calendar} />
+            <Route path="/calendar/:publisherId/:year/:month" component={Calendar} />
             {/* <Route path="/aa" component={TileContent} /> */}
             {/* A not found component needed here */}
             {/* <Route  component={NotFound} /> */}

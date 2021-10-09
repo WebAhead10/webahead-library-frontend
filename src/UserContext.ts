@@ -4,6 +4,7 @@ export interface UserContextType {
   month: string
   year: string
   newspaper: string
+  publisherId: number | null
 }
 
 interface ContextArg {
@@ -16,6 +17,7 @@ export const UserContext = createContext<ContextArg>({
   value: {
     month: '',
     year: '',
-    newspaper: ''
+    newspaper: '',
+    publisherId: null
   }
 })
