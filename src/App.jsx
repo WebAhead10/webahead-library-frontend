@@ -11,6 +11,8 @@ import ChooseYearMonth from './pages/ChooseYearMonth'
 import { UserContext } from './UserContext.ts'
 import ViewNewsPaper from './pages/ViewNewsPaper'
 import Calendar from './pages/Calendar'
+import About from './pages/About'
+import ContactUs from './pages/ContactUs'
 
 function App() {
   const [value, setValue] = useState({})
@@ -37,7 +39,8 @@ function App() {
             <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
             <Route path="/newspaper" component={Publishers} />
             <Route path="/calendar/:publisherId/:year/:month" component={Calendar} />
-            {/* <Route path="/aa" component={TileContent} /> */}
+            <Route path="/about" component={About} />
+            <Route path="/contact-us" component={ContactUs} />
             {/* A not found component needed here */}
             {/* <Route  component={NotFound} /> */}
           </Switch>

@@ -39,7 +39,7 @@ const ManageDocuments = () => {
           Add
         </button>
       </div>
-      <div className={style.newsContainer}>
+      {/* <div className={style.newsContainer}>
         {publisherArr.map((publisher: Publisher, index) => (
           <PublisherSquare
             name={publisher.name}
@@ -52,7 +52,7 @@ const ManageDocuments = () => {
             key={publisher.id}
           />
         ))}
-      </div>
+      </div> */}
     </div>
   )
 }
