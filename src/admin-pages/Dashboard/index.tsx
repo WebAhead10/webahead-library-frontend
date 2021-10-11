@@ -14,8 +14,9 @@ const Dashboard = () => {
       <button className="button" onClick={() => history.push('/tags')}>
         Manage tags
       </button>
-      <button className="button" onClick={() => history.push('/documents')}>
-        Manage documents/newspaper
+      {/* <button className="button" onClick={() => history.push('/documents')}> */}
+      <button className="button" onClick={() => history.push('/manage/document')}>
+        Add newspaper
       </button>
       <br />
       <br />
