@@ -26,7 +26,7 @@ const EditEntity = () => {
 
       if (!result.data.success) throw new Error('Failed')
 
-      const bucketRoot = 'https://feuerstein-form-website-uploads.s3.eu-central-1.amazonaws.com/misc'
+      const bucketRoot = 'https://library-documents.s3.eu-central-1.amazonaws.com/documents'
 
       viewer && viewer.destroy()
       setViewer(
