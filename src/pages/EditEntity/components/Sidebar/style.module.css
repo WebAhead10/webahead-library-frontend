@@ -1,0 +1,52 @@
+.articleSidebar {
+  width: 30vw;
+  height: 75vh;
+  background-color: white;
+}
+
+.articleWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.articleName {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  cursor: pointer;
+  padding: 5px 0px;
+  position: relative;
+  font-size: bold;
+  position: relative;
+}
+
+.articleOpenArrow {
+  position: absolute;
+  left: 20px;
+  top: -15px;
+  font-size: 30px;
+  transform: rotate(180deg);
+}
+
+.addOverlays {
+  position: absolute;
+  right: 20px;
+  top: 5px;
+}
+
+.overlayWrapper {
+  background-color: #f0f2f5;
+  height: 0;
+  overflow: hidden;
+  transition: all 0.5s;
+}
+
+.overlay {
+  position: relative;
+  cursor: pointer;
+}
+
+.deleteOverlay {
+  position: absolute;
+  right: 20px;
+  top: 0px;
+}

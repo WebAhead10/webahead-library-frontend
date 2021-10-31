@@ -1,25 +1,39 @@
-import { useHistory } from 'react-router-dom'
 import style from './style.module.css'
+import { Layout, Menu, Breadcrumb, Card, Row, Col } from 'antd'
 
 const Dashboard = () => {
-  const history = useHistory()
-
   return (
     <div className={style.dashboardContainer}>
-      <h1>Webahead library management</h1>
-      <br />
-      <button className="button" onClick={() => history.push('/addadmin')}>
-        Add admin
-      </button>
-      <button className="button" onClick={() => history.push('/tags')}>
-        Manage tags
-      </button>
-      {/* <button className="button" onClick={() => history.push('/documents')}> */}
-      <button className="button" onClick={() => history.push('/manage/document')}>
-        Add newspaper
-      </button>
-      <br />
-      <br />
+      <Row gutter={[20, 20]}>
+        <Col className={style.column}>
+          <Card className={style.topCard}>
+            <p>Card content</p>
+            <p>Card content</p>
+            <p>Card content</p>
+          </Card>
+        </Col>
+        <Col className={style.column}>
+          <Card style={{ width: '90%' }}>
+            <p>Card content</p>
+            <p>Card content</p>
+            <p>Card content</p>
+          </Card>
+        </Col>
+        <Col className={style.column}>
+          <Card className={style.topCard}>
+            <p>Card content</p>
+            <p>Card content</p>
+            <p>Card content</p>
+          </Card>
+        </Col>
+        <Col className={style.column}>
+          <Card style={{ width: '90%' }}>
+            <p>Card content</p>
+            <p>Card content</p>
+            <p>Card content</p>
+          </Card>
+        </Col>
+      </Row>
     </div>
   )
 }

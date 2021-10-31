@@ -1,3 +1,8 @@
+.editWrapper {
+  display: flex;
+  padding-left: 5px;
+}
+
 .edit-entity-viewer {
   border: 1px solid black;
   height: 75vh;

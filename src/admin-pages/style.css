@@ -1,6 +1,6 @@
+@import '~antd/dist/antd.css';
+
 .admin-app {
-  direction: ltr;
-  background-color: blanchedalmond;
 }
 
 /* General styles */

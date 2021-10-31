@@ -13,6 +13,7 @@ import ViewNewsPaper from './pages/ViewNewsPaper'
 import Calendar from './pages/Calendar'
 import About from './pages/About'
 import ContactUs from './pages/ContactUs'
+import EditEntity from './pages/EditEntity'
 
 function App() {
   const [value, setValue] = useState({})
@@ -37,6 +38,7 @@ function App() {
             <Route exact path="/" component={Publishers} />
             <Route path="/choose/year-month/:publisherId" component={ChooseYearMonth} />
             <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
+            <Route path="/edit/newspaper/:id" component={EditEntity} />
             <Route path="/newspaper" component={Publishers} />
             <Route path="/calendar/:publisherId/:year/:month" component={Calendar} />
             <Route path="/about" component={About} />

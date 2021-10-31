@@ -6,3 +6,17 @@
 .dashboardContainer button {
   margin: 10px 20px;
 }
+
+.topCard {
+  width: 90%;
+}
+
+.column {
+  width: 50%;
+}
+
+@media screen and (min-width: 1280px) {
+  .column {
+    width: 25%;
+  }
+}
