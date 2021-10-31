@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Home from './pages/Home'
-import HeaderSearch from './components/HeaderSearch'
 import HeaderInfo from './components/HeaderInfo/index'
 import NavBar from './components/NavBar'
 import AdminApp from './admin-pages/AdminApp'
@@ -32,7 +31,6 @@ function App() {
       <UserContext.Provider value={{ value, setValue }}>
         <Router>
           <HeaderInfo />
-          {/* <HeaderSearch /> */}
           <NavBar />
           <Switch>
             <Route exact path="/" component={Publishers} />
