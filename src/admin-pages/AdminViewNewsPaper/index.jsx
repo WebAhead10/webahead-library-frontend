@@ -132,3 +132,6 @@ const ViewNewsPaper = () => {
 }
 
 export default ViewNewsPaper
+
+
+Hello there
