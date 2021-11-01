@@ -132,3 +132,5 @@ const ViewNewsPaper = () => {
 }
 
 export default ViewNewsPaper
+
+asdfasdasd
