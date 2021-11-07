@@ -29,7 +29,7 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
 
   const updateArticleText = async () => {
     try {
-      const res = await axios.put(process.env.REACT_APP_API_URL + '/update/article/' + articleId, {
+      const res = await axios.post(process.env.REACT_APP_API_URL + '/overlay/content/' + articleId, {
         text
       })
 
