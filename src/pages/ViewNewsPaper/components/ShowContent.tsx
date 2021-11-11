@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import style from '../style.module.css'
 import Tags from './Tags'
+import { FaWindowClose } from 'react-icons/fa'
 
 interface ShowContentProps {
   articleId: number
@@ -10,7 +11,7 @@ interface ShowContentProps {
 
 const ShowContent = ({ articleId, close }: ShowContentProps) => {
   const [text, setText] = useState('')
-
+  const [UpdateResultMsg, setUpdateResultMsg] = useState('')
   const fetchContent = async (coordsId: number) => {
     try {
       const result = await axios.get(`${process.env.REACT_APP_API_URL}/overlay/content/${coordsId}`)
@@ -36,6 +37,8 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
       if (!res.data.success) {
         console.log('error in updating content for the article')
         return
+      } else {
+        setUpdateResultMsg('Upload done, Thank you for your efforts.')
       }
     } catch (err) {
       console.log(err)
@@ -44,13 +47,9 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
 
   return (
     <div className={style['ShowTextDiv']}>
-      <button
-        className="button view-newspaper-button"
-        style={{ margin: '10px', marginRight: 'auto' }}
-        onClick={() => close()}
-      >
-        Close
-      </button>
+      <div style={{ textAlign: 'left', paddingLeft: '0.5vw' }}>
+        <FaWindowClose style={{ fontSize: '35px' }} onClick={() => close()} />
+      </div>
       <Tags articleId={articleId} />
       <textarea
         rows={23}
@@ -59,6 +58,7 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
         style={{ margin: '0px 10px' }}
         onChange={(e) => setText(e.target.value)}
       ></textarea>
+      <div>{UpdateResultMsg}</div>
       <button
         className="button view-newspaper-button"
         onClick={() => updateArticleText()}
