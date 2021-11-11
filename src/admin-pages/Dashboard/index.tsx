@@ -3,7 +3,7 @@ import { Layout, Menu, Breadcrumb, Card, Row, Col } from 'antd'
 
 const Dashboard = () => {
   return (
-    <div className={style.dashboardContainer}>
+    <div className={style.dashboardContainer} style={{ backgroundColor: 'red' }}>
       <Row gutter={[20, 20]}>
         <Col className={style.column}>
           <Card className={style.topCard}>
