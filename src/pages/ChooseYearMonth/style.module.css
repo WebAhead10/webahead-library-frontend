@@ -47,7 +47,9 @@
 }
 
 .nav__monthes > * {
-  flex: 1 1 120px;
+  flex: 0 0 100px;
+  display: flex;
+  justify-content: space-around;
 }
 
 .nav__item:last-child {
@@ -77,4 +79,19 @@
   padding: 14px 16px;
   cursor: auto;
   font-size: 18px;
+}
+@media screen and (min-width: 900px) {
+  .nav__monthes > * {
+    flex: 0 0 110px;
+  }
+}
+@media screen and (min-width: 980px) {
+  .nav__monthes > * {
+    flex: 0 0 140px;
+  }
+}
+@media screen and (min-width: 1050px) {
+  .nav__monthes > * {
+    flex: 0 0 170px;
+  }
 }
