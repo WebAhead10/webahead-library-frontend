@@ -120,12 +120,11 @@ const ViewNewsPaper = () => {
         id="openSeaDragon"
         style={{
           border: selectedId ? '2px solid blue' : '1px solid black',
-          height: '75vh',
+          height: '100vh',
           width: '85vw',
           margin: 'auto'
         }}
       />
-
       {selectedId && <ShowContent articleId={selectedId} close={setSelectedId} />}
     </div>
   )
