@@ -19,7 +19,7 @@ const Signin = () => {
 
   const onClick = () => {
     axios
-      .post(process.env.REACT_APP_API_URL + '/admin/signin', userData)
+      .post(process.env.REACT_APP_API_URL + '/volunteer/signin', userData)
       .then((res) => {
         if (!res.data.success) {
           setError('Something went wrong')
@@ -35,7 +35,7 @@ const Signin = () => {
 
   return (
     <div className={style.signin}>
-      <h1>Admin Login</h1>
+      <h1>Volunteer Login</h1>
       <label htmlFor="email" className="label-input-combo">
         Email
         <input name="email" type="email" onChange={onChange('email')} value={userData.email} />
