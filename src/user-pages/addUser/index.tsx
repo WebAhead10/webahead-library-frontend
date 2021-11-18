@@ -53,28 +53,28 @@ const AddUser: FunctionComponent = () => {
 
   return (
     <div className={style.addUser}>
-      <h1>Add User</h1>
+      <h1>تسجيل مستخدم جديد</h1>
       <br />
       <label htmlFor="email" className="label-input-combo">
-        Email :
+           بريد الكتروني
         <input name="email" type="email" onChange={onChange('email')} value={newUser.email} required />
       </label>
       <br />
       <br />
       <label htmlFor="email" className="label-input-combo">
-        Name :
+        اسم
         <input name="name" type="text" onChange={onChange('name')} value={newUser.name} required />
       </label>
       <br />
 
       <label htmlFor="password" className="label-input-combo">
-        Password :
+      كلمة المرور
         <input name="password" type="password" onChange={onChange('password')} value={newUser.password} required />
       </label>
       <br />
 
       <label htmlFor="confirmPassword" className="label-input-combo">
-        Confirm password :
+      تاكيد كلمة المرور
         <input
           name="confirmPassword"
           type="password"
@@ -84,7 +84,7 @@ const AddUser: FunctionComponent = () => {
         />
       </label>
       <br />
-      <input type="button" value="Add" className="button" onClick={onClick} />
+      <input type="button" value="تسجيل" className="button" onClick={onClick} />
       <span className={style.errorMsg}>{error}</span>
     </div>
   )

@@ -40,19 +40,19 @@ const Signin = (props: signInProps) => {
 
   return (
     <div className={style.signin}>
-      <h1>Volunteer Login</h1>
+      <h1>تسجيل دخول المستخدم</h1>
       <label htmlFor="email" className="label-input-combo">
-        Email
+        بريد الكتروني
         <input name="email" type="email" onChange={onChange('email')} value={userData.email} />
       </label>
       <br />
 
       <label htmlFor="password" className="label-input-combo">
-        Password
+        كلمة المرور
         <input name="password" type="password" onChange={onChange('password')} value={userData.password} />
       </label>
       <br />
-      <input type="button" className="button" value="Submit" onClick={onClick} />
+      <input type="button" className="button" value="دخول" onClick={onClick} />
       <span className="error">{error}</span>
     </div>
   )
