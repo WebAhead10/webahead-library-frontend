@@ -12,8 +12,8 @@ import Calendar from './pages/Calendar'
 import About from './pages/About'
 import ContactUs from './pages/ContactUs'
 import EditEntity from './pages/EditEntity'
-import volunteerSignin from './volunteer-pages/Signin'
-import AddVolunteer from './volunteer-pages/addVolunteer'
+import UserSignin from './user-pages/Signin'
+import AddUser from './user-pages/addUser'
 
 
 function App() {
@@ -43,8 +43,8 @@ function App() {
             <Route path="/calendar/:publisherId/:year/:month" component={Calendar} />
             <Route path="/about" component={About} />
             <Route path="/contact-us" component={ContactUs} />
-            <Route path="/volunteer-signin" component={volunteerSignin} />
-            <Route path="/volunteer-add" component={AddVolunteer} />
+            <Route path="/user-signin" component={UserSignin} />
+            <Route path="/user-add" component={AddUser} />
             {/* A not found component needed here */}
             {/* <Route  component={NotFound} /> */}
           </Switch>

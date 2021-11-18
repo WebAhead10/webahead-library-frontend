@@ -19,7 +19,7 @@ const Signin = () => {
 
   const onClick = () => {
     axios
-      .post(process.env.REACT_APP_API_URL + '/volunteer/signin', userData)
+      .post(process.env.REACT_APP_API_URL + '/user/signin', userData)
       .then((res) => {
         if (!res.data.success) {
           setError('Something went wrong')

@@ -1,5 +1,6 @@
 import React from 'react'
 import './style.css'
+import { Link } from 'react-router-dom'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 function HeaderInfo() {
   return (
@@ -9,8 +10,12 @@ function HeaderInfo() {
       </div>
 
       <div className="headerInfo__buttons">
-        <button className="authButton">الدخول</button>
+        <Link to="/user-signin">
         <button className="authButton">تسجيل دخول</button>
+        </Link>
+        <Link to="/user-add">
+        <button className="authButton">انشاء حساب</button>
+        </Link>
       </div>
     </div>
   )

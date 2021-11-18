@@ -3,17 +3,19 @@ import React, { FunctionComponent, useState } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 
-interface AddVolunteerInfo {
+interface AddUserInfo {
   email: string
   password: string
   confirmPassword: string
+  name: string
 }
 
-const AddVolunteer: FunctionComponent = () => {
-  const [newVolunteer, setNewVolunteer] = useState<AddVolunteerInfo>({
+const AddUser: FunctionComponent = () => {
+  const [newUser, setNewUser] = useState<AddUserInfo>({
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    name: ''
   })
 
   const [error, setError] = useState('')
@@ -23,10 +25,10 @@ const AddVolunteer: FunctionComponent = () => {
   const onChange =
     (stateKey: string) =>
     ({ target }: { target: HTMLInputElement }) => {
-      setNewVolunteer({ ...newVolunteer, [stateKey]: target.value })
+      setNewUser({ ...newUser, [stateKey]: target.value })
     }
 
-  const matchedPassword = () => newVolunteer.password === newVolunteer.confirmPassword
+  const matchedPassword = () => newUser.password === newUser.confirmPassword
 
   const onClick = () => {
     setError('')
@@ -36,7 +38,7 @@ const AddVolunteer: FunctionComponent = () => {
       return
     }
     axios
-      .post(process.env.REACT_APP_API_URL + '/volunteer/add', newVolunteer)
+      .post(process.env.REACT_APP_API_URL + '/user/add', newUser)
       .then((res) => {
         if (!res.data.success) {
           setError('Something went wrong')
@@ -50,18 +52,24 @@ const AddVolunteer: FunctionComponent = () => {
   }
 
   return (
-    <div className={style.addVolunteer}>
-      <h1>Add Volunteer</h1>
+    <div className={style.addUser}>
+      <h1>Add User</h1>
       <br />
       <label htmlFor="email" className="label-input-combo">
         Email :
-        <input name="email" type="email" onChange={onChange('email')} value={newVolunteer.email} required />
+        <input name="email" type="email" onChange={onChange('email')} value={newUser.email} required />
+      </label>
+      <br />
+      <br />
+      <label htmlFor="email" className="label-input-combo">
+        Name :
+        <input name="name" type="text" onChange={onChange('name')} value={newUser.name} required />
       </label>
       <br />
 
       <label htmlFor="password" className="label-input-combo">
         Password :
-        <input name="password" type="password" onChange={onChange('password')} value={newVolunteer.password} required />
+        <input name="password" type="password" onChange={onChange('password')} value={newUser.password} required />
       </label>
       <br />
 
@@ -71,7 +79,7 @@ const AddVolunteer: FunctionComponent = () => {
           name="confirmPassword"
           type="password"
           onChange={onChange('confirmPassword')}
-          value={newVolunteer.confirmPassword}
+          value={newUser.confirmPassword}
           required
         />
       </label>
@@ -82,4 +90,4 @@ const AddVolunteer: FunctionComponent = () => {
   )
 }
 
-export default AddVolunteer
+export default AddUser
