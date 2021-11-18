@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import HeaderInfo from './components/HeaderInfo/index'
@@ -17,7 +17,17 @@ import AddUser from './user-pages/addUser'
 
 
 function App() {
+
+  
+
   const [value, setValue] = useState({})
+
+  const [token, setToken] = useState(localStorage.getItem('token'))
+
+  useEffect(() => {
+    /** the whole App relaods when user logs in/out */
+  }, [token])
+
 
   if (window.location.pathname.indexOf('/a/admin') === 0) {
     return (
@@ -30,9 +40,9 @@ function App() {
   }
   return (
     <div className="App">
-      <UserContext.Provider value={{ value, setValue }}>
+      <UserContext.Provider value={{ value, setValue}}>
         <Router>
-          <HeaderInfo />
+          <HeaderInfo token={token} setToken={setToken} />
           <NavBar />
           <Switch>
             <Route exact path="/" component={Publishers} />
@@ -43,7 +53,9 @@ function App() {
             <Route path="/calendar/:publisherId/:year/:month" component={Calendar} />
             <Route path="/about" component={About} />
             <Route path="/contact-us" component={ContactUs} />
-            <Route path="/user-signin" component={UserSignin} />
+            <Route path="/user-signin">
+              <UserSignin setToken={setToken}/>
+            </Route>
             <Route path="/user-add" component={AddUser} />
             {/* A not found component needed here */}
             {/* <Route  component={NotFound} /> */}

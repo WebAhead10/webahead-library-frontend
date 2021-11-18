@@ -43,7 +43,7 @@ const AddUser: FunctionComponent = () => {
         if (!res.data.success) {
           setError('Something went wrong')
         } else {
-          history.push('/')
+          history.push('/user-signin')
         }
       })
       .catch((err) => {

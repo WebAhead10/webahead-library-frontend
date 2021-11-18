@@ -3,7 +3,11 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 
-const Signin = () => {
+interface signInProps {
+  setToken : Function
+}
+
+const Signin = (props: signInProps) => {
   const [userData, setUserData] = useState({
     email: '',
     password: ''
@@ -25,6 +29,7 @@ const Signin = () => {
           setError('Something went wrong')
         } else {
           localStorage.setItem('token', res.data.token)
+          props.setToken(res.data.token) 
           history.push('/')
         }
       })
