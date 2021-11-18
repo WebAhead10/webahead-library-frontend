@@ -5,6 +5,7 @@ import Tags from './Tags'
 import { FaWindowClose } from 'react-icons/fa'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
+
 interface ShowContentProps {
   articleId: number
   close: Function
@@ -13,8 +14,27 @@ interface ShowContentProps {
 const ShowContent = ({ articleId, close }: ShowContentProps) => {
   const [text, setText] = useState('')
   const [UpdateResultMsg, setUpdateResultMsg] = useState('')
+  const [initialNote, setInitialNote] = useState(
+    'للُّغَة العَرَبِيّة هي أكثر اللغات السامية تحدثًا، وإحدى أكثر اللغات انتشاراً في العالم، يتحدثها أكثر من 467 مليون نسمة،(1) ويتوزع متحدثوها في الوطن العربي، بالإضافة إلى العديد من المناطق الأخرى المجاورة كالأهواز وتركيا وتشاد ومالي والسنغال وإرتيريا وإثيوبيا وجنوب السودان وإيران. وبذلك فهي تحتل المركز الرابع أو الخامس من حيث اللغات الأكثر انتشارًا في العالم، وهي تحتل المركز الثالث تبعًا لعدد الدول التي تعترف بها كلغة رسمية؛ إذ تعترف بها 27 دولة كلغة رسمية، واللغة الرابعة من حيث عدد المستخدمين على الإنترنت. اللغةُ العربيةُ ذات أهمية قصوى لدى المسلمين، فهي عندَهم لغةٌ مقدسة إذ أنها لغة القرآن، وهي لغةُ الصلاة وأساسيةٌ في القيام بالعديد من العبادات والشعائرِ الإسلامية'
+  )
   //write now it is hard coded for notes
   const [NotesArr, setNotesArr] = useState([
+    { text: 'first Note' },
+    { text: 'second Note' },
+    { text: 'third Note' },
+    { text: 'first Note' },
+    { text: 'first Note' },
+    { text: 'second Note' },
+    { text: 'third Note' },
+    { text: 'first Note' },
+    { text: 'first Note' },
+    { text: 'second Note' },
+    { text: 'third Note' },
+    { text: 'first Note' },
+    { text: 'first Note' },
+    { text: 'second Note' },
+    { text: 'third Note' },
+    { text: 'first Note' },
     { text: 'first Note' },
     { text: 'second Note' },
     { text: 'third Note' },
@@ -66,13 +86,13 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
         </TabList>
         <TabPanel>
           <div>
-            <h2>The Content</h2>
+            <h2>Initial Note</h2>
           </div>
-          <div className={style['CommentDev']}>{text}</div>
+          <div className={style['CommentDev']}>{initialNote}</div>
           <div>
             <h2>Notes</h2>
           </div>
-          <div>
+          <div className={style['scroll']}>
             {NotesArr.map((text) => (
               <div className={style['CommentDev']}>{text['text']}</div>
             ))}
