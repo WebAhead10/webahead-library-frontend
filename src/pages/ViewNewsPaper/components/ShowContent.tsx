@@ -13,7 +13,9 @@ interface ShowContentProps {
 
 const ShowContent = ({ articleId, close }: ShowContentProps) => {
   const [text, setText] = useState('')
+  const [note, setNote] = useState('')
   const [UpdateResultMsg, setUpdateResultMsg] = useState('')
+  const [UpdateNoteMsg, setUpdateNoteMsg] = useState('')
   const [initialNote, setInitialNote] = useState(
     'للُّغَة العَرَبِيّة هي أكثر اللغات السامية تحدثًا، وإحدى أكثر اللغات انتشاراً في العالم، يتحدثها أكثر من 467 مليون نسمة،(1) ويتوزع متحدثوها في الوطن العربي، بالإضافة إلى العديد من المناطق الأخرى المجاورة كالأهواز وتركيا وتشاد ومالي والسنغال وإرتيريا وإثيوبيا وجنوب السودان وإيران. وبذلك فهي تحتل المركز الرابع أو الخامس من حيث اللغات الأكثر انتشارًا في العالم، وهي تحتل المركز الثالث تبعًا لعدد الدول التي تعترف بها كلغة رسمية؛ إذ تعترف بها 27 دولة كلغة رسمية، واللغة الرابعة من حيث عدد المستخدمين على الإنترنت. اللغةُ العربيةُ ذات أهمية قصوى لدى المسلمين، فهي عندَهم لغةٌ مقدسة إذ أنها لغة القرآن، وهي لغةُ الصلاة وأساسيةٌ في القيام بالعديد من العبادات والشعائرِ الإسلامية'
   )
@@ -74,6 +76,25 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
     }
   }
 
+  const updateArticleNote = async () => {
+    try {
+      const res = await axios.post(process.env.REACT_APP_API_URL + '/note/', {
+        text: note,
+        user_id: 1,
+        document_id: articleId
+      })
+
+      if (!res.data.success) {
+        console.log('error in adding note')
+        return
+      } else {
+        setUpdateNoteMsg('Thank you for your note.')
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <div className={style['ShowTextDiv']}>
       <div style={{ textAlign: 'left', paddingLeft: '0.5vw' }}>
@@ -108,9 +129,16 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
               >
                 اضافة ملاحظه
               </span>
-              <input type="text" placeholder="هل لديك ملاحظه؟" />
+              <input type="text" placeholder="هل لديك ملاحظه؟" onChange={(e) => setNote(e.target.value)} />
             </label>
-            <button>UPDATE</button>
+            <div>{UpdateNoteMsg}</div>
+            <button
+              className="button view-newspaper-button"
+              onClick={() => updateArticleNote()}
+              style={{ margin: 'auto', marginTop: '10px' }}
+            >
+              UPDATE
+            </button>
           </div>
         </TabPanel>
         <TabPanel>
