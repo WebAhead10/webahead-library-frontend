@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import Home from './pages/Home'
 import HeaderInfo from './components/HeaderInfo/index'
 import NavBar from './components/NavBar'
 import AdminApp from './admin-pages/AdminApp'
@@ -13,8 +12,6 @@ import Calendar from './pages/Calendar'
 import About from './pages/About'
 import ContactUs from './pages/ContactUs'
 import EditEntity from './pages/EditEntity'
-import adminsignin from './admin-pages/Signin'
-import AddAdmin from './admin-pages/AddAdmin'
 import volunteerSignin from './volunteer-pages/Signin'
 import AddVolunteer from './volunteer-pages/addVolunteer'
 
@@ -46,8 +43,6 @@ function App() {
             <Route path="/calendar/:publisherId/:year/:month" component={Calendar} />
             <Route path="/about" component={About} />
             <Route path="/contact-us" component={ContactUs} />
-            <Route path="/admin-signin" component={adminsignin} />
-            <Route path="/admin-add" component={AddAdmin} />
             <Route path="/volunteer-signin" component={volunteerSignin} />
             <Route path="/volunteer-add" component={AddVolunteer} />
             {/* A not found component needed here */}

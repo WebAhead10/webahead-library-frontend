@@ -36,7 +36,7 @@ const AddVolunteer: FunctionComponent = () => {
       return
     }
     axios
-      .post(process.env.REACT_APP_API_URL + '/Volunteer/add', newVolunteer)
+      .post(process.env.REACT_APP_API_URL + '/volunteer/add', newVolunteer)
       .then((res) => {
         if (!res.data.success) {
           setError('Something went wrong')
