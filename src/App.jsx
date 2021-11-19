@@ -13,13 +13,9 @@ import About from './pages/About'
 import ContactUs from './pages/ContactUs'
 import EditEntity from './pages/EditEntity'
 import UserSignin from './user-pages/Signin'
-import AddUser from './user-pages/addUser'
-
+import AddUser from './user-pages/AddUser/index.tsx'
 
 function App() {
-
-  
-
   const [value, setValue] = useState({})
 
   const [token, setToken] = useState(localStorage.getItem('token'))
@@ -27,7 +23,6 @@ function App() {
   useEffect(() => {
     /** the whole App relaods when user logs in/out */
   }, [token])
-
 
   if (window.location.pathname.indexOf('/a/admin') === 0) {
     return (
@@ -40,7 +35,7 @@ function App() {
   }
   return (
     <div className="App">
-      <UserContext.Provider value={{ value, setValue}}>
+      <UserContext.Provider value={{ value, setValue }}>
         <Router>
           <HeaderInfo token={token} setToken={setToken} />
           <NavBar />
@@ -54,7 +49,7 @@ function App() {
             <Route path="/about" component={About} />
             <Route path="/contact-us" component={ContactUs} />
             <Route path="/user-signin">
-              <UserSignin setToken={setToken}/>
+              <UserSignin setToken={setToken} />
             </Route>
             <Route path="/user-add" component={AddUser} />
             {/* A not found component needed here */}

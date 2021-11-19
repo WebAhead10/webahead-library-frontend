@@ -56,10 +56,9 @@ const AddUser: FunctionComponent = () => {
       <h1>تسجيل مستخدم جديد</h1>
       <br />
       <label htmlFor="email" className="label-input-combo">
-           بريد الكتروني
+        بريد الكتروني
         <input name="email" type="email" onChange={onChange('email')} value={newUser.email} required />
       </label>
-      <br />
       <br />
       <label htmlFor="email" className="label-input-combo">
         اسم
@@ -68,13 +67,13 @@ const AddUser: FunctionComponent = () => {
       <br />
 
       <label htmlFor="password" className="label-input-combo">
-      كلمة المرور
+        كلمة المرور
         <input name="password" type="password" onChange={onChange('password')} value={newUser.password} required />
       </label>
       <br />
 
       <label htmlFor="confirmPassword" className="label-input-combo">
-      تاكيد كلمة المرور
+        تاكيد كلمة المرور
         <input
           name="confirmPassword"
           type="password"
