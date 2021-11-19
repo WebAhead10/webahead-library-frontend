@@ -13,7 +13,7 @@ import About from './pages/About'
 import ContactUs from './pages/ContactUs'
 import EditEntity from './pages/EditEntity'
 import UserSignin from './user-pages/Signin'
-import AddUser from './user-pages/AddUser/index.tsx'
+import AddUser from './user-pages/AddUser'
 
 function App() {
   const [value, setValue] = useState({})
