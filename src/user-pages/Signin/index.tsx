@@ -3,7 +3,11 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 
-const Signin = () => {
+interface signInProps {
+  setToken : Function
+}
+
+const Signin = (props: signInProps) => {
   const [userData, setUserData] = useState({
     email: '',
     password: ''
@@ -19,12 +23,13 @@ const Signin = () => {
 
   const onClick = () => {
     axios
-      .post(process.env.REACT_APP_API_URL + '/admin/signin', userData)
+      .post(process.env.REACT_APP_API_URL + '/user/signin', userData)
       .then((res) => {
         if (!res.data.success) {
           setError('Something went wrong')
         } else {
           localStorage.setItem('token', res.data.token)
+          props.setToken(res.data.token) 
           history.push('/')
         }
       })
@@ -35,19 +40,19 @@ const Signin = () => {
 
   return (
     <div className={style.signin}>
-      <h1>Admin Login</h1>
+      <h1>تسجيل دخول المستخدم</h1>
       <label htmlFor="email" className="label-input-combo">
-        Email
+        بريد الكتروني
         <input name="email" type="email" onChange={onChange('email')} value={userData.email} />
       </label>
       <br />
 
       <label htmlFor="password" className="label-input-combo">
-        Password
+        كلمة المرور
         <input name="password" type="password" onChange={onChange('password')} value={userData.password} />
       </label>
       <br />
-      <input type="button" className="button" value="Submit" onClick={onClick} />
+      <input type="button" className="button" value="دخول" onClick={onClick} />
       <span className="error">{error}</span>
     </div>
   )

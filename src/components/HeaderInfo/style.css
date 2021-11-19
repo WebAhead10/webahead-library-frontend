@@ -8,10 +8,17 @@
   margin-right: 20px;
 }
 .headerInfo__buttons {
-  width: 20vw;
+  width: 25vw;
   display: flex;
   justify-content: space-evenly;
 }
+
+.headerInfo__buttons div {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
 .authButton {
   border-radius: 8px;
   font-size: 22px;
@@ -23,6 +30,8 @@
   transition: all 0.4s;
   background-color: #cd9042;
   color: white;
+  margin-right: auto;
+  margin-left: 20px;
 }
 
 .authButton:hover {
