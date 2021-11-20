@@ -72,7 +72,8 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
         setUpdateResultMsg('Upload done, Thank you for your efforts.')
       }
     } catch (err) {
-      console.log(err)
+      setUpdateResultMsg('An error has occurred')
+      // console.log(err)
     }
   }
 
@@ -91,7 +92,8 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
         setUpdateNoteMsg('Thank you for your note.')
       }
     } catch (err) {
-      console.log(err)
+      setUpdateNoteMsg('An error has occurred')
+      // console.log(err)
     }
   }
 
