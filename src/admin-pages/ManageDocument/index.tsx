@@ -20,6 +20,7 @@ const UploadPDFDocument = () => {
   })
   const [tagAutocomplete, setTagAutocomplete] = useState('')
   const [tags, setTags] = useState([])
+  const [year , setYear]=useState('')
 
   const onChange =
     (key: string) =>
@@ -113,6 +114,11 @@ const UploadPDFDocument = () => {
               ))}
             </select>
           </label>
+          <label className="document-detail">
+                <span>السنه</span>
+                <input type="text" maxLength={4} value={year} onChange={({target}:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement> ) => setYear(target.value)} />
+
+                </label>
 
           <label className="document-detail">
             <span>تاريخ</span>
