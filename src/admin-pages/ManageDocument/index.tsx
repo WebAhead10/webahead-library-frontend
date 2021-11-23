@@ -30,6 +30,13 @@ const UploadPDFDocument = () => {
         [key]: target.value
       }))
 
+      const onChangeYear = ({target}: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) =>{
+     return ( setNewDocument((prevDoc) => ({
+        ...prevDoc,
+        'date': ''
+      })),
+      setYear(target.value)
+     )}
   const onTagClick = (tagId: number, tagName: string) => {
     if (!tagId) return
 
@@ -116,7 +123,7 @@ const UploadPDFDocument = () => {
           </label>
           <label className="document-detail">
                 <span>السنه</span>
-                <input type="text" maxLength={4} value={year} onChange={({target}:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement> ) => setYear(target.value)} />
+                <input className="year-input" type="text" maxLength={4} value={year} onChange={(target) => onChangeYear(target)} />
 
                 </label>
 
