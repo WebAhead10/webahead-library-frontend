@@ -122,7 +122,7 @@ const UploadPDFDocument = () => {
 
           <label className="document-detail">
             <span>تاريخ</span>
-            <input className="date-input" type="date" value={newDocument.date} onChange={onChange('date')} />
+            <input className="date-input" type="date" value={newDocument.date == '' ? `${year}-01-01` : newDocument.date} onChange={onChange('date')} />
           </label>
         </div>
 
