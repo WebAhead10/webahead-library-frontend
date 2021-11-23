@@ -50,6 +50,13 @@
   width: 150px;
 }
 
+.year-input {
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid black;
+  width: 150px;
+}
+
 .newspaper-tags-container {
   display: flex;
   width: 40%;
