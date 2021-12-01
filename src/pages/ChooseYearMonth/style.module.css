@@ -38,6 +38,7 @@
   display: flex;
   margin: 10px;
   flex-direction: row-reverse;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   list-style-type: none;
   margin: 0;
@@ -80,18 +81,9 @@
   cursor: auto;
   font-size: 18px;
 }
-@media screen and (min-width: 900px) {
-  .nav__monthes > * {
-    flex: 0 0 110px;
-  }
-}
-@media screen and (min-width: 980px) {
-  .nav__monthes > * {
-    flex: 0 0 140px;
-  }
-}
+
 @media screen and (min-width: 1050px) {
   .nav__monthes > * {
-    flex: 0 0 170px;
+    flex: 0 0 14%;
   }
 }

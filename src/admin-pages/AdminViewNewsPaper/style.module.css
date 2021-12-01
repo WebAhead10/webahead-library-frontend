@@ -3,9 +3,8 @@
   flex-direction: row;
   align-items: center;
 }
-.ShowTextDiv {
+.showTextDiv {
   width: 30%;
-  height: 70%;
   float: right;
   display: flex;
   flex-direction: column;
