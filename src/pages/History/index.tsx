@@ -1,23 +1,24 @@
-import React, { useState, useLayoutEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 
 const History = () => {
   const [typeOfNotesState, setTypeOfNotesState] = useState('note')
-  const [result, setResult] = useState('Loading')
   const [historyData, setHistoryData] = useState<any>([])
-  useLayoutEffect(() => {
-    let strRes: any
-    const dbResult = axios
+
+  useEffect(() => {
+    axios
       .post(`${process.env.REACT_APP_API_URL}/historyDoc/`, {
         type: typeOfNotesState
       })
       .then((res) => {
         setHistoryData(res.data.data)
       })
+      .catch(console.log)
     //in this part should select the right username/email by user kind  admin/user/advanced
   }, [typeOfNotesState])
+
   return (
     <div>
       <Tabs
