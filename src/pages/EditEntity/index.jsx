@@ -248,9 +248,7 @@ const EditEntity = () => {
       viewer.setMouseNavEnabled(true)
       setEditStatus(STATUS_NAVIGATING)
 
-      if (articleId) {
-        fetchCoords(params.id)
-      }
+      fetchCoords(params.id)
     } catch (err) {
       setError('Error has occured')
       console.error(err)

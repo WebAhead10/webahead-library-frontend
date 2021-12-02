@@ -3,6 +3,7 @@ import './App.css'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import HeaderInfo from './components/HeaderInfo/index'
 import NavBar from './components/NavBar'
+import ProtectedRoute from './components/ProtectedRoute'
 import AdminApp from './admin-pages/AdminApp'
 import Publishers from './pages/Publishers'
 import ChooseYearMonth from './pages/ChooseYearMonth'
@@ -43,7 +44,7 @@ function App() {
             <Route exact path="/" component={Publishers} />
             <Route path="/choose/year-month/:publisherId" component={ChooseYearMonth} />
             <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
-            <Route path="/edit/newspaper/:id" component={EditEntity} />
+            <ProtectedRoute path="/edit/newspaper/:id" component={EditEntity} />
             <Route path="/newspaper" component={Publishers} />
             <Route path="/calendar/:publisherId/:year/:month" component={Calendar} />
             <Route path="/about" component={About} />

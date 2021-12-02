@@ -9,9 +9,7 @@ const History = () => {
 
   useEffect(() => {
     axios
-      .post(`${process.env.REACT_APP_API_URL}/historyDoc/`, {
-        type: typeOfNotesState
-      })
+      .get(`${process.env.REACT_APP_API_URL}/history/${typeOfNotesState}`)
       .then((res) => {
         setHistoryData(res.data.data)
       })

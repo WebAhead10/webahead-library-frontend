@@ -82,4 +82,13 @@
   left: 4px;
   top: 4px;
   text-align: left;
+  cursor: pointer;
+}
+
+.editOverlays {
+  position: absolute;
+  right: 5px;
+  top: 4px;
+  text-align: left;
+  cursor: pointer;
 }

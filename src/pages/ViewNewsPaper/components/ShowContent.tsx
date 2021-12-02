@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import style from '../style.module.css'
 import Tags from './Tags'
-import { FaWindowClose } from 'react-icons/fa'
+import { FaWindowClose, FaCut } from 'react-icons/fa'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 
@@ -103,6 +103,7 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
       <div className={style.closeButton}>
         <FaWindowClose style={{ fontSize: '35px' }} onClick={() => close()} />
       </div>
+
       <Tabs defaultIndex={1} onSelect={(index) => console.log(index)} style={{ marginTop: '10px' }}>
         <TabList>
           <Tab>Notes</Tab>

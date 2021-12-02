@@ -1,14 +1,16 @@
 /* eslint-disable no-undef */
 import { useState, useEffect, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import axios from 'axios'
 import style from './style.module.css'
 import ShowContent from './components/ShowContent'
+import { FaCut } from 'react-icons/fa'
 
 const ViewNewsPaper = () => {
   const [viewer, setViewer] = useState(null)
   const [selectedId, setSelectedId] = useState(null)
   const params = useParams()
+  const history = useHistory()
 
   const fetchNewspaper = async (id) => {
     try {
@@ -125,6 +127,14 @@ const ViewNewsPaper = () => {
           margin: 'auto'
         }}
       />
+      <div className={style.editOverlays}>
+        <FaCut
+          style={{ fontSize: '20px' }}
+          onClick={() => {
+            history.push(`/edit/newspaper/${params.id}`)
+          }}
+        />
+      </div>
       {selectedId && <ShowContent articleId={selectedId} close={setSelectedId} />}
     </div>
   )
