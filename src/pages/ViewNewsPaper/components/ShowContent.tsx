@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import style from '../style.module.css'
 import Tags from './Tags'
-import { FaWindowClose, FaCut } from 'react-icons/fa'
+import { FaWindowClose } from 'react-icons/fa'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 
