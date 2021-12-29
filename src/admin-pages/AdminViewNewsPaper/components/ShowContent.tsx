@@ -43,7 +43,7 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
   }
 
   return (
-    <div className={style['ShowTextDiv']}>
+    <div className={style.showTextDiv}>
       <button
         className="button view-newspaper-button"
         style={{ margin: '10px', marginRight: 'auto' }}

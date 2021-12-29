@@ -15,7 +15,7 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
   const [text, setText] = useState('')
   const [note, setNote] = useState('')
   const [UpdateResultMsg, setUpdateResultMsg] = useState('')
-  const [UpdateNoteMsg, setUpdateNoteMsg] = useState('')
+  const [updateNoteMsg, setUpdateNoteMsg] = useState('')
   const [initialNote, setInitialNote] = useState(
     'للُّغَة العَرَبِيّة هي أكثر اللغات السامية تحدثًا، وإحدى أكثر اللغات انتشاراً في العالم، يتحدثها أكثر من 467 مليون نسمة،(1) ويتوزع متحدثوها في الوطن العربي، بالإضافة إلى العديد من المناطق الأخرى المجاورة كالأهواز وتركيا وتشاد ومالي والسنغال وإرتيريا وإثيوبيا وجنوب السودان وإيران. وبذلك فهي تحتل المركز الرابع أو الخامس من حيث اللغات الأكثر انتشارًا في العالم، وهي تحتل المركز الثالث تبعًا لعدد الدول التي تعترف بها كلغة رسمية؛ إذ تعترف بها 27 دولة كلغة رسمية، واللغة الرابعة من حيث عدد المستخدمين على الإنترنت. اللغةُ العربيةُ ذات أهمية قصوى لدى المسلمين، فهي عندَهم لغةٌ مقدسة إذ أنها لغة القرآن، وهي لغةُ الصلاة وأساسيةٌ في القيام بالعديد من العبادات والشعائرِ الإسلامية'
   )
@@ -30,8 +30,6 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
     { text: 'third Note' },
     { text: 'first Note' },
     { text: 'first Note' },
-    { text: 'second Note' },
-    { text: 'third Note' },
     { text: 'first Note' },
     { text: 'first Note' },
     { text: 'second Note' },
@@ -43,6 +41,7 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
     { text: 'first Note' }
   ])
 
+  // fetch the text for the overlay
   const fetchContent = async (coordsId: number) => {
     try {
       const result = await axios.get(`${process.env.REACT_APP_API_URL}/overlay/content/${coordsId}`)
@@ -62,7 +61,9 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
   const updateArticleText = async () => {
     try {
       const res = await axios.post(process.env.REACT_APP_API_URL + '/overlay/content/' + articleId, {
-        text
+        text: text,
+        user_id: 1,
+        document_id: articleId
       })
 
       if (!res.data.success) {
@@ -98,68 +99,66 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
   }
 
   return (
-    <div className={style['ShowTextDiv']}>
-      <div style={{ textAlign: 'left', paddingLeft: '0.5vw' }}>
+    <div className={style.showTextDiv}>
+      <div className={style.closeButton}>
         <FaWindowClose style={{ fontSize: '35px' }} onClick={() => close()} />
       </div>
-      <Tabs defaultIndex={1} onSelect={(index) => console.log(index)}>
+
+      <Tabs defaultIndex={1} onSelect={(index) => console.log(index)} style={{ marginTop: '10px' }}>
         <TabList>
           <Tab>Notes</Tab>
           <Tab>Content</Tab>
         </TabList>
         <TabPanel>
-          <div>
-            <h2>Initial Note</h2>
-          </div>
-          <div className={style['CommentDev']}>{initialNote}</div>
-          <div>
+          <div className={style.tabPanelBody}>
+            <div className={style.commentDev}>{initialNote}</div>
             <h2>Notes</h2>
-          </div>
-          <div className={style['scroll']}>
-            {NotesArr.map((text) => (
-              <div className={style['CommentDev']}>{text['text']}</div>
-            ))}
-          </div>
-          <div className="autocomplete-container">
-            <label>
-              <span
-                style={{
-                  marginLeft: 'auto',
-                  display: 'flex',
-                  fontSize: '20px'
-                }}
+            <div className={style['scroll']}>
+              {NotesArr.map(({ text }) => (
+                <div className={style.commentDev}>{text}</div>
+              ))}
+            </div>
+            <div className="autocomplete-container" style={{ width: '100%' }}>
+              <label>
+                <span className={style.addNote}>اضافة ملاحظه</span>
+                <textarea
+                  rows={5}
+                  cols={40}
+                  value={note}
+                  placeholder="هل لديك ملاحظه؟"
+                  onChange={(e) => setNote(e.target.value)}
+                ></textarea>
+              </label>
+              <div>{updateNoteMsg}</div>
+              <button
+                className="button view-newspaper-button"
+                onClick={updateArticleNote}
+                style={{ margin: 'auto', marginTop: '20px' }}
               >
-                اضافة ملاحظه
-              </span>
-              <input type="text" placeholder="هل لديك ملاحظه؟" onChange={(e) => setNote(e.target.value)} />
-            </label>
-            <div>{UpdateNoteMsg}</div>
-            <button
-              className="button view-newspaper-button"
-              onClick={() => updateArticleNote()}
-              style={{ margin: 'auto', marginTop: '10px' }}
-            >
-              UPDATE
-            </button>
+                Update
+              </button>
+            </div>
           </div>
         </TabPanel>
         <TabPanel>
-          <Tags articleId={articleId} />
-          <textarea
-            rows={23}
-            cols={60}
-            value={text}
-            style={{ margin: '0px 10px' }}
-            onChange={(e) => setText(e.target.value)}
-          ></textarea>
-          <div>{UpdateResultMsg}</div>
-          <button
-            className="button view-newspaper-button"
-            onClick={() => updateArticleText()}
-            style={{ margin: 'auto', marginTop: '10px' }}
-          >
-            Update text
-          </button>
+          <div className={style.tabPanelBody}>
+            <Tags articleId={articleId} />
+            <textarea
+              rows={23}
+              cols={60}
+              value={text}
+              style={{ margin: '0px 10px' }}
+              onChange={(e) => setText(e.target.value)}
+            ></textarea>
+            <div>{UpdateResultMsg}</div>
+            <button
+              className="button view-newspaper-button"
+              onClick={() => updateArticleText()}
+              style={{ margin: 'auto', marginTop: '10px' }}
+            >
+              Update text
+            </button>
+          </div>
         </TabPanel>
       </Tabs>
     </div>

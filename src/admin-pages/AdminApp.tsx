@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
 import { Layout, Menu, Breadcrumb, Card, Row, Col } from 'antd'
-import { DesktopOutlined, PieChartOutlined, FileOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons'
+import {
+  DesktopOutlined,
+  PieChartOutlined,
+  FileOutlined,
+  TeamOutlined,
+  UserOutlined,
+  FolderOpenOutlined
+} from '@ant-design/icons'
 import { Route, Switch, useLocation, useHistory } from 'react-router-dom'
 import Signin from './Signin'
 import AddAdmin from './AddAdmin'
@@ -8,6 +15,7 @@ import Dashboard from './Dashboard'
 import ManageDocument from './ManageDocument'
 import ManageDocuments from './ManageDocuments'
 import TagsAdmin from './TagsAdmin'
+import History from '../pages/History'
 import './style.css'
 import EditEntity from './EditEntity'
 import AdminViewNewsPaper from './AdminViewNewsPaper'
@@ -64,6 +72,9 @@ function AdminApp() {
             <Menu.Item key="9" icon={<FileOutlined />}>
               Files
             </Menu.Item>
+            <Menu.Item key="10" onClick={() => history.push('/history')} icon={<FolderOpenOutlined />}>
+              History
+            </Menu.Item>
           </Menu>
         </Sider>
         <Content style={{ margin: '0 16px' }}>
@@ -76,6 +87,7 @@ function AdminApp() {
               <Route exact path="/" component={Dashboard} />
               <Route path="/signin" component={Signin} />
               <Route path="/addadmin" component={AddAdmin} />
+              <Route path="/history" component={History} />
               <Route path="/manage/document" component={ManageDocument} />
               <Route path="/edit/document/:id" component={EditEntity} />
               <Route path="/view/document/:id" component={AdminViewNewsPaper} />
