@@ -24,7 +24,6 @@ const Signin = () => {
         if (!res.data.success) {
           setError('Something went wrong')
         } else {
-          localStorage.setItem('token', res.data.token)
           history.push('/')
         }
       })

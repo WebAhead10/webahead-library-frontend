@@ -1,5 +1,3 @@
-import { useContext } from 'react'
-import { UserContext } from '../../UserContext'
 import SearchIcon from '@material-ui/icons/Search'
 import HappyIcon from '@material-ui/icons/SentimentVerySatisfied'
 import SettingsIcon from '@material-ui/icons/Settings'
@@ -8,10 +6,6 @@ import ShareIcon from '@material-ui/icons/Share'
 import style from './style.module.css'
 
 function Home() {
-  const context = useContext(UserContext)
-
-  console.log(context)
-
   return (
     <div className={style['home_container']}>
       <div className={style['rightSide']}>

@@ -61,7 +61,7 @@ const History = () => {
                   <td>{historyRow.data_id}</td>
                   {/*in this part should select the right username/email by user kind  admin/user/advanced*/}
                   <td>{historyRow.operation}</td>
-                  <td>{historyRow.user_id}</td>
+                  <td>{historyRow.entityId}</td>
                   <td>{historyRow.user_roll}</td>
                   <td>{historyRow.change_data}</td>
                   <td>{new Date(historyRow.created_at).toDateString()}</td>

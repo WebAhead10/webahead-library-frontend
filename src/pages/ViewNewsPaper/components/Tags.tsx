@@ -4,7 +4,7 @@ import axios from 'axios'
 const API_URL = process.env.REACT_APP_API_URL
 
 interface TagsProps {
-  articleId: number
+  overlayId: number
 }
 
 interface SelectedTags {
@@ -12,7 +12,7 @@ interface SelectedTags {
   name: string
 }
 
-const Tags = ({ articleId }: TagsProps) => {
+const Tags = ({ overlayId }: TagsProps) => {
   const [tags, setTags] = useState([])
   const [tagAutocomplete, setTagAutocomplete] = useState('')
   const [error, setError] = useState('')

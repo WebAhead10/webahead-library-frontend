@@ -1,9 +1,11 @@
 import Calendar from 'react-calendar'
-import { useContext, useCallback, useEffect, useState } from 'react'
-import { UserContext } from '../../UserContext'
+import { useCallback, useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import style from './style.module.css'
 import axios from 'axios'
+import { useRecoilState } from 'recoil'
+import { documentSearchAtom } from 'utils/recoil/atoms'
+import { IDocumentSearch } from 'utils/recoil/types'
 
 const monthNameToNumber: IRandomKeys = {
   يناير: '01',
@@ -26,10 +28,10 @@ interface INewspaperDay {
 }
 
 function Calendar_() {
-  const context = useContext(UserContext)
   const history = useHistory()
   const { publisherId, year, month } = useParams<NewspaperParams>()
   const [publishedDays, setPublishedDays] = useState([])
+  const [documentSearch, setDocumentSearch] = useRecoilState<IDocumentSearch>(documentSearchAtom)
 
   const fetchPublishDates = useCallback(async () => {
     if (!publisherId || !year || !month) {
@@ -51,11 +53,12 @@ function Calendar_() {
 
   return (
     <div>
-      <div className={style['year-month']}>
+      {/* TODO: Fix using recoil */}
+      {/* <div className={style['year-month']}>
         <span>{context.value.newspaper}</span>
         <span>{context.value.year}</span>
         <span>{context.value.month}</span>
-      </div>
+      </div> */}
       <Calendar
         locale="ar"
         activeStartDate={new Date(+year, +monthNameToNumber[month] - 1, 1)}

@@ -1,18 +1,16 @@
 import style from './style.module.css'
 import React, { useState } from 'react'
-import axios from 'axios'
+import axios from 'utils/axios'
 import { useHistory } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 
-interface signInProps {
-  setToken : Function
-}
-
-const Signin = (props: signInProps) => {
+const Signin = () => {
   const [userData, setUserData] = useState({
     email: '',
     password: ''
   })
   const [error, setError] = useState('')
+  const queryClient = useQueryClient()
 
   const history = useHistory()
 
@@ -23,14 +21,13 @@ const Signin = (props: signInProps) => {
 
   const onClick = () => {
     axios
-      .post(process.env.REACT_APP_API_URL + '/user/signin', userData)
+      .post('/user/signin', userData)
       .then((res) => {
         if (!res.data.success) {
           setError('Something went wrong')
         } else {
-          localStorage.setItem('token', res.data.token)
-          props.setToken(res.data.token) 
           history.push('/')
+          queryClient.invalidateQueries(['user'])
         }
       })
       .catch((err) => {

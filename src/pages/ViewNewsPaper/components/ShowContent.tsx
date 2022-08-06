@@ -1,103 +1,102 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import axiosOld from 'axios'
+import axios from 'utils/axios'
 import style from '../style.module.css'
 import Tags from './Tags'
 import { FaWindowClose } from 'react-icons/fa'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import { useQuery } from '@tanstack/react-query'
+
 import 'react-tabs/style/react-tabs.css'
+import { message } from 'antd'
 
 interface ShowContentProps {
-  articleId: number
+  overlayId: number
   close: Function
 }
 
-const ShowContent = ({ articleId, close }: ShowContentProps) => {
+const ShowContent = ({ overlayId, close }: ShowContentProps) => {
   const [text, setText] = useState('')
   const [note, setNote] = useState('')
-  const [UpdateResultMsg, setUpdateResultMsg] = useState('')
-  const [updateNoteMsg, setUpdateNoteMsg] = useState('')
   const [initialNote, setInitialNote] = useState(
     'للُّغَة العَرَبِيّة هي أكثر اللغات السامية تحدثًا، وإحدى أكثر اللغات انتشاراً في العالم، يتحدثها أكثر من 467 مليون نسمة،(1) ويتوزع متحدثوها في الوطن العربي، بالإضافة إلى العديد من المناطق الأخرى المجاورة كالأهواز وتركيا وتشاد ومالي والسنغال وإرتيريا وإثيوبيا وجنوب السودان وإيران. وبذلك فهي تحتل المركز الرابع أو الخامس من حيث اللغات الأكثر انتشارًا في العالم، وهي تحتل المركز الثالث تبعًا لعدد الدول التي تعترف بها كلغة رسمية؛ إذ تعترف بها 27 دولة كلغة رسمية، واللغة الرابعة من حيث عدد المستخدمين على الإنترنت. اللغةُ العربيةُ ذات أهمية قصوى لدى المسلمين، فهي عندَهم لغةٌ مقدسة إذ أنها لغة القرآن، وهي لغةُ الصلاة وأساسيةٌ في القيام بالعديد من العبادات والشعائرِ الإسلامية'
   )
-  //write now it is hard coded for notes
-  const [NotesArr, setNotesArr] = useState([
-    { text: 'first Note' },
-    { text: 'second Note' },
-    { text: 'third Note' },
-    { text: 'first Note' },
-    { text: 'first Note' },
-    { text: 'second Note' },
-    { text: 'third Note' },
-    { text: 'first Note' },
-    { text: 'first Note' },
-    { text: 'first Note' },
-    { text: 'first Note' },
-    { text: 'second Note' },
-    { text: 'third Note' },
-    { text: 'first Note' },
-    { text: 'first Note' },
-    { text: 'second Note' },
-    { text: 'third Note' },
-    { text: 'first Note' }
-  ])
 
-  // fetch the text for the overlay
-  const fetchContent = async (coordsId: number) => {
-    try {
-      const result = await axios.get(`${process.env.REACT_APP_API_URL}/overlay/content/${coordsId}`)
-
-      if (!result.data.success) throw new Error('Failed')
-
-      setText(result.data.content)
-    } catch (error) {
-      console.log(error)
+  const { data: notesData = [], refetch: refetchNotes } = useQuery<[]>(
+    ['overlay-notes', overlayId],
+    async () => {
+      const res = await axios.get(`/overlay/notes/${overlayId}`)
+      return res.data.notes
+    },
+    {
+      enabled: false
     }
-  }
+  )
+
+  const { data: textData, refetch: refetchText } = useQuery(
+    ['overlay-text', overlayId],
+    async () => {
+      const res = await axios.get(`/overlay/content/${overlayId}`)
+      return res.data.content
+    },
+    {
+      enabled: false
+    }
+  )
 
   useEffect(() => {
-    fetchContent(articleId)
-  }, [articleId])
+    if (overlayId) {
+      refetchNotes()
+      refetchText()
+    }
+  }, [overlayId, refetchNotes, refetchText])
+
+  useEffect(() => {
+    setText(textData)
+  }, [textData])
 
   const updateArticleText = async () => {
     try {
-      const res = await axios.post(process.env.REACT_APP_API_URL + '/overlay/content/' + articleId, {
+      const res = await axiosOld.post(process.env.REACT_APP_API_URL + '/overlay/content/' + overlayId, {
         text: text,
-        user_id: 1,
-        document_id: articleId
+        userId: 1,
+        document_id: overlayId
       })
 
       if (!res.data.success) {
-        console.log('error in updating content for the article')
+        message.error('error in updating content for the article')
         return
-      } else {
-        setUpdateResultMsg('Upload done, Thank you for your efforts.')
       }
+
+      message.success('Upload done, Thank you for your efforts.')
     } catch (err) {
-      setUpdateResultMsg('An error has occurred')
-      // console.log(err)
+      message.error('An error has occurred')
     }
   }
 
-  const updateArticleNote = async () => {
+  const updateOverlayNote = async () => {
     try {
-      const res = await axios.post(process.env.REACT_APP_API_URL + '/note/', {
+      const res = await axios.post(`/overlay/note`, {
         text: note,
-        user_id: 1,
-        document_id: articleId
+        userId: 1,
+        overlayId
       })
 
       if (!res.data.success) {
         console.log('error in adding note')
         return
-      } else {
-        setUpdateNoteMsg('Thank you for your note.')
       }
+
+      message.success('Thank you for your note.')
+
+      setNote('')
+      refetchNotes()
     } catch (err) {
-      setUpdateNoteMsg('An error has occurred')
-      // console.log(err)
+      message.error('An error has occurred')
     }
   }
 
+  console.log({ notesData })
   return (
     <div className={style.showTextDiv}>
       <div className={style.closeButton}>
@@ -106,16 +105,18 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
 
       <Tabs defaultIndex={1} onSelect={(index) => console.log(index)} style={{ marginTop: '10px' }}>
         <TabList>
-          <Tab>Notes</Tab>
-          <Tab>Content</Tab>
+          <Tab key={1}>Notes</Tab>
+          <Tab key={2}>Content</Tab>
         </TabList>
         <TabPanel>
           <div className={style.tabPanelBody}>
             <div className={style.commentDev}>{initialNote}</div>
             <h2>Notes</h2>
             <div className={style['scroll']}>
-              {NotesArr.map(({ text }) => (
-                <div className={style.commentDev}>{text}</div>
+              {notesData?.map(({ text }, index) => (
+                <div key={index} className={style.commentDiv}>
+                  {text}
+                </div>
               ))}
             </div>
             <div className="autocomplete-container" style={{ width: '100%' }}>
@@ -127,12 +128,12 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
                   value={note}
                   placeholder="هل لديك ملاحظه؟"
                   onChange={(e) => setNote(e.target.value)}
-                ></textarea>
+                />
               </label>
-              <div>{updateNoteMsg}</div>
+              <br />
               <button
                 className="button view-newspaper-button"
-                onClick={updateArticleNote}
+                onClick={updateOverlayNote}
                 style={{ margin: 'auto', marginTop: '20px' }}
               >
                 Update
@@ -142,15 +143,14 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
         </TabPanel>
         <TabPanel>
           <div className={style.tabPanelBody}>
-            <Tags articleId={articleId} />
+            <Tags overlayId={overlayId} />
             <textarea
               rows={23}
               cols={60}
               value={text}
               style={{ margin: '0px 10px' }}
               onChange={(e) => setText(e.target.value)}
-            ></textarea>
-            <div>{UpdateResultMsg}</div>
+            />
             <button
               className="button view-newspaper-button"
               onClick={() => updateArticleText()}

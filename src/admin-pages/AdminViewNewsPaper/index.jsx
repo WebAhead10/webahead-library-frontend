@@ -126,7 +126,7 @@ const ViewNewsPaper = () => {
         }}
       />
       {/* Todo add button here to return the edit docuemnt page */}
-      {selectedId && <ShowContent articleId={selectedId} close={setSelectedId} />}
+      {selectedId && <ShowContent overlayId={selectedId} close={setSelectedId} />}
     </div>
   )
 }

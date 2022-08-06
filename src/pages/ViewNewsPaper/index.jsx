@@ -135,7 +135,7 @@ const ViewNewsPaper = () => {
           }}
         />
       </div>
-      {selectedId && <ShowContent articleId={selectedId} close={setSelectedId} />}
+      {selectedId && <ShowContent overlayId={selectedId} close={setSelectedId} />}
     </div>
   )
 }

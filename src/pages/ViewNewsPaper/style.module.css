@@ -40,7 +40,7 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(52, 7, 248);
 }
-.commentDev {
+.commentDiv {
   border: 1px solid black;
   border-radius: 5px;
   margin: 2% 0;

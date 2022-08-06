@@ -28,8 +28,6 @@ function AdminApp() {
   const history = useHistory()
   const [collapse, setCollapse] = useState(false)
 
-  //   const [value, setValue] = useState([])
-
   React.useEffect(() => {
     console.log('Location changed')
     // When location changes we need to check if the token

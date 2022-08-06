@@ -1,8 +1,9 @@
-import { useContext } from 'react'
 import style from './style.module.css'
 import { CSSProperties } from 'react'
-import { UserContext } from '../../UserContext'
+import { useRecoilState } from 'recoil'
+import { documentSearchAtom } from 'utils/recoil/atoms'
 import { Link } from 'react-router-dom'
+import { IDocumentSearch } from 'utils/recoil/types'
 
 interface PublisherSquareProps {
   name: string
@@ -12,7 +13,7 @@ interface PublisherSquareProps {
 }
 
 function PublisherSquare(props: PublisherSquareProps) {
-  const { setValue, value } = useContext(UserContext)
+  const [documentSearch, setDocumentSearch] = useRecoilState<IDocumentSearch>(documentSearchAtom)
 
   return (
     <div className={style['newspaper-square']}>
@@ -20,7 +21,7 @@ function PublisherSquare(props: PublisherSquareProps) {
         <Link
           className={style['click']}
           to={`/choose/year-month/${props.id}`}
-          onClick={() => setValue({ ...value, publisherId: props.id })}
+          onClick={() => setDocumentSearch({ ...documentSearch, publisherId: props.id })}
         >
           <img className={style['pic']} src={props.logo} alt="" style={props.style} />
           <b className={style['publisherName']}>{props.name}</b>
