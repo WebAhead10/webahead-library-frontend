@@ -1,31 +1,39 @@
-interface Publisher {
+export interface IUser {
+  id: number
+  name: string
+  email: string
+  role: string
+}
+
+export interface IPublisher {
+  id: number
+  name: string
+  logo: string
+}
+
+export interface ITagInput {
   id: number
   name: string
 }
 
-interface TagInput {
-  id: number
-  name: string
-}
-
-interface Document_ {
+export interface IDocument {
   publisher: string
   date: string
-  tags: TagInput[]
+  tags: ITagInput[]
   documentId: number | null
 }
 
-interface pdfPage {
+export interface IpdfPage {
   getViewport(data: Object): { height: number; width: number }
   render(data: Object): { _internalRenderTask: { callback: Function } }
 }
 
-interface NewspaperParams {
+export interface INewspaperParams {
   publisherId: string
   year: string
   month: string
 }
 
-interface IRandomKeys {
+export interface IRandomKeys {
   [key: string]: string
 }

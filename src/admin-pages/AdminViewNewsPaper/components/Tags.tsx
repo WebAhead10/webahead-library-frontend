@@ -18,7 +18,6 @@ const Tags = ({ articleId }: TagsProps) => {
   const [selectedTags, setSelectedTags] = useState<SelectedTags[]>([])
 
   const onTagClick = (tagId: number, tagName: string) => {
-    console.log(1, tagId)
     if (!tagId) return
 
     const isTagSelected = selectedTags.find(({ id }) => id === tagId)

@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 import './style.css'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { IDocument, IPublisher } from 'types'
 const API_URL = process.env.REACT_APP_API_URL
 
 // TODO: Connect tags to newspaper in the backend.
@@ -12,7 +13,7 @@ const UploadPDFDocument = () => {
 
   const [error, setError] = useState('')
   const [publishers, setPublishers] = useState([])
-  const [newDocument, setNewDocument] = useState<Document_>({
+  const [newDocument, setNewDocument] = useState<IDocument>({
     publisher: '',
     date: '',
     tags: [],
@@ -20,7 +21,7 @@ const UploadPDFDocument = () => {
   })
   const [tagAutocomplete, setTagAutocomplete] = useState('')
   const [tags, setTags] = useState([])
-  const [year , setYear]=useState('')
+  const [year, setYear] = useState('')
 
   const onChange =
     (key: string) =>
@@ -30,13 +31,15 @@ const UploadPDFDocument = () => {
         [key]: target.value
       }))
 
-      const onChangeYear = ({target}: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) =>{
-     return ( setNewDocument((prevDoc) => ({
+  const onChangeYear = ({ target }: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
+    return (
+      setNewDocument((prevDoc) => ({
         ...prevDoc,
-        'date': ''
+        date: ''
       })),
       setYear(target.value)
-     )}
+    )
+  }
   const onTagClick = (tagId: number, tagName: string) => {
     if (!tagId) return
 
@@ -116,20 +119,30 @@ const UploadPDFDocument = () => {
             <span>دار النشر</span>
             <select className="dropdown" onChange={onChange('publisher')} value={newDocument.publisher}>
               <option selected disabled></option>
-              {publishers.map((publisher: Publisher) => (
+              {publishers.map((publisher: IPublisher) => (
                 <option value={publisher.id}>{publisher.name}</option>
               ))}
             </select>
           </label>
           <label className="document-detail">
-                <span>السنه</span>
-                <input className="year-input" type="text" maxLength={4} value={year} onChange={(target) => onChangeYear(target)} />
-
-                </label>
+            <span>السنه</span>
+            <input
+              className="year-input"
+              type="text"
+              maxLength={4}
+              value={year}
+              onChange={(target) => onChangeYear(target)}
+            />
+          </label>
 
           <label className="document-detail">
             <span>تاريخ</span>
-            <input className="date-input" type="date" value={newDocument.date == '' ? `${year}-01-01` : newDocument.date} onChange={onChange('date')} />
+            <input
+              className="date-input"
+              type="date"
+              value={newDocument.date == '' ? `${year}-01-01` : newDocument.date}
+              onChange={onChange('date')}
+            />
           </label>
         </div>
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Layout, Menu, Breadcrumb, Card, Row, Col } from 'antd'
+import { Layout, Menu } from 'antd'
 import {
   DesktopOutlined,
   PieChartOutlined,
@@ -19,20 +19,29 @@ import History from '../pages/History'
 import './style.css'
 import EditEntity from './EditEntity'
 import AdminViewNewsPaper from './AdminViewNewsPaper'
+import ProtectedRoute from '../components/ProtectedRoute'
+import { useRecoilValue } from 'recoil'
+import { IUser } from 'types'
+import { userAtom } from 'utils/recoil/atoms'
 
-const { Header, Content, Footer, Sider } = Layout
+const { Header, Content, Sider } = Layout
 const { SubMenu } = Menu
 
 function AdminApp() {
   const location = useLocation()
   const history = useHistory()
   const [collapse, setCollapse] = useState(false)
+  const user = useRecoilValue<IUser>(userAtom)
 
   React.useEffect(() => {
     console.log('Location changed')
     // When location changes we need to check if the token
     // is stil valid
   }, [location])
+
+  if (!user.id) {
+    return <Signin />
+  }
 
   return (
     <Layout dir="ltr">
@@ -76,21 +85,17 @@ function AdminApp() {
           </Menu>
         </Sider>
         <Content style={{ margin: '0 16px' }}>
-          {/* <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb> */}
           <div className="site-layout-background admin-app" style={{ padding: 24, minHeight: 360 }}>
             <Switch>
-              <Route exact path="/" component={Dashboard} />
+              <ProtectedRoute exact path="/" component={Dashboard} />
               <Route path="/signin" component={Signin} />
-              <Route path="/addadmin" component={AddAdmin} />
-              <Route path="/history" component={History} />
-              <Route path="/manage/document" component={ManageDocument} />
-              <Route path="/edit/document/:id" component={EditEntity} />
-              <Route path="/view/document/:id" component={AdminViewNewsPaper} />
-              <Route path="/documents" component={ManageDocuments} />
-              <Route path="/tags" component={TagsAdmin} />
+              <ProtectedRoute path="/addadmin" component={AddAdmin} />
+              <ProtectedRoute path="/history" component={History} />
+              <ProtectedRoute path="/manage/document" component={ManageDocument} />
+              <ProtectedRoute path="/edit/document/:id" component={EditEntity} />
+              <ProtectedRoute path="/view/document/:id" component={AdminViewNewsPaper} />
+              <ProtectedRoute path="/documents" component={ManageDocuments} />
+              <ProtectedRoute path="/tags" component={TagsAdmin} />
               {/* A not found component needed here */}
               {/* <Route  component={NotFound} /> */}
             </Switch>

@@ -3,6 +3,7 @@ import React from 'react'
 import axios from 'axios'
 import Dropzone from './Dropzone'
 import { v4 as uuidv4 } from 'uuid'
+import { IpdfPage } from 'types'
 
 // This needs to be require and not as an import for typescript to work on
 // the package's methods and properties
@@ -81,14 +82,13 @@ const ImageInput = ({ height, width, onError, onChange, documentId }: ImageInput
         const pdf = await pdfjs.getDocument({
           data: pdfData
         }).promise
-        console.log(1)
 
         var pagesImage = new Array(pdf.numPages).fill('')
 
         //   render the pdf onto a canvas so we can convert them into png images
         const renderPage = (pageNumber: number, canvas: HTMLCanvasElement) => {
           // read the pdf page
-          pdf.getPage(pageNumber).then(function (page: pdfPage) {
+          pdf.getPage(pageNumber).then(function (page: IpdfPage) {
             let viewport = page.getViewport({ scale: 2.5 })
             canvas.height = viewport.height
             canvas.width = viewport.width

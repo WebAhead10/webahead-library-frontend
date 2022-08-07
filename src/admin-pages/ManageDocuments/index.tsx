@@ -40,7 +40,7 @@ const ManageDocuments = () => {
         </button>
       </div>
       {/* <div className={style.newsContainer}>
-        {publisherArr.map((publisher: Publisher, index) => (
+        {publisherArr.map((publisher: IPublisher, index) => (
           <PublisherSquare
             name={publisher.name}
             id={publisher.id}

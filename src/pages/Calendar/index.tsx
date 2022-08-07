@@ -6,6 +6,7 @@ import axios from 'axios'
 import { useRecoilState } from 'recoil'
 import { documentSearchAtom } from 'utils/recoil/atoms'
 import { IDocumentSearch } from 'utils/recoil/types'
+import { INewspaperParams, IRandomKeys } from 'types'
 
 const monthNameToNumber: IRandomKeys = {
   يناير: '01',
@@ -29,7 +30,7 @@ interface INewspaperDay {
 
 function Calendar_() {
   const history = useHistory()
-  const { publisherId, year, month } = useParams<NewspaperParams>()
+  const { publisherId, year, month } = useParams<INewspaperParams>()
   const [publishedDays, setPublishedDays] = useState([])
   const [documentSearch, setDocumentSearch] = useRecoilState<IDocumentSearch>(documentSearchAtom)
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import PublisherSquare from '../../components/PublisherSquare'
 import axios from 'axios'
 import style from './style.module.css'
+import { IPublisher } from 'types'
 const API_URL = process.env.REACT_APP_API_URL
 
 interface Publisher {
@@ -31,7 +32,7 @@ function Newspaper() {
 
   return (
     <div className={style['news-container']}>
-      {publisherArr.map((publisher: Publisher, index) => (
+      {publisherArr.map((publisher: IPublisher, index) => (
         <PublisherSquare
           name={publisher.name}
           id={publisher.id}

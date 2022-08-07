@@ -14,7 +14,6 @@ function AddTag() {
           //   setError("Failed")
           return
         }
-        console.log(res.data.data)
         setTags(res.data.data)
       })
       .catch((error) => {
@@ -48,7 +47,7 @@ function AddTag() {
 
   const removeTags = (indexToRemove) => {
     setTags(tags.filter((tag, index) => index !== indexToRemove))
-    console.log(tags[indexToRemove])
+
     axios
       .post(process.env.REACT_APP_API_URL + '/deleteTag', tags[indexToRemove])
       .then((res) => {

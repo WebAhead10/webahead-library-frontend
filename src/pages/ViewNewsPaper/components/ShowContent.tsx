@@ -96,7 +96,6 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
     }
   }
 
-  console.log({ notesData })
   return (
     <div className={style.showTextDiv}>
       <div className={style.closeButton}>

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import style from './style.module.css'
 import { useHistory, useParams } from 'react-router-dom'
 import axios from 'axios'
+import { INewspaperParams } from 'types'
 
 const months = [
   'يناير',
@@ -20,7 +21,7 @@ const months = [
 
 function ChooseYearMonth() {
   const history = useHistory()
-  const params = useParams<NewspaperParams>()
+  const params = useParams<INewspaperParams>()
   const [year, setYear] = useState('')
   const [month, setMonth] = useState('')
   const [publishedDocs, setPublishedDocs] = useState<{ [key: string]: string[] }>({})

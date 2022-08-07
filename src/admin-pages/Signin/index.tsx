@@ -34,7 +34,9 @@ const Signin = () => {
 
   return (
     <div className={style.signin}>
-      <h1>Admin Login</h1>
+      <br />
+      <br />
+      <br />
       <label htmlFor="email" className="label-input-combo">
         Email
         <input name="email" type="email" onChange={onChange('email')} value={userData.email} />

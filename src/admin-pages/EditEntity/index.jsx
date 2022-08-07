@@ -119,7 +119,7 @@ const EditEntity = () => {
         }
 
         const newOverlay = { x, y, height, width }
-        console.log('newOverlay', newOverlay)
+
         setOverlays((prevOverlays) => [
           ...prevOverlays,
           {
@@ -157,7 +157,7 @@ const EditEntity = () => {
           const overlayElement = document.getElementById(overlay.id)
 
           overlayElement.style.background = 'rgba(0, 0, 255, 0.3)'
-          overlayElement.ondblclick = () => {}
+          overlayElement.ondblclick = () => { }
 
           return { ...overlay, saved: true, rendered: false }
         })

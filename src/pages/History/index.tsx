@@ -22,7 +22,6 @@ const History = () => {
       <Tabs
         defaultIndex={0}
         onSelect={(index) => {
-          //   console.log(typeOfNotesState)
           if (index === 0) {
             setTypeOfNotesState('note')
           } else if (index === 1) {

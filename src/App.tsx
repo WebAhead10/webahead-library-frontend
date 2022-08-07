@@ -33,8 +33,6 @@ function App() {
       onSuccess: (data) => {
         if (data?.success) {
           setUser(data.user)
-        } else {
-          setUser({})
         }
       }
     }
@@ -59,7 +57,7 @@ function App() {
           <Route exact path="/" component={Publishers} />
           <Route path="/choose/year-month/:publisherId" component={ChooseYearMonth} />
           <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
-          <ProtectedRoute path="/edit/newspaper/:id" component={EditEntity} />
+          <ProtectedRoute admin={false} path="/edit/newspaper/:id" component={EditEntity} />
           <Route path="/newspaper" component={Publishers} />
           <Route path="/calendar/:publisherId/:year/:month" component={Calendar} />
           <Route path="/about" component={About} />
