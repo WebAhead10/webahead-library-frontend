@@ -1,10 +1,9 @@
-import BulkImageInput from '../../components/ImageInput'
+import MultiplePagePDFInput from '../../components/MultiplePagePDFInput'
 import { useHistory } from 'react-router-dom'
 import './style.css'
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { IDocument, IPublisher } from 'types'
-const API_URL = process.env.REACT_APP_API_URL
+import axios from 'utils/axios'
+import { IDocument, IMainCategory } from 'types'
 
 // TODO: Connect tags to newspaper in the backend.
 // TODO: Change the way newspaper is edited.
@@ -12,9 +11,9 @@ const UploadPDFDocument = () => {
   const history = useHistory()
 
   const [error, setError] = useState('')
-  const [publishers, setPublishers] = useState([])
+  const [categories, setCategories] = useState([])
   const [newDocument, setNewDocument] = useState<IDocument>({
-    publisher: '',
+    category: '',
     date: '',
     tags: [],
     documentId: null
@@ -23,23 +22,20 @@ const UploadPDFDocument = () => {
   const [tags, setTags] = useState([])
   const [year, setYear] = useState('')
 
-  const onChange =
+  const onChange: Function =
     (key: string) =>
-    ({ target }: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) =>
+    ({ target }: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
+      console.log(key, target.value)
       setNewDocument((prevDoc) => ({
         ...prevDoc,
         [key]: target.value
       }))
+    }
 
-  const onChangeYear = ({ target }: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
-    return (
-      setNewDocument((prevDoc) => ({
-        ...prevDoc,
-        date: ''
-      })),
-      setYear(target.value)
-    )
+  const onChangeYear = (value: string) => {
+    return setYear(value)
   }
+
   const onTagClick = (tagId: number, tagName: string) => {
     if (!tagId) return
 
@@ -66,14 +62,14 @@ const UploadPDFDocument = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/publishers`)
+      .get(`/categories`)
       .then((res) => {
         if (!res.data.success) {
           setError('Failed')
           return
         }
 
-        setPublishers(res.data.publisher)
+        setCategories(res.data.categories)
       })
       .catch((error) => {
         setError(error.message)
@@ -84,7 +80,7 @@ const UploadPDFDocument = () => {
     if (!tagAutocomplete) return
 
     axios
-      .get(`${API_URL}/tag/autocomplete/${tagAutocomplete}`)
+      .get(`/tag/autocomplete/${tagAutocomplete}`)
       .then((res) => {
         if (!res.data.success) {
           setError('Failed')
@@ -100,9 +96,9 @@ const UploadPDFDocument = () => {
 
   const submitDocument = async () => {
     try {
-      await axios.post(`${API_URL}/newspaper`, newDocument)
+      await axios.post(`/newspaper`, newDocument)
 
-      history.push(`/edit/document/${newDocument.documentId}`)
+      window.location.href = `/edit/newspaper/${newDocument.documentId}`
     } catch (error) {
       setError('An error has occured while saving')
     }
@@ -117,10 +113,10 @@ const UploadPDFDocument = () => {
         <div className="critical-details-form">
           <label className="document-detail">
             <span>دار النشر</span>
-            <select className="dropdown" onChange={onChange('publisher')} value={newDocument.publisher}>
+            <select className="dropdown" onChange={onChange('category')} value={newDocument.category}>
               <option selected disabled></option>
-              {publishers.map((publisher: IPublisher) => (
-                <option value={publisher.id}>{publisher.name}</option>
+              {categories.map((category: IMainCategory) => (
+                <option value={category.id}>{category.name}</option>
               ))}
             </select>
           </label>
@@ -131,7 +127,9 @@ const UploadPDFDocument = () => {
               type="text"
               maxLength={4}
               value={year}
-              onChange={(target) => onChangeYear(target)}
+              onChange={({ target }: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) =>
+                onChangeYear(target.value)
+              }
             />
           </label>
 
@@ -140,7 +138,7 @@ const UploadPDFDocument = () => {
             <input
               className="date-input"
               type="date"
-              value={newDocument.date == '' ? `${year}-01-01` : newDocument.date}
+              value={newDocument.date === '' ? `${year}-01-01` : newDocument.date}
               onChange={onChange('date')}
             />
           </label>
@@ -200,14 +198,14 @@ const UploadPDFDocument = () => {
       <br />
       <br />
       <br />
-      <BulkImageInput
+      <MultiplePagePDFInput
         width="300px"
         height="300px"
         onChange={(documentId: number) => {
           setNewDocument({ ...newDocument, documentId })
         }}
         documentId={newDocument.documentId}
-        onError={(errorMessage) => setError(errorMessage)}
+        onError={setError}
       />
 
       <input type="submit" value="Submit" className="button" style={{ marginTop: '20px' }} onClick={submitDocument} />

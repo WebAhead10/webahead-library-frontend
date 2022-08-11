@@ -5,6 +5,7 @@ import './index.css'
 import './antd-override.css'
 import { RecoilRoot } from 'recoil'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ConfigProvider } from 'antd'
 
 
 const Index = () => {
@@ -14,7 +15,9 @@ const Index = () => {
     <React.StrictMode>
       <RecoilRoot>
         <QueryClientProvider client={queryClient}>
-          <App />
+          <ConfigProvider direction="rtl">
+            <App />
+          </ConfigProvider>
         </QueryClientProvider>
       </RecoilRoot>
     </React.StrictMode>

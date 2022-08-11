@@ -1,13 +1,6 @@
 import React, { useState } from 'react'
 import { Layout, Menu } from 'antd'
-import {
-  DesktopOutlined,
-  PieChartOutlined,
-  FileOutlined,
-  TeamOutlined,
-  UserOutlined,
-  FolderOpenOutlined
-} from '@ant-design/icons'
+import { DesktopOutlined, PieChartOutlined, FileOutlined, FolderOpenOutlined } from '@ant-design/icons'
 import { Route, Switch, useLocation, useHistory } from 'react-router-dom'
 import Signin from './Signin'
 import AddAdmin from './AddAdmin'
@@ -15,9 +8,9 @@ import Dashboard from './Dashboard'
 import ManageDocument from './ManageDocument'
 import ManageDocuments from './ManageDocuments'
 import TagsAdmin from './TagsAdmin'
+import ManageCategories from './ManageCategories'
 import History from '../pages/History'
 import './style.css'
-import EditEntity from './EditEntity'
 import AdminViewNewsPaper from './AdminViewNewsPaper'
 import ProtectedRoute from '../components/ProtectedRoute'
 import { useRecoilValue } from 'recoil'
@@ -25,7 +18,6 @@ import { IUser } from 'types'
 import { userAtom } from 'utils/recoil/atoms'
 
 const { Header, Content, Sider } = Layout
-const { SubMenu } = Menu
 
 function AdminApp() {
   const location = useLocation()
@@ -39,6 +31,10 @@ function AdminApp() {
     // is stil valid
   }, [location])
 
+  React.useEffect(() => {
+    console.log('AdminApp', user)
+  }, [user])
+
   if (!user.id) {
     return <Signin />
   }
@@ -49,11 +45,6 @@ function AdminApp() {
         <div>
           <h2 style={{ color: 'white', margin: '0 10px 0 -30px' }}>Webahead library</h2>
         </div>
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-          <Menu.Item key="1">Tab 1</Menu.Item>
-          <Menu.Item key="2">Tab 2</Menu.Item>
-          <Menu.Item key="3">Tab 3</Menu.Item>
-        </Menu>
       </Header>
       <Layout className="site-layout" style={{ minHeight: '90vh' }}>
         {/* <Header className="site-layout-background" style={{ padding: 0 }} /> */}
@@ -68,17 +59,10 @@ function AdminApp() {
             <Menu.Item key="3" onClick={() => history.push('/manage/document')} icon={<FileOutlined />}>
               Add newspaper
             </Menu.Item>
-            <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-              <Menu.Item key="4">Bill</Menu.Item>
-              <Menu.Item key="5">Alex</Menu.Item>
-            </SubMenu>
-            <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
-              <Menu.Item key="6">Team 1</Menu.Item>
-              <Menu.Item key="8">Team 2</Menu.Item>
-            </SubMenu>
-            <Menu.Item key="9" icon={<FileOutlined />}>
-              Files
+            <Menu.Item key="4" onClick={() => history.push('/manage/categories')} icon={<FileOutlined />}>
+              Categories
             </Menu.Item>
+
             <Menu.Item key="10" onClick={() => history.push('/history')} icon={<FolderOpenOutlined />}>
               History
             </Menu.Item>
@@ -92,7 +76,7 @@ function AdminApp() {
               <ProtectedRoute path="/addadmin" component={AddAdmin} />
               <ProtectedRoute path="/history" component={History} />
               <ProtectedRoute path="/manage/document" component={ManageDocument} />
-              <ProtectedRoute path="/edit/document/:id" component={EditEntity} />
+              <ProtectedRoute path="/manage/categories" component={ManageCategories} />
               <ProtectedRoute path="/view/document/:id" component={AdminViewNewsPaper} />
               <ProtectedRoute path="/documents" component={ManageDocuments} />
               <ProtectedRoute path="/tags" component={TagsAdmin} />

@@ -1,29 +1,28 @@
 import { useState, useEffect } from 'react'
-import PublisherSquare from '../../components/PublisherSquare'
-import axios from 'axios'
+import MainCategorySquare from '../../components/MainCategorySquare'
+import axios from 'utils/axios'
 import style from './style.module.css'
-import { IPublisher } from 'types'
-const API_URL = process.env.REACT_APP_API_URL
+import { IMainCategory } from 'types'
 
-interface Publisher {
+interface Category {
   name: string
   logo: string
   id: number
 }
 function Newspaper() {
-  const [publisherArr, setPublisherArr] = useState([])
+  const [categories, setCategories] = useState([])
   const [error, setError] = useState('')
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/publishers`)
+      .get(`/categories`)
       .then((res) => {
         if (!res.data.success) {
           setError('Failed')
           return
         }
 
-        setPublisherArr(res.data.publisher)
+        setCategories(res.data.categories)
       })
       .catch((error) => {
         setError(error.message)
@@ -32,16 +31,16 @@ function Newspaper() {
 
   return (
     <div className={style['news-container']}>
-      {publisherArr.map((publisher: IPublisher, index) => (
-        <PublisherSquare
-          name={publisher.name}
-          id={publisher.id}
+      {categories.map((category: IMainCategory, index) => (
+        <MainCategorySquare
+          name={category.name}
+          id={category.id}
           style={{
             objectFit: (index + 1) % 4 === 0 ? 'cover' : 'fill',
             background: (index + 1) % 5 === 0 ? 'white' : ''
           }}
-          logo={publisher.logo}
-          key={publisher.id}
+          logo={category.logo}
+          key={category.id}
         />
       ))}
 

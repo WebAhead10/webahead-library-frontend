@@ -5,14 +5,14 @@ import { documentSearchAtom } from 'utils/recoil/atoms'
 import { Link } from 'react-router-dom'
 import { IDocumentSearch } from 'utils/recoil/types'
 
-interface PublisherSquareProps {
+interface MainCategorySquareProps {
   name: string
   logo: string
   id: number
   style: CSSProperties
 }
 
-function PublisherSquare(props: PublisherSquareProps) {
+function MainCategorySquare(props: MainCategorySquareProps) {
   const [documentSearch, setDocumentSearch] = useRecoilState<IDocumentSearch>(documentSearchAtom)
 
   return (
@@ -21,14 +21,14 @@ function PublisherSquare(props: PublisherSquareProps) {
         <Link
           className={style['click']}
           to={`/choose/year-month/${props.id}`}
-          onClick={() => setDocumentSearch({ ...documentSearch, publisherId: props.id })}
+          onClick={() => setDocumentSearch({ ...documentSearch, categoryId: props.id })}
         >
           <img className={style['pic']} src={props.logo} alt="" style={props.style} />
-          <b className={style['publisherName']}>{props.name}</b>
+          <b className={style['categoryName']}>{props.name}</b>
         </Link>
       </div>
     </div>
   )
 }
 
-export default PublisherSquare
+export default MainCategorySquare

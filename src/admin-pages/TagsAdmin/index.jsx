@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import axios from 'utils/axios'
 import DeleteIcon from '@material-ui/icons/Delete'
 import './style.css'
 
@@ -8,7 +8,7 @@ function AddTag() {
 
   useEffect(() => {
     axios
-      .get(process.env.REACT_APP_API_URL + '/allTags')
+      .get('/tag/all')
       .then((res) => {
         if (!res.data.success) {
           //   setError("Failed")
@@ -24,7 +24,7 @@ function AddTag() {
   const addTags = (event) => {
     if (event.key === 'Enter' && event.target.value !== '') {
       axios
-        .post(process.env.REACT_APP_API_URL + '/addTag', {
+        .post('/tag/add', {
           tag: event.target.value
         })
         .then((res) => {
@@ -49,7 +49,7 @@ function AddTag() {
     setTags(tags.filter((tag, index) => index !== indexToRemove))
 
     axios
-      .post(process.env.REACT_APP_API_URL + '/deleteTag', tags[indexToRemove])
+      .post('/deleteTag', tags[indexToRemove])
       .then((res) => {
         if (!res.data.success) {
           // setError("Something went wrong")

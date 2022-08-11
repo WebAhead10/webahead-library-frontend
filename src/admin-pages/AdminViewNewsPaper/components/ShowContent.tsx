@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import axios from 'utils/axios'
 import style from '../style.module.css'
 import Tags from './Tags'
 
@@ -13,7 +13,7 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
 
   const fetchContent = async (coordsId: number) => {
     try {
-      const result = await axios.get(`${process.env.REACT_APP_API_URL}/overlay/content/${coordsId}`)
+      const result = await axios.get(`/overlay/content/${coordsId}`)
 
       if (!result.data.success) throw new Error('Failed')
 
@@ -29,7 +29,7 @@ const ShowContent = ({ articleId, close }: ShowContentProps) => {
 
   const updateArticleText = async () => {
     try {
-      const res = await axios.post(process.env.REACT_APP_API_URL + '/overlay/content/' + articleId, {
+      const res = await axios.post('/overlay/content/' + articleId, {
         text
       })
 

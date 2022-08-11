@@ -5,7 +5,7 @@ export interface IUser {
   role: string
 }
 
-export interface IPublisher {
+export interface IMainCategory {
   id: number
   name: string
   logo: string
@@ -17,7 +17,7 @@ export interface ITagInput {
 }
 
 export interface IDocument {
-  publisher: string
+  category: string
   date: string
   tags: ITagInput[]
   documentId: number | null
@@ -29,7 +29,7 @@ export interface IpdfPage {
 }
 
 export interface INewspaperParams {
-  publisherId: string
+  categoryId: string
   year: string
   month: string
 }

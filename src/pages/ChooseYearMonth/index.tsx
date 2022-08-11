@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import style from './style.module.css'
 import { useHistory, useParams } from 'react-router-dom'
-import axios from 'axios'
+import axios from 'utils/axios'
 import { INewspaperParams } from 'types'
 
 const months = [
@@ -27,18 +27,18 @@ function ChooseYearMonth() {
   const [publishedDocs, setPublishedDocs] = useState<{ [key: string]: string[] }>({})
 
   const fetchPublishDates = useCallback(async () => {
-    if (!params.publisherId) {
+    if (!params.categoryId) {
       window.location.href = '/'
     }
 
     try {
-      const result = await axios.get(`${process.env.REACT_APP_API_URL}/publish/dates/${params.publisherId}`)
+      const result = await axios.get(`/publish/dates/${params.categoryId}`)
 
       setPublishedDocs(result.data.data)
     } catch (error) {
       console.log(error)
     }
-  }, [params.publisherId])
+  }, [params.categoryId])
 
   useEffect(() => {
     fetchPublishDates()
@@ -84,7 +84,7 @@ function ChooseYearMonth() {
           className="button"
           style={{ margin: '0px 10px' }}
           onClick={() => {
-            history.push(`/calendar/${params.publisherId}/${year}/${month}`)
+            history.push(`/calendar/${params.categoryId}/${year}/${month}`)
           }}
         >
           اذهب
@@ -104,7 +104,7 @@ function ChooseYearMonth() {
                     }
                     onClick={() => {
                       if (currentMonth !== 'أكتوبر') {
-                        history.push(`/calendar/${params.publisherId}/${currentYear}/${currentMonth}`)
+                        history.push(`/calendar/${params.categoryId}/${currentYear}/${currentMonth}`)
                       }
                     }}
                   >

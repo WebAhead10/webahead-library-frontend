@@ -1,143 +1,74 @@
-/* eslint-disable no-undef */
-import React from 'react'
-import axios from 'axios'
-import Dropzone from './Dropzone'
-import { v4 as uuidv4 } from 'uuid'
-import { IpdfPage } from 'types'
-
-// This needs to be require and not as an import for typescript to work on
-// the package's methods and properties
-let pdfjs = require('pdfjs-dist')
-pdfjs.GlobalWorkerOptions.workerSrc = require('pdfjs-dist/build/pdf.worker.entry.js')
+import React, { useState } from 'react'
+import axios from 'utils/axios'
+import basicAxios from 'axios'
+import Dropzone from '../ImageDropzone'
 
 interface ImageInputProps {
   height: string
   width: string
   onError(msg: string): void
-  onChange(id: number): void
-  documentId: number | null
-}
-interface PageResult {
-  data: { documentId: number }
+  onChange(id: number | string): void
+  value: string
 }
 
-const ImageInput = ({ height, width, onError, onChange, documentId }: ImageInputProps) => {
+const ImageInput = ({ height, width, onError, onChange, value }: ImageInputProps) => {
+  const [loading, setLoading] = useState(false)
   const [error, setError] = React.useState<string>('')
-  const [loading, setLoading] = React.useState<boolean>(false)
-  const documentName = `${Date.now()}-${uuidv4()}`
 
-  const upload = async (files: string[]) => {
-    try {
-      // save the first page to prepare the db for the rest of the pages
-      const result = await axios.post(`${process.env.REACT_APP_API_URL}/upload`, {
-        file: files[0],
-        index: 0,
-        isNewspaper: true,
-        documentName
+  const uploadFile = (file: File, signedRequest: string, url: string) =>
+    basicAxios
+      .put(signedRequest, file, {
+        headers: {
+          'Content-Type': file.type
+        }
       })
+      .then((res) => {
+        if (res.status === 200) {
+          onChange(url)
+          setLoading(false)
+          return
+        }
 
-      if (!result.data.success) {
-        onError(result.data.message)
+        onError('Could not upload file.')
         setLoading(false)
-      }
+      })
+      .catch((error) => console.log(error))
 
-      const pagesResult: PageResult[] = await Promise.all(
-        files.slice(1).map((file, i: number) =>
-          axios.post(`${process.env.REACT_APP_API_URL}/upload`, {
-            file,
-            // add 1 to the index just so the page numbers would be correct
-            index: i + 1,
-            documentName: documentName,
-            id: result.data.documentId,
-            isNewspaper: true,
-            isNewPage: true
-          })
-        )
-      )
-
-      if (pagesResult.every(({ data }: any) => data.success)) {
-        onChange(pagesResult[0].data.documentId)
-        setLoading(false)
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const prepareUpload = (file: Blob) => {
-    if (file.size > 50000000) {
-      return setError('File should be below 50mb')
+  const getSignedRequest = (file: File) => {
+    if (file.size > 5000000) {
+      onError('File should be below 50mb')
+      return setError('File should be below 5mb')
     }
 
     setLoading(true)
 
-    pdfjs.disableWorker = false
-
-    var reader = new FileReader() || {}
-
-    reader.onload = async function (e) {
-      try {
-        const pdfData = atob((reader.result as string).split(',')[1])
-
-        const pdf = await pdfjs.getDocument({
-          data: pdfData
-        }).promise
-
-        var pagesImage = new Array(pdf.numPages).fill('')
-
-        //   render the pdf onto a canvas so we can convert them into png images
-        const renderPage = (pageNumber: number, canvas: HTMLCanvasElement) => {
-          // read the pdf page
-          pdf.getPage(pageNumber).then(function (page: IpdfPage) {
-            let viewport = page.getViewport({ scale: 2.5 })
-            canvas.height = viewport.height
-            canvas.width = viewport.width
-
-            // render in onto a canvas
-            var pageRendering = page.render({
-              canvasContext: canvas.getContext('2d'),
-              viewport: viewport
-            })
-
-            const completeCallback = pageRendering._internalRenderTask.callback
-            pageRendering._internalRenderTask.callback = async function (error: any) {
-              completeCallback.call(this, error)
-              // turn the canvas to an image
-              let image = await canvas.toDataURL('image/png', 1.0)
-              pagesImage[pageNumber - 1] = image
-              canvas.remove()
-
-              if (pagesImage.every((x) => x)) {
-                upload(pagesImage)
-              }
-            }
-          })
+    return axios
+      .post(`/category/upload/signedRequest`, {
+        fileName: file.name,
+        fileType: file.type
+      })
+      .then((res) => {
+        if (res.status === 200 && res.data.success) {
+          uploadFile(file, res.data.signedRequest, res.data.url)
+          return
         }
 
-        // loop over the pdf pages
-        for (let page = 1; page <= pdf.numPages; page++) {
-          let canvas = document.createElement('canvas')
-          renderPage(page, canvas)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    reader.readAsDataURL(file)
+        onError('Could not get signed URL.')
+        setLoading(false)
+      })
+      .catch((error) => error)
   }
 
   return (
     <div>
       <Dropzone
-        value={documentId}
         width={width}
         height={height}
-        prepareUpload={prepareUpload}
+        value={value}
         loading={loading}
         error={!!error}
+        prepareUpload={(file: File) => getSignedRequest(file)}
       />
-      {error && <span style={{ color: 'red' }}>{error}</span>}
     </div>
   )
 }

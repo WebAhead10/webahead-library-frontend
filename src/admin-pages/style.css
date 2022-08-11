@@ -1,6 +1,7 @@
 @import '~antd/dist/antd.css';
 
 .admin-app {
+  direction: ltr;
 }
 
 /* General styles */

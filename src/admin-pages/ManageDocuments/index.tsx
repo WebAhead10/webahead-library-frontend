@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import PublisherSquare from '../../components/PublisherSquare'
-import axios from 'axios'
+import MainCategorySquare from '../../components/MainCategorySquare'
+import axios from 'utils/axios'
 import style from './style.module.css'
-const API_URL = process.env.REACT_APP_API_URL
 
-interface Publisher {
+interface Category {
   name: string
   logo: string
   id: number
@@ -13,19 +12,19 @@ interface Publisher {
 
 const ManageDocuments = () => {
   const history = useHistory()
-  const [publisherArr, setPublisherArr] = useState([])
+  const [categories, setCategories] = useState([])
   const [error, setError] = useState('')
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/publishers`)
+      .get(`/categories`)
       .then((res) => {
         if (!res.data.success) {
           setError('Failed')
           return
         }
 
-        setPublisherArr(res.data.publisher)
+        setCategories(res.data.categories)
       })
       .catch((error) => {
         setError(error.message)
@@ -39,20 +38,6 @@ const ManageDocuments = () => {
           Add
         </button>
       </div>
-      {/* <div className={style.newsContainer}>
-        {publisherArr.map((publisher: IPublisher, index) => (
-          <PublisherSquare
-            name={publisher.name}
-            id={publisher.id}
-            style={{
-              objectFit: (index + 1) % 4 === 0 ? 'cover' : 'fill',
-              background: (index + 1) % 5 === 0 ? 'white' : ''
-            }}
-            logo={publisher.logo}
-            key={publisher.id}
-          />
-        ))}
-      </div> */}
     </div>
   )
 }

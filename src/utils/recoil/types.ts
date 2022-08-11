@@ -1,3 +1,3 @@
 export interface IDocumentSearch {
-  publisherId: number
+  categoryId: number
 }

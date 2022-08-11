@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import style from './style.module.css'
 import { DeleteFilled, PlusCircleOutlined } from '@ant-design/icons'
-import axios from 'axios'
+import axios from 'utils/axios'
 
 interface Overlay {
   x: number
@@ -41,7 +41,7 @@ const Sidebar = ({
 
   const deleteOverlay = async (coordId: string, overlayId: number) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/overlay/${overlayId}/${coordId}`)
+      await axios.delete(`/overlay/${overlayId}/${coordId}`)
 
       refreshCoords()
     } catch (error) {

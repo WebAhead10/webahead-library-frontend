@@ -2,7 +2,7 @@ import Calendar from 'react-calendar'
 import { useCallback, useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import style from './style.module.css'
-import axios from 'axios'
+import axios from 'utils/axios'
 import { useRecoilState } from 'recoil'
 import { documentSearchAtom } from 'utils/recoil/atoms'
 import { IDocumentSearch } from 'utils/recoil/types'
@@ -30,23 +30,23 @@ interface INewspaperDay {
 
 function Calendar_() {
   const history = useHistory()
-  const { publisherId, year, month } = useParams<INewspaperParams>()
+  const { categoryId, year, month } = useParams<INewspaperParams>()
   const [publishedDays, setPublishedDays] = useState([])
   const [documentSearch, setDocumentSearch] = useRecoilState<IDocumentSearch>(documentSearchAtom)
 
   const fetchPublishDates = useCallback(async () => {
-    if (!publisherId || !year || !month) {
+    if (!categoryId || !year || !month) {
       window.location.href = '/'
     }
 
     try {
-      const result = await axios.get(`${process.env.REACT_APP_API_URL}/publish/dates/${publisherId}/${year}/${month}`)
+      const result = await axios.get(`/publish/dates/${categoryId}/${year}/${month}`)
 
       setPublishedDays(result.data.data)
     } catch (error) {
       console.log(error)
     }
-  }, [publisherId, year, month])
+  }, [categoryId, year, month])
 
   useEffect(() => {
     fetchPublishDates()

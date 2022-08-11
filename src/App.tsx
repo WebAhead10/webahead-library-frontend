@@ -5,7 +5,7 @@ import HeaderInfo from './components/HeaderInfo/index'
 import NavBar from './components/NavBar'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminApp from './admin-pages/AdminApp'
-import Publishers from './pages/Publishers'
+import Categories from './pages/Categories'
 import ChooseYearMonth from './pages/ChooseYearMonth'
 import ViewNewsPaper from './pages/ViewNewsPaper'
 import Calendar from './pages/Calendar'
@@ -38,6 +38,10 @@ function App() {
     }
   )
 
+  if (!data) {
+    return null
+  }
+
   if (window.location.pathname.indexOf('/a/admin') === 0) {
     return (
       <div className="App">
@@ -54,12 +58,11 @@ function App() {
         <HeaderInfo />
         <NavBar />
         <Switch>
-          <Route exact path="/" component={Publishers} />
-          <Route path="/choose/year-month/:publisherId" component={ChooseYearMonth} />
+          <Route exact path="/" component={Categories} />
+          <Route path="/choose/year-month/:categoryId" component={ChooseYearMonth} />
           <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
           <ProtectedRoute admin={false} path="/edit/newspaper/:id" component={EditEntity} />
-          <Route path="/newspaper" component={Publishers} />
-          <Route path="/calendar/:publisherId/:year/:month" component={Calendar} />
+          <Route path="/calendar/:categoryId/:year/:month" component={Calendar} />
           <Route path="/about" component={About} />
           <Route path="/contact-us" component={ContactUs} />
           <Route path="/user-signin">

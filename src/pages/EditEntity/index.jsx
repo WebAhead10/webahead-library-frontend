@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import axios from 'axios'
+import axios from 'utils/axios'
 import { v4 as uuidv4 } from 'uuid'
 import Sidebar from './components/Sidebar'
 import style from './style.module.css'
@@ -22,7 +22,7 @@ const EditEntity = () => {
 
   const fetchNewspaper = async (id) => {
     try {
-      const result = await axios.get(`${process.env.REACT_APP_API_URL}/newspaper/${id}`)
+      const result = await axios.get(`/newspaper/${id}`)
 
       if (!result.data.success) throw new Error('Failed')
 
@@ -88,7 +88,7 @@ const EditEntity = () => {
   const fetchCoords = useCallback(
     async (id) => {
       try {
-        const result = await axios.get(`${process.env.REACT_APP_API_URL}/overlay/coords/${id}`)
+        const result = await axios.get(`/overlay/coords/${id}`)
         setArticles(result.data.pages)
 
         if (!result.data.success) throw new Error('Failed')
@@ -225,11 +225,11 @@ const EditEntity = () => {
 
   const onSubmit = async (overlays, documentId, articleId) => {
     if (!overlays.length) return
-    let url = process.env.REACT_APP_API_URL + '/overlay/coords/' + documentId
+    let url = '/overlay/coords/' + documentId
 
     try {
       if (articleId) {
-        url = process.env.REACT_APP_API_URL + '/overlay/coords/update/' + articleId
+        url = '/overlay/coords/update/' + articleId
       }
 
       const res = await axios.post(url, {

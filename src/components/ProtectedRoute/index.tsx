@@ -16,6 +16,8 @@ function ProtectedRoute({ component: Component, admin = true, ...restOfProps }: 
   const user = useRecoilValue<IUser>(userAtom)
   const isAuthenticated = !!user.id
 
+  console.log({ user })
+
   return (
     <Route
       {...restOfProps}

@@ -1,6 +1,6 @@
 import style from './style.module.css'
 import React, { useState } from 'react'
-import axios from 'axios'
+import axios from 'utils/axios'
 import { useHistory } from 'react-router-dom'
 
 const Signin = () => {
@@ -19,12 +19,13 @@ const Signin = () => {
 
   const onClick = () => {
     axios
-      .post(process.env.REACT_APP_API_URL + '/admin/signin', userData)
+      .post('/admin/signin', userData)
       .then((res) => {
         if (!res.data.success) {
           setError('Something went wrong')
         } else {
-          history.push('/')
+          // history.push('/')
+          window.location.href = '/a/admin/'
         }
       })
       .catch((err) => {
