@@ -20,7 +20,7 @@ client.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
-      window.location.href = '/login'
+      window.location.href = '/user-signin'
     }
 
     if (error.response?.status === 403) {
