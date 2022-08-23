@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import MainCategorySquare from 'components/MainCategorySquare'
-import { IMainCategory } from 'types'
-import { Button, Modal, Form, Input } from 'antd'
+import { IMainCategory, IViewTypeRadio } from 'types'
+import { viewTypes } from 'consts'
+import { Button, Modal, Form, Input, Radio } from 'antd'
 
 import style from './style.module.css'
 
@@ -27,11 +28,9 @@ const ManageCategories = () => {
     setLoading(true)
     // setIsModalVisible(false)
     form.validateFields().then(async (values) => {
-      const { name, logo } = values
+      const { name, logo, viewType, id } = values
 
-      console.log({ values })
-
-      const res = await axios.post('/categories/add', { name, logo })
+      const res = await axios.post('/categories/add', { name, logo, viewType, id })
       if (res.data.success) {
         setIsModalVisible(false)
         form.resetFields()
@@ -57,6 +56,7 @@ const ManageCategories = () => {
         shape="round"
         size="large"
         onClick={() => {
+          form.setFieldsValue({ name: '', logo: '', viewType: viewTypes[0].value, id: '' })
           showModal()
         }}
       >
@@ -68,12 +68,21 @@ const ManageCategories = () => {
           <MainCategorySquare
             key={category.id}
             name={category.name}
-            id={category.id}
             style={{
               objectFit: (index + 1) % 4 === 0 ? 'cover' : 'fill',
               background: (index + 1) % 5 === 0 ? 'white' : ''
             }}
             logo={category.logo}
+            onClick={() => {
+              form.setFieldsValue({
+                name: category.name,
+                logo: category.logo,
+                id: category.id,
+                viewType: category.viewType
+              })
+
+              showModal()
+            }}
           />
         ))}
       </div>
@@ -87,6 +96,18 @@ const ManageCategories = () => {
         <Form form={form}>
           <Form.Item label="Name" name="name">
             <Input />
+          </Form.Item>
+
+          <Form.Item hidden name="id">
+            <Input />
+          </Form.Item>
+
+          <Form.Item label="View type" name="viewType">
+            <Radio.Group>
+              {viewTypes.map((viewType: IViewTypeRadio) => (
+                <Radio value={viewType.value}>{viewType.label}</Radio>
+              ))}
+            </Radio.Group>
           </Form.Item>
 
           <Form.Item label="Logo" name="logo">

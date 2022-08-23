@@ -9,6 +9,7 @@ export interface IMainCategory {
   id: number
   name: string
   logo: string
+  viewType: string
 }
 
 export interface ITagInput {
@@ -36,4 +37,9 @@ export interface INewspaperParams {
 
 export interface IRandomKeys {
   [key: string]: string
+}
+
+export interface IViewTypeRadio {
+  value: string
+  label: string
 }

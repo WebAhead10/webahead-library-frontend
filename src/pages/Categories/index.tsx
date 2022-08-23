@@ -3,6 +3,10 @@ import MainCategorySquare from '../../components/MainCategorySquare'
 import axios from 'utils/axios'
 import style from './style.module.css'
 import { IMainCategory } from 'types'
+import { useRecoilState } from 'recoil'
+import { documentSearchAtom } from 'utils/recoil/atoms'
+import { IDocumentSearch } from 'utils/recoil/types'
+import { useHistory } from 'react-router-dom'
 
 interface Category {
   name: string
@@ -12,6 +16,8 @@ interface Category {
 function Newspaper() {
   const [categories, setCategories] = useState([])
   const [error, setError] = useState('')
+  const [documentSearch, setDocumentSearch] = useRecoilState<IDocumentSearch>(documentSearchAtom)
+  const history = useHistory()
 
   useEffect(() => {
     axios
@@ -34,13 +40,16 @@ function Newspaper() {
       {categories.map((category: IMainCategory, index) => (
         <MainCategorySquare
           name={category.name}
-          id={category.id}
           style={{
             objectFit: (index + 1) % 4 === 0 ? 'cover' : 'fill',
             background: (index + 1) % 5 === 0 ? 'white' : ''
           }}
           logo={category.logo}
           key={category.id}
+          onClick={() => {
+            history.push(`/choose/year-month/${category.id}`)
+            setDocumentSearch({ ...documentSearch, categoryId: category.id })
+          }}
         />
       ))}
 

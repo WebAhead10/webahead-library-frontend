@@ -1,11 +1,13 @@
-.newspaper-square .news {
+.news {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 40px;
+  flex-direction: column;
+  transition: 0.3s ease;
 }
 
-.newspaper-square .pic {
+.pic {
   width: 150px;
   height: 150px;
   border: 1px black solid;
@@ -14,24 +16,16 @@
   margin-bottom: 5px;
 }
 
-.newspaper-square .categoryName {
+.categoryName {
   margin-top: 5px;
   text-shadow: rgba(144, 144, 144, 0.658) 0px 1px 4px;
 }
 
-.newspaper-square .click {
-  display: flex;
-  flex-direction: column;
-  transition: 0.3s ease;
-  text-decoration: none;
-  color: inherit;
-}
-
-.newspaper-square .click:hover {
+.news:hover {
   transform: scale(1.2);
   cursor: pointer;
 }
 
-.newspaper-square .click:active {
+.news:active {
   transform: scale(1.1);
 }
