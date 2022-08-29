@@ -16,7 +16,8 @@ const UploadPDFDocument = () => {
     category: '',
     date: '',
     tags: [],
-    documentId: null
+    id: null,
+    name: ''
   })
   const [tagAutocomplete, setTagAutocomplete] = useState('')
   const [tags, setTags] = useState([])
@@ -98,7 +99,7 @@ const UploadPDFDocument = () => {
     try {
       await axios.post(`/newspaper`, newDocument)
 
-      window.location.href = `/edit/newspaper/${newDocument.documentId}`
+      window.location.href = `/edit/newspaper/${newDocument.id}`
     } catch (error) {
       setError('An error has occured while saving')
     }
@@ -111,6 +112,10 @@ const UploadPDFDocument = () => {
       <br />
       <div className="top-form">
         <div className="critical-details-form">
+          <label className="document-detail">
+            <span>اسم الملف</span>
+            <input className="year-input" type="text" value={newDocument.name} onChange={onChange('name')} />
+          </label>
           <label className="document-detail">
             <span>دار النشر</span>
             <select className="dropdown" onChange={onChange('category')} value={newDocument.category}>
@@ -202,9 +207,9 @@ const UploadPDFDocument = () => {
         width="300px"
         height="300px"
         onChange={(documentId: number) => {
-          setNewDocument({ ...newDocument, documentId })
+          setNewDocument({ ...newDocument, id: documentId })
         }}
-        documentId={newDocument.documentId}
+        documentId={newDocument.id}
         onError={setError}
       />
 

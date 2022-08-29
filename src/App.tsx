@@ -12,6 +12,7 @@ import Calendar from './pages/Calendar'
 import About from './pages/About'
 import ContactUs from './pages/ContactUs'
 import EditEntity from './pages/EditEntity'
+import DocumentsListView from './pages/DocumentsListView'
 import UserSignin from './user-pages/Signin'
 import AddUser from './user-pages/AddUser'
 import { useQuery } from '@tanstack/react-query'
@@ -60,6 +61,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Categories} />
           <Route path="/choose/year-month/:categoryId" component={ChooseYearMonth} />
+          <Route path="/list/:categoryId" component={DocumentsListView} />
           <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
           <ProtectedRoute admin={false} path="/edit/newspaper/:id" component={EditEntity} />
           <Route path="/calendar/:categoryId/:year/:month" component={Calendar} />

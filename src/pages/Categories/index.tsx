@@ -47,7 +47,12 @@ function Newspaper() {
           logo={category.logo}
           key={category.id}
           onClick={() => {
-            history.push(`/choose/year-month/${category.id}`)
+            if (category.viewType === 'calendar') {
+              history.push(`/choose/year-month/${category.id}`)
+            } else if (category.viewType === 'list') {
+              history.push(`/list/${category.id}`)
+            }
+
             setDocumentSearch({ ...documentSearch, categoryId: category.id })
           }}
         />

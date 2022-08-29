@@ -27,10 +27,10 @@
 
 .choose-year-top .date-dropdown-container .date-dropdown {
   font-size: 26px;
-  padding: 8px 20px;
   border-radius: 8px;
   user-select: none;
   outline: none;
+  padding: 8px 20px;
 }
 
 .nav__monthes {

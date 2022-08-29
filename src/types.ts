@@ -21,7 +21,8 @@ export interface IDocument {
   category: string
   date: string
   tags: ITagInput[]
-  documentId: number | null
+  id: number | null
+  name: string
 }
 
 export interface IpdfPage {
