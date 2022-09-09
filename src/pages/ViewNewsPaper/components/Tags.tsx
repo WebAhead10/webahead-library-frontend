@@ -30,7 +30,7 @@ const Tags = ({ overlayId }: TagsProps) => {
       return
     }
 
-    // if it doesn't then add it
+    // if it doesn't exist then add it
     setSelectedTags((prevDoc) => selectedTags.concat({ id: tagId, name: tagName }))
 
     setTagAutocomplete('')

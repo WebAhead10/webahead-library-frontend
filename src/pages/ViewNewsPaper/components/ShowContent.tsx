@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react'
 import axiosOld from 'axios'
 import axios from 'utils/axios'
 import style from '../style.module.css'
-import Tags from './Tags'
 import { FaWindowClose } from 'react-icons/fa'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
-import { useQuery } from '@tanstack/react-query'
+import { Tabs } from 'antd'
 
-import 'react-tabs/style/react-tabs.css'
-import { message } from 'antd'
+import { useQuery, useMutation } from '@tanstack/react-query'
+
+import { message, Select, Tag } from 'antd'
+import { ITagInput } from 'types'
 
 interface ShowContentProps {
   overlayId: number
@@ -44,12 +44,47 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
     }
   )
 
+  const {
+    data: tagsData,
+    refetch: refetchTags,
+    isLoading: isFetchingTags
+  } = useQuery<ITagInput[]>(
+    ['overlay-tags', overlayId],
+    async () => {
+      const res = await axios.get(`/overlay/tags/${overlayId}`)
+      return res.data.data
+    },
+    {
+      enabled: false
+    }
+  )
+
+  const { mutate: attachTag, isLoading: isAttachingTag } = useMutation((tagId: number) => {
+    return axios.post('/tag/attach/overlay', {
+      tagId,
+      overlayId
+    })
+  })
+
+  const { mutate: detachTag, isLoading: isDetachingTag } = useMutation((tagId: number) => {
+    return axios.post('/tag/detach/overlay', {
+      tagId,
+      overlayId
+    })
+  })
+
+  const { data: tags } = useQuery(['tags'], async () => {
+    const res = await axios.get(`/tag/all`)
+    return res.data
+  })
+
   useEffect(() => {
     if (overlayId) {
       refetchNotes()
       refetchText()
+      refetchTags()
     }
-  }, [overlayId, refetchNotes, refetchText])
+  }, [overlayId, refetchNotes, refetchText, refetchTags])
 
   useEffect(() => {
     setText(textData)
@@ -96,22 +131,23 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
     }
   }
 
+  if (!tags || !tagsData) return null
+
+  const isLoading = isFetchingTags || isAttachingTag || isDetachingTag
+
   return (
     <div className={style.showTextDiv}>
       <div className={style.closeButton}>
         <FaWindowClose style={{ fontSize: '35px' }} onClick={() => close()} />
       </div>
 
-      <Tabs defaultIndex={1} onSelect={(index) => console.log(index)} style={{ marginTop: '10px' }}>
-        <TabList>
-          <Tab key={1}>Notes</Tab>
-          <Tab key={2}>Content</Tab>
-        </TabList>
-        <TabPanel>
+      <Tabs defaultActiveKey="2" centered style={{ marginTop: '10px' }}>
+        {/* Notes panel */}
+        <Tabs.TabPane tab="Notes" key="1">
           <div className={style.tabPanelBody}>
-            <div className={style.commentDev}>{initialNote}</div>
+            <div>{initialNote}</div>
             <h2>Notes</h2>
-            <div className={style['scroll']}>
+            <div className={style.scroll}>
               {notesData?.map(({ text }, index) => (
                 <div key={index} className={style.commentDiv}>
                   {text}
@@ -139,17 +175,74 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
               </button>
             </div>
           </div>
-        </TabPanel>
-        <TabPanel>
+        </Tabs.TabPane>
+
+        {/* Main panel */}
+        <Tabs.TabPane tab="Content" key="2">
           <div className={style.tabPanelBody}>
-            <Tags overlayId={overlayId} />
-            <textarea
-              rows={23}
-              cols={60}
-              value={text}
-              style={{ margin: '0px 10px' }}
-              onChange={(e) => setText(e.target.value)}
-            />
+            <Select
+              mode="tags"
+              style={{
+                width: '50%',
+                margin: 'auto'
+              }}
+              placeholder="تصنيف"
+              onSelect={(value) => {
+                const tag = tags.data.find((tag: ITagInput) => tag.id === value)
+                if (tag) {
+                  attachTag(value, {
+                    onSuccess: () => {
+                      message.success('تم اضافة التصنيف بنجاح')
+                      refetchTags()
+                    }
+                  })
+                }
+              }}
+              onDeselect={(value) => {
+                const tag = tags.data.find((tag: ITagInput) => tag.id === value)
+
+                if (tag) {
+                  detachTag(value, {
+                    onSuccess: () => {
+                      message.success('تم حذف التصنيف بنجاح')
+                      refetchTags()
+                    }
+                  })
+                }
+              }}
+              loading={isLoading}
+              value={tagsData.map((tag) => tag.id)}
+              // tagRender={() => <> </>}
+            >
+              {tags.data.map((tag: ITagInput) => (
+                <Select.Option key={tag.id} value={tag.id}>
+                  {tag.name}
+                </Select.Option>
+              ))}
+            </Select>
+            <br />
+            <br />
+            <div>
+              {tagsData.map((tag) => (
+                <Tag
+                  closable
+                  onClose={() => {
+                    detachTag(tag.id, {
+                      onSuccess: () => {
+                        message.success('تم حذف التصنيف بنجاح')
+                        refetchTags()
+                      }
+                    })
+                  }}
+                  style={{ fontSize: '20px', padding: '5px 10px' }}
+                >
+                  {tag.name}
+                </Tag>
+              ))}
+            </div>
+            <br />
+
+            <textarea rows={23} cols={60} value={text} onChange={(e) => setText(e.target.value)} />
             <button
               className="button view-newspaper-button"
               onClick={() => updateArticleText()}
@@ -158,7 +251,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
               Update text
             </button>
           </div>
-        </TabPanel>
+        </Tabs.TabPane>
       </Tabs>
     </div>
   )

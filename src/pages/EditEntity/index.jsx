@@ -19,6 +19,7 @@ const EditEntity = () => {
   const [mouseTracker, setMouseTracker] = useState(null)
   const [error, setError] = useState('')
   const [editStatus, setEditStatus] = useState(STATUS_NAVIGATING)
+  var drag
 
   const fetchNewspaper = async (id) => {
     try {
@@ -131,6 +132,7 @@ const EditEntity = () => {
     [viewer]
   )
 
+  // fetch the newspaper/document
   useEffect(() => {
     const newspaperId = params.id
     fetchNewspaper(newspaperId)
@@ -147,7 +149,6 @@ const EditEntity = () => {
     }
   }, [viewer, params.id, fetchCoords])
 
-  var drag
 
   const drawOverly = () => {
     if (!viewer || editStatus !== STATUS_NAVIGATING) return null
@@ -155,6 +156,7 @@ const EditEntity = () => {
     viewer.setMouseNavEnabled(false)
     setEditStatus(STATUS_DRAWING)
 
+    // event liseners for drawing
     const mouseTrackerListeners = new OpenSeadragon.MouseTracker({
       element: viewer.element,
       pressHandler: function (event) {
