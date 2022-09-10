@@ -10,7 +10,7 @@ const ViewNewsPaper = () => {
   const [selectedId, setSelectedId] = useState(null)
   const params = useParams()
 
-  const fetchNewspaper = useCallback(async (id) => {
+  const fetchNewspaper = async (id) => {
     try {
       const result = await axios.get(`${process.env.REACT_APP_API_URL}/newspaper/${id}`)
 
@@ -39,16 +39,18 @@ const ViewNewsPaper = () => {
     } catch (error) {
       console.log(error)
     }
-  }, [viewer])
+  }
 
   useEffect(() => {
     const newspaperId = params.id
+
     fetchNewspaper(newspaperId)
+
 
     return () => {
       viewer && viewer.destroy()
     }
-  }, [viewer, fetchNewspaper, params.id])
+  }, [])
 
   const fetchCoords = useCallback(
     async (id) => {
