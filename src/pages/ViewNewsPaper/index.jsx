@@ -4,7 +4,7 @@ import { useParams, useHistory } from 'react-router-dom'
 import axios from 'axios'
 import style from './style.module.css'
 import ShowContent from './components/ShowContent'
-import { FaCut } from 'react-icons/fa'
+import { ScissorOutlined } from '@ant-design/icons'
 
 const ViewNewsPaper = () => {
   const [viewer, setViewer] = useState(null)
@@ -12,7 +12,7 @@ const ViewNewsPaper = () => {
   const params = useParams()
   const history = useHistory()
 
-  const fetchNewspaper = async (id) => {
+  const fetchNewspaper = useCallback(async (id) => {
     try {
       const result = await axios.get(`${process.env.REACT_APP_API_URL}/newspaper/${id}`)
 
@@ -41,7 +41,7 @@ const ViewNewsPaper = () => {
     } catch (error) {
       console.log(error)
     }
-  }
+  }, [viewer])
 
   useEffect(() => {
     const newspaperId = params.id
@@ -50,7 +50,7 @@ const ViewNewsPaper = () => {
     return () => {
       viewer && viewer.destroy()
     }
-  }, [])
+  }, [viewer, fetchNewspaper, params.id])
 
   const fetchCoords = useCallback(
     async (id) => {
@@ -128,14 +128,14 @@ const ViewNewsPaper = () => {
         }}
       />
       <div className={style.editOverlays}>
-        <FaCut
+        <ScissorOutlined
           style={{ fontSize: '20px' }}
           onClick={() => {
             history.push(`/edit/newspaper/${params.id}`)
           }}
         />
       </div>
-      {selectedId && <ShowContent overlayId={selectedId} close={setSelectedId} />}
+      {selectedId && <ShowContent overlayId={selectedId} close={() => setSelectedId(null)} />}
     </div>
   )
 }

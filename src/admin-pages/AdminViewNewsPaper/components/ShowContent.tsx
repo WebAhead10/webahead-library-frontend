@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import axiosOld from 'axios'
 import axios from 'utils/axios'
 import style from '../style.module.css'
-import { FaWindowClose } from 'react-icons/fa'
+import { CloseCircleFilled } from '@ant-design/icons'
+
 import { Tabs } from 'antd'
 
 import { useQuery, useMutation } from '@tanstack/react-query'
@@ -138,7 +139,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
   return (
     <div className={style.showTextDiv}>
       <div className={style.closeButton}>
-        <FaWindowClose style={{ fontSize: '35px' }} onClick={() => close()} />
+        <CloseCircleFilled style={{ fontSize: '35px' }} onClick={() => close()} />
       </div>
 
       <Tabs defaultActiveKey="2" centered style={{ marginTop: '10px' }}>
@@ -212,7 +213,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
               }}
               loading={isLoading}
               value={tagsData.map((tag) => tag.id)}
-              // tagRender={() => <> </>}
+            // tagRender={() => <> </>}
             >
               {tags.data.map((tag: ITagInput) => (
                 <Select.Option key={tag.id} value={tag.id}>

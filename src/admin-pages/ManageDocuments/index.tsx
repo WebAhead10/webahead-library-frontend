@@ -1,33 +1,28 @@
-import React, { useState, useEffect } from 'react'
+import { message } from 'antd'
+import { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import MainCategorySquare from '../../components/MainCategorySquare'
+// import MainCategorySquare from '../../components/MainCategorySquare'
 import axios from 'utils/axios'
 import style from './style.module.css'
 
-interface Category {
-  name: string
-  logo: string
-  id: number
-}
 
 const ManageDocuments = () => {
   const history = useHistory()
   const [categories, setCategories] = useState([])
-  const [error, setError] = useState('')
 
   useEffect(() => {
     axios
       .get(`/categories`)
       .then((res) => {
         if (!res.data.success) {
-          setError('Failed')
+          message.error('Failed')
           return
         }
 
         setCategories(res.data.categories)
       })
       .catch((error) => {
-        setError(error.message)
+        message.error(error.message)
       })
   }, [])
 

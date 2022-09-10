@@ -7,15 +7,12 @@ import { useRecoilState } from 'recoil'
 import { documentSearchAtom } from 'utils/recoil/atoms'
 import { IDocumentSearch } from 'utils/recoil/types'
 import { useHistory } from 'react-router-dom'
+import { message } from 'antd'
 
-interface Category {
-  name: string
-  logo: string
-  id: number
-}
+
+
 function Newspaper() {
   const [categories, setCategories] = useState([])
-  const [error, setError] = useState('')
   const [documentSearch, setDocumentSearch] = useRecoilState<IDocumentSearch>(documentSearchAtom)
   const history = useHistory()
 
@@ -24,14 +21,14 @@ function Newspaper() {
       .get(`/categories`)
       .then((res) => {
         if (!res.data.success) {
-          setError('Failed')
+          message.error('Failed')
           return
         }
 
         setCategories(res.data.categories)
       })
       .catch((error) => {
-        setError(error.message)
+        message.error(error.message)
       })
   }, [])
 
@@ -57,8 +54,6 @@ function Newspaper() {
           }}
         />
       ))}
-
-      <span>{error}</span>
     </div>
   )
 }

@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import { message } from 'antd'
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import axios from 'utils/axios'
@@ -17,11 +18,10 @@ const EditEntity = () => {
   const params = useParams()
   const history = useHistory()
   const [mouseTracker, setMouseTracker] = useState(null)
-  const [error, setError] = useState('')
   const [editStatus, setEditStatus] = useState(STATUS_NAVIGATING)
   var drag
 
-  const fetchNewspaper = async (id) => {
+  const fetchNewspaper = useCallback(async (id) => {
     try {
       const result = await axios.get(`/newspaper/${id}`)
 
@@ -50,7 +50,7 @@ const EditEntity = () => {
     } catch (error) {
       console.log(error)
     }
-  }
+  }, [viewer])
 
   const mouseEnterListener = (id, overlayIndex) => {
     const elements = document.getElementsByClassName(id)
@@ -140,7 +140,7 @@ const EditEntity = () => {
     return () => {
       viewer && viewer.destroy()
     }
-  }, [])
+  }, [fetchNewspaper, params.id, viewer])
 
   useEffect(() => {
     const newspaperId = params.id
@@ -239,7 +239,7 @@ const EditEntity = () => {
       })
 
       if (!res.data.success) {
-        setError(res.data.message)
+        message.error(res.data.message)
         return
       }
 
@@ -252,7 +252,7 @@ const EditEntity = () => {
 
       fetchCoords(params.id)
     } catch (err) {
-      setError('Error has occured')
+      message.error('Error has occured')
       console.error(err)
     }
   }

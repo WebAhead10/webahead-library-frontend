@@ -3,10 +3,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import style from './style.module.css'
 import axios from 'utils/axios'
-import { useRecoilState } from 'recoil'
-import { documentSearchAtom } from 'utils/recoil/atoms'
-import { IDocumentSearch } from 'utils/recoil/types'
 import { INewspaperParams, IRandomKeys } from 'types'
+// import { Calendar } from 'antd';
+import type { Moment } from 'moment';
 
 const monthNameToNumber: IRandomKeys = {
   يناير: '01',
@@ -32,7 +31,6 @@ function Calendar_() {
   const history = useHistory()
   const { categoryId, year, month } = useParams<INewspaperParams>()
   const [publishedDays, setPublishedDays] = useState([])
-  const [documentSearch, setDocumentSearch] = useRecoilState<IDocumentSearch>(documentSearchAtom)
 
   const fetchPublishDates = useCallback(async () => {
     if (!categoryId || !year || !month) {
@@ -61,6 +59,16 @@ function Calendar_() {
         <span>{context.value.month}</span>
       </div> */}
       <Calendar
+        // antd calendar
+        // headerRender={() => null}
+        // mode="month"
+        // onSelect={(date: Moment) => {
+        //   const newspaperDay: INewspaperDay | any = publishedDays.find(({ day }) => +day === date.day())
+
+        //   if (newspaperDay) {
+        //     history.push(`/newspaper/${newspaperDay.id}`)
+        //   }
+        // }}
         locale="ar"
         activeStartDate={new Date(+year, +monthNameToNumber[month] - 1, 1)}
         calendarType="Arabic"
@@ -79,6 +87,7 @@ function Calendar_() {
           }
           return null
         }}
+
       />
     </div>
   )
