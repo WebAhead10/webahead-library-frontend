@@ -21,6 +21,7 @@ interface Coord {
 interface Article {
   id: number
   coords: Coord[]
+  title: string
 }
 
 interface SidebarProps {
@@ -50,7 +51,7 @@ const Sidebar = ({
 
   const { data: tags } = useQuery(['tags'], async () => {
     const res = await axios.get(`/tag/all`)
-    return res.data
+    return res.data.data
   })
 
   const { data: overlayData, refetch } = useQuery<{
@@ -137,13 +138,16 @@ const Sidebar = ({
       },
       {
         onSuccess: () => {
-          message.success('با موفقیت ذخیره شد')
+          message.success('👍')
           refetch()
           setIsModalOpen(false)
+          refreshCoords()
         }
       }
     )
   }
+
+  console.log({ tags })
 
   if (!tags) {
     return null
@@ -155,10 +159,10 @@ const Sidebar = ({
       <div className={style.articleWrapper}>
         {articles
           .sort(({ id: aId }, { id: bId }) => aId - bId)
-          .map(({ id, coords }, index) => (
+          .map(({ id, coords, title }, index) => (
             <>
               <div
-                className={style.articleName}
+                className={style.articleContainer}
                 onMouseEnter={() => mouseEnterListener(id)}
                 onMouseLeave={() => mouseOutListener(id)}
                 onClick={() => {
@@ -166,7 +170,8 @@ const Sidebar = ({
                 }}
               >
                 <div>
-                  Article id: {id} <span className={style.articleOpenArrow}> ^ </span>
+                  <span className={style.articleTitle}>{title || 'بدون عنوان'}</span>
+                  <span className={style.articleOpenArrow}> ^ </span>
                 </div>
                 {editStatus === 'drawing' && (
                   <span className={style.addOverlays}>
@@ -246,7 +251,7 @@ const Sidebar = ({
                     loading={isAttachingTag || isDetachingTag}
                     mode="tags"
                     onSelect={(value: number) => {
-                      const tag = tags.data.find((tag: ITagInput) => tag.id === value)
+                      const tag = tags.find((tag: ITagInput) => tag.id === value)
                       if (tag) {
                         attachTag(value, {
                           onSuccess: () => {
@@ -257,7 +262,7 @@ const Sidebar = ({
                       }
                     }}
                     onDeselect={(value) => {
-                      const tag = tags.data.find((tag: ITagInput) => tag.id === value)
+                      const tag = tags.find((tag: ITagInput) => tag.id === value)
 
                       if (tag) {
                         detachTag(value, {
@@ -269,7 +274,7 @@ const Sidebar = ({
                       }
                     }}
                   >
-                    {tags.data.map((tag: ITagInput) => (
+                    {tags.map((tag: ITagInput) => (
                       <Select.Option key={tag.id} value={tag.id}>
                         {tag.name}
                       </Select.Option>

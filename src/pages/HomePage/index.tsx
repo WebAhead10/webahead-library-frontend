@@ -37,11 +37,6 @@ function HomePage() {
     return <span>Loading</span>
   }
 
-  console.log({
-    categories,
-    tags
-  })
-
   return (
     <Row wrap>
       <Col span={24} style={{ marginTop: '20px' }}>

@@ -9,7 +9,7 @@
   flex-direction: column;
 }
 
-.articleName {
+.articleContainer {
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   cursor: pointer;
@@ -17,6 +17,13 @@
   position: relative;
   font-size: bold;
   position: relative;
+}
+
+.articleTitle {
+  display: flex;
+  justify-content: center;
+  max-width: 70%;
+  text-align: center;
 }
 
 .articleOpenArrow {
@@ -29,7 +36,7 @@
 
 .addOverlays {
   position: absolute;
-  right: 20px;
+  right: 10px;
   top: 5px;
 }
 
@@ -53,6 +60,6 @@
 
 .showDataModal {
   position: absolute;
-  right: 50px;
+  right: 40px;
   top: 0px;
 }
