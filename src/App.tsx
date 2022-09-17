@@ -5,7 +5,7 @@ import HeaderInfo from './components/HeaderInfo/index'
 import NavBar from './components/NavBar'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminApp from './admin-pages/AdminApp'
-import Categories from './pages/Categories'
+import HomePage from './pages/HomePage'
 import ChooseYearMonth from './pages/ChooseYearMonth'
 import ViewNewsPaper from './pages/ViewNewsPaper'
 import Calendar from './pages/Calendar'
@@ -59,7 +59,7 @@ function App() {
         <HeaderInfo />
         <NavBar />
         <Switch>
-          <Route exact path="/" component={Categories} />
+          <Route exact path="/" component={HomePage} />
           <Route path="/choose/year-month/:categoryId" component={ChooseYearMonth} />
           <Route path="/list/:categoryId" component={DocumentsListView} />
           <Route path="/view/newspaper/:id" component={ViewNewsPaper} />

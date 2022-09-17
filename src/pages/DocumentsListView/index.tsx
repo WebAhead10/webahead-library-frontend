@@ -19,15 +19,15 @@ const DocumentsListView = () => {
 
   const { data: tags } = useQuery(['tags'], async () => {
     const res = await axios.get(`/tag/all`)
-    return res.data
+    return res.data.data
   })
 
   const handleTagsChange = (value: number[]) => {
     setSelectedTags(value)
   }
 
-  if (!tags && !documents) {
-    return null
+  if (!tags || !documents) {
+    return <span>Loading</span>
   }
 
   return (
@@ -49,7 +49,7 @@ const DocumentsListView = () => {
             }}
             onChange={handleTagsChange}
           >
-            {tags?.data.map((tag: ITagInput) => (
+            {tags?.map((tag: ITagInput) => (
               <Select.Option key={tag.id} value={tag.id}>
                 {tag.name}
               </Select.Option>

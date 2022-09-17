@@ -212,7 +212,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
               }}
               loading={isLoading}
               value={tagsData.map((tag) => tag.id)}
-              // tagRender={() => <> </>}
+              tagRender={() => <> </>}
             >
               {tags.data.map((tag: ITagInput) => (
                 <Select.Option key={tag.id} value={tag.id}>
