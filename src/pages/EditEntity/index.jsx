@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import { message } from 'antd'
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import axios from 'utils/axios'
@@ -17,11 +18,10 @@ const EditEntity = () => {
   const params = useParams()
   const history = useHistory()
   const [mouseTracker, setMouseTracker] = useState(null)
-  const [error, setError] = useState('')
   const [editStatus, setEditStatus] = useState(STATUS_NAVIGATING)
   var drag
 
-  const fetchNewspaper = async (id) => {
+  const fetchNewspaper = useCallback(async (id) => {
     try {
       const result = await axios.get(`/newspaper/${id}`)
 
@@ -50,7 +50,7 @@ const EditEntity = () => {
     } catch (error) {
       console.log(error)
     }
-  }
+  }, [viewer])
 
   const mouseEnterListener = (id, overlayIndex) => {
     const elements = document.getElementsByClassName(id)
@@ -86,51 +86,48 @@ const EditEntity = () => {
     viewer.viewport.zoomBy(4)
   }
 
-  const fetchCoords = useCallback(
-    async (id) => {
-      try {
-        const result = await axios.get(`/overlay/coords/${id}`)
-        setArticles(result.data.pages)
+  const fetchCoords = async (id) => {
+    try {
+      const result = await axios.get(`/overlay/coords/${id}`)
+      setArticles(result.data.pages)
 
-        if (!result.data.success) throw new Error('Failed')
+      if (!result.data.success) throw new Error('Failed')
 
-        const coordsArr = result.data.pages
+      const coordsArr = result.data.pages
 
-        viewer.clearOverlays()
-        coordsArr.forEach(({ coords, id }) => {
-          coords.forEach(({ overlay }) => {
-            const overlayElement = document.createElement('div')
-            overlayElement.style.cursor = 'pointer'
-            overlayElement.setAttribute('class', `overlay ${id}`)
+      viewer.clearOverlays()
+      coordsArr.forEach(({ coords, id }) => {
+        coords.forEach(({ overlay }) => {
+          const overlayElement = document.createElement('div')
+          overlayElement.style.cursor = 'pointer'
+          overlayElement.setAttribute('class', `overlay ${id}`)
 
-            overlayElement.addEventListener('mouseenter', () => mouseEnterListener(id))
+          overlayElement.addEventListener('mouseenter', () => mouseEnterListener(id))
 
-            overlayElement.addEventListener('mouseout', () => mouseOutListener(id))
+          overlayElement.addEventListener('mouseout', () => mouseOutListener(id))
 
-            // overlayElement.addEventListener('click', () => {
-            //   const elements = document.getElementsByClassName(id)
+          // overlayElement.addEventListener('click', () => {
+          //   const elements = document.getElementsByClassName(id)
 
-            //   for (var i = 0; i < elements.length; i++) {
-            //     elements[i].removeEventListener('mouseenter', mouseEnterListener)
-            //     elements[i].removeEventListener('mouseout', mouseOutListener)
-            //     elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
-            //   }
+          //   for (var i = 0; i < elements.length; i++) {
+          //     elements[i].removeEventListener('mouseenter', mouseEnterListener)
+          //     elements[i].removeEventListener('mouseout', mouseOutListener)
+          //     elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
+          //   }
 
-            //   setSelectedId(id)
-            // })
+          //   setSelectedId(id)
+          // })
 
-            viewer.addOverlay(
-              overlayElement,
-              new OpenSeadragon.Rect(overlay.x, overlay.y, overlay.width, overlay.height)
-            )
-          })
+          viewer.addOverlay(
+            overlayElement,
+            new OpenSeadragon.Rect(overlay.x, overlay.y, overlay.width, overlay.height)
+          )
         })
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    [viewer]
-  )
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   // fetch the newspaper/document
   useEffect(() => {
@@ -239,7 +236,7 @@ const EditEntity = () => {
       })
 
       if (!res.data.success) {
-        setError(res.data.message)
+        message.error(res.data.message)
         return
       }
 
@@ -252,7 +249,7 @@ const EditEntity = () => {
 
       fetchCoords(params.id)
     } catch (err) {
-      setError('Error has occured')
+      message.error('Error has occured')
       console.error(err)
     }
   }

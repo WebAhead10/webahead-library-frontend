@@ -43,7 +43,9 @@ const ViewNewsPaper = () => {
 
   useEffect(() => {
     const newspaperId = params.id
+
     fetchNewspaper(newspaperId)
+
 
     return () => {
       viewer && viewer.destroy()

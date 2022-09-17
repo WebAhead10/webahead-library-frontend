@@ -8,6 +8,11 @@
   align-items: flex-start;
 }
 
-.news-container > div {
+.news-container>div {
   width: 25%;
+}
+
+.title {
+  font-size: 30px;
+  color: green;
 }

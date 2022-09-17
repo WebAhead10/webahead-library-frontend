@@ -4,7 +4,7 @@ import { useParams, useHistory } from 'react-router-dom'
 import axios from 'axios'
 import style from './style.module.css'
 import ShowContent from './components/ShowContent'
-import { FaCut } from 'react-icons/fa'
+import { ScissorOutlined } from '@ant-design/icons'
 
 const ViewNewsPaper = () => {
   const [viewer, setViewer] = useState(null)
@@ -45,6 +45,7 @@ const ViewNewsPaper = () => {
 
   useEffect(() => {
     const newspaperId = params.id
+
     fetchNewspaper(newspaperId)
 
     return () => {
@@ -114,7 +115,7 @@ const ViewNewsPaper = () => {
     if (viewer) {
       fetchCoords(newspaperId)
     }
-  }, [viewer, params.id, fetchCoords])
+  }, [viewer])
 
   return (
     <div className={style['main-container']}>
@@ -128,14 +129,14 @@ const ViewNewsPaper = () => {
         }}
       />
       <div className={style.editOverlays}>
-        <FaCut
+        <ScissorOutlined
           style={{ fontSize: '20px' }}
           onClick={() => {
             history.push(`/edit/newspaper/${params.id}`)
           }}
         />
       </div>
-      {selectedId && <ShowContent overlayId={selectedId} close={setSelectedId} />}
+      {selectedId && <ShowContent overlayId={selectedId} close={() => setSelectedId(null)} />}
     </div>
   )
 }

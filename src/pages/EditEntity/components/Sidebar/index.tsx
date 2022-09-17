@@ -225,6 +225,7 @@ const Sidebar = ({
           onOk={() => {
             form.submit()
           }}
+          confirmLoading={isSubmittingOverlayData}
           onCancel={() => setIsModalOpen(false)}
           visible={isModalOpen}
           title={modalTitle}

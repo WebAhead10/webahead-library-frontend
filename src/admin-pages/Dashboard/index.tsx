@@ -1,5 +1,5 @@
 import style from './style.module.css'
-import { Layout, Menu, Breadcrumb, Card, Row, Col } from 'antd'
+import { Card, Row, Col } from 'antd'
 
 const Dashboard = () => {
   return (
