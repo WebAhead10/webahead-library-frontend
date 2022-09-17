@@ -6,7 +6,7 @@ function NavBar() {
     <div>
       <Nav>
         <NavMenu>
-          <NavLink to="/newspaper">الصحف المتاحة</NavLink>
+          <NavLink to="/">الصفحة الرئيسية</NavLink>
           <NavLink to="/about">من نحن</NavLink>
           <NavLink to="/contact-us">تواصل معنا</NavLink>
         </NavMenu>

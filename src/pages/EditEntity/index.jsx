@@ -86,7 +86,7 @@ const EditEntity = () => {
     viewer.viewport.zoomBy(4)
   }
 
-  const fetchCoords = async (id) => {
+  const fetchCoords = useCallback(async (id) => {
     try {
       const result = await axios.get(`/overlay/coords/${id}`)
       setArticles(result.data.pages)
@@ -127,7 +127,7 @@ const EditEntity = () => {
     } catch (error) {
       console.log(error)
     }
-  }
+  }, [viewer])
 
   // fetch the newspaper/document
   useEffect(() => {
