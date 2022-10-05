@@ -97,7 +97,10 @@ const UploadPDFDocument = () => {
 
   const submitDocument = async () => {
     try {
-      await axios.post(`/newspaper`, newDocument)
+      await axios.post(`/newspaper`, {
+        ...newDocument,
+        documentId: newDocument.id
+      })
 
       window.location.href = `/edit/newspaper/${newDocument.id}`
     } catch (error) {
