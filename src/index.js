@@ -5,11 +5,8 @@ import './index.css'
 import './antd-override.css'
 import { RecoilRoot } from 'recoil'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ConfigProvider } from 'antd'
 
-// arabic
-import 'moment/locale/ar'
-import locale from 'antd/es/locale/ar_EG'
+
 
 
 const Index = () => {
@@ -19,9 +16,7 @@ const Index = () => {
     <React.StrictMode>
       <RecoilRoot>
         <QueryClientProvider client={queryClient}>
-          <ConfigProvider direction="rtl" locale={locale}>
-            <App />
-          </ConfigProvider>
+          <App />
         </QueryClientProvider>
       </RecoilRoot>
     </React.StrictMode>

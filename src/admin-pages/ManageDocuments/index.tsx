@@ -1,25 +1,24 @@
-import { message } from 'antd'
+import { message, Table, Card, Button } from 'antd'
 import { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 // import MainCategorySquare from '../../components/MainCategorySquare'
 import axios from 'utils/axios'
 import style from './style.module.css'
 
-
 const ManageDocuments = () => {
   const history = useHistory()
-  const [categories, setCategories] = useState([])
+  const [documents, setDocuments] = useState([])
 
   useEffect(() => {
     axios
-      .get(`/categories`)
+      .get(`/all/documents`)
       .then((res) => {
         if (!res.data.success) {
           message.error('Failed')
           return
         }
 
-        setCategories(res.data.categories)
+        setDocuments(res.data.data)
       })
       .catch((error) => {
         message.error(error.message)
@@ -28,11 +27,37 @@ const ManageDocuments = () => {
 
   return (
     <div>
-      <div style={{ padding: '30px 0px' }}>
-        <button className="button" onClick={() => history.push('/manage/document')}>
-          Add
-        </button>
-      </div>
+      <Button type="primary" size="large">
+        <Link to="/manage/document">Add</Link>
+      </Button>
+
+      <br />
+      <br />
+      <Table
+        dataSource={documents}
+        columns={[
+          {
+            title: 'ID',
+            dataIndex: 'id',
+            key: 'name'
+          },
+          {
+            title: 'Document name',
+            dataIndex: 'name',
+            key: 'name'
+          },
+          {
+            title: 'Category',
+            dataIndex: 'categoryName',
+            key: 'category'
+          },
+          {
+            title: 'published Date',
+            dataIndex: 'publishedDate',
+            key: 'publishedDate'
+          }
+        ]}
+      />
     </div>
   )
 }

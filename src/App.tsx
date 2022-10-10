@@ -20,6 +20,11 @@ import axios from './utils/axios'
 
 import { useSetRecoilState } from 'recoil'
 import { userAtom } from 'utils/recoil/atoms'
+import { ConfigProvider } from 'antd'
+
+// arabic
+import 'moment/locale/ar'
+import locale from 'antd/es/locale/ar_EG'
 
 function App() {
   const setUser = useSetRecoilState(userAtom)
@@ -46,35 +51,39 @@ function App() {
   if (window.location.pathname.indexOf('/a/admin') === 0) {
     return (
       <div className="App">
-        <Router basename="/a/admin">
-          <AdminApp />
-        </Router>
+        <ConfigProvider direction="ltr" locale={locale}>
+          <Router basename="/a/admin">
+            <AdminApp />
+          </Router>
+        </ConfigProvider>
       </div>
     )
   }
 
   return (
     <div className="App">
-      <Router>
-        <HeaderInfo />
-        <NavBar />
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route path="/choose/year-month/:categoryId" component={ChooseYearMonth} />
-          <Route path="/list/:categoryId" component={DocumentsListView} />
-          <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
-          <ProtectedRoute admin={false} path="/edit/newspaper/:id" component={EditEntity} />
-          <Route path="/calendar/:categoryId/:year/:month" component={Calendar} />
-          <Route path="/about" component={About} />
-          <Route path="/contact-us" component={ContactUs} />
-          <Route path="/user-signin">
-            <UserSignin />
-          </Route>
-          <Route path="/user-add" component={AddUser} />
-          {/* A not found component needed here */}
-          {/* <Route  component={NotFound} /> */}
-        </Switch>
-      </Router>
+      <ConfigProvider direction="rtl" locale={locale}>
+        <Router>
+          <HeaderInfo />
+          <NavBar />
+          <Switch>
+            <Route exact path="/" component={HomePage} />
+            <Route path="/choose/year-month/:categoryId" component={ChooseYearMonth} />
+            <Route path="/list/:categoryId" component={DocumentsListView} />
+            <Route path="/view/newspaper/:id" component={ViewNewsPaper} />
+            <ProtectedRoute admin={false} path="/edit/newspaper/:id" component={EditEntity} />
+            <Route path="/calendar/:categoryId/:year/:month" component={Calendar} />
+            <Route path="/about" component={About} />
+            <Route path="/contact-us" component={ContactUs} />
+            <Route path="/user-signin">
+              <UserSignin />
+            </Route>
+            <Route path="/user-add" component={AddUser} />
+            {/* A not found component needed here */}
+            {/* <Route  component={NotFound} /> */}
+          </Switch>
+        </Router>
+      </ConfigProvider>
     </div>
   )
 }

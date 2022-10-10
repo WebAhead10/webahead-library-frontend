@@ -56,8 +56,8 @@ function AdminApp() {
             <Menu.Item key="2" onClick={() => history.push('/tags')} icon={<DesktopOutlined />}>
               Manage Tags
             </Menu.Item>
-            <Menu.Item key="3" onClick={() => history.push('/manage/document')} icon={<FileOutlined />}>
-              Add newspaper
+            <Menu.Item key="3" onClick={() => history.push('/documents')} icon={<FileOutlined />}>
+              Manage Documents
             </Menu.Item>
             <Menu.Item key="4" onClick={() => history.push('/manage/categories')} icon={<FileOutlined />}>
               Categories
@@ -76,7 +76,7 @@ function AdminApp() {
               <ProtectedRoute path="/addadmin" component={AddAdmin} />
               <ProtectedRoute path="/history" component={History} />
               <ProtectedRoute path="/manage/document" component={ManageDocument} />
-              <ProtectedRoute path="/manage/categories" component={ManageCategories} />
+              <ProtectedRoute path="/manage/documents" component={ManageDocument} />
               <ProtectedRoute path="/view/document/:id" component={AdminViewNewsPaper} />
               <ProtectedRoute path="/documents" component={ManageDocuments} />
               <ProtectedRoute path="/tags" component={TagsAdmin} />
