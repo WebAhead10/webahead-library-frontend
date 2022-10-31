@@ -20,6 +20,7 @@ const EditEntity = () => {
   const history = useHistory()
   const [mouseTracker, setMouseTracker] = useState(null)
   const [editStatus, setEditStatus] = useState(STATUS_NAVIGATING)
+  const [editOverlayId, setEditOverlayId] = useState(null)
   var drag
 
   const fetchNewspaper = useCallback(
@@ -297,14 +298,20 @@ const EditEntity = () => {
           mouseEnterListener={mouseEnterListener}
           mouseOutListener={mouseOutListener}
           moveToOverlay={moveToOverlay}
-          refreshCoords={() => fetchCoords(params.id)}
           editStatus={editStatus}
           updateOverlayCoords={(articleId) => {
             onSubmit(overlays, params.id, articleId)
           }}
+          setEditOverlayId={setEditOverlayId}
         />
         <div id="openSeaDragon" className={style['edit-entity-viewer']} />
-        <EditDataSidebar />
+        {editOverlayId && (
+          <EditDataSidebar
+            editOverlayId={editOverlayId}
+            editStatus={editStatus}
+            refreshCoords={() => fetchCoords(params.id)}
+          />
+        )}
       </div>
       <button onClick={() => onSubmit(overlays, params.id)} className={`button ${style['edit-entity-button']}`}>
         Submit
