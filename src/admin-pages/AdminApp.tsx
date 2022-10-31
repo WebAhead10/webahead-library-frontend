@@ -80,6 +80,8 @@ function AdminApp() {
               <ProtectedRoute path="/view/document/:id" component={AdminViewNewsPaper} />
               <ProtectedRoute path="/documents" component={ManageDocuments} />
               <ProtectedRoute path="/tags" component={TagsAdmin} />
+              <ProtectedRoute path="/manage/categories" component={ManageCategories} />
+
               {/* A not found component needed here */}
               {/* <Route  component={NotFound} /> */}
             </Switch>

@@ -135,6 +135,12 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
 
   const isLoading = isFetchingTags || isAttachingTag || isDetachingTag
 
+  console.log({
+    tagsData,
+    tags,
+    notesData
+  })
+
   return (
     <div className={style.showTextDiv}>
       <div className={style.closeButton} onClick={() => close()} style={{ cursor: 'pointer', zIndex: 2 }}>
@@ -211,10 +217,10 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
                 }
               }}
               loading={isLoading}
-              value={tagsData.map((tag) => tag.id)}
+              value={tagsData?.map((tag) => tag.id)}
               tagRender={() => <> </>}
             >
-              {tags.data.map((tag: ITagInput) => (
+              {tags.data?.map((tag: ITagInput) => (
                 <Select.Option key={tag.id} value={tag.id}>
                   {tag.name}
                 </Select.Option>
@@ -223,7 +229,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
             <br />
             <br />
             <div>
-              {tagsData.map((tag) => (
+              {tagsData?.map((tag) => (
                 <Tag
                   closable
                   onClose={() => {
