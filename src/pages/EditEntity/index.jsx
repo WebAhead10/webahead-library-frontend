@@ -5,6 +5,7 @@ import { useParams, useHistory } from 'react-router-dom'
 import axios from 'utils/axios'
 import { v4 as uuidv4 } from 'uuid'
 import Sidebar from './components/Sidebar'
+import EditDataSidebar from './components/EditDataSidebar'
 import style from './style.module.css'
 
 const STATUS_NAVIGATING = 'nagivating'
@@ -21,36 +22,39 @@ const EditEntity = () => {
   const [editStatus, setEditStatus] = useState(STATUS_NAVIGATING)
   var drag
 
-  const fetchNewspaper = useCallback(async (id) => {
-    try {
-      const result = await axios.get(`/newspaper/${id}`)
+  const fetchNewspaper = useCallback(
+    async (id) => {
+      try {
+        const result = await axios.get(`/newspaper/${id}`)
 
-      if (!result.data.success) throw new Error('Failed')
+        if (!result.data.success) throw new Error('Failed')
 
-      const bucketRoot = 'https://library-documents.s3.eu-central-1.amazonaws.com/documents'
+        const bucketRoot = 'https://library-documents.s3.eu-central-1.amazonaws.com/documents'
 
-      viewer && viewer.destroy()
-      setViewer(
-        OpenSeadragon({
-          id: 'openSeaDragon',
-          tileSources: result.data.pages.map(
-            ({ name, pagename }) => `${bucketRoot}/${pagename.split('_')[0]}/${pagename}/${pagename}.dzi`
-          ),
-          animationTime: 0.5,
-          immediateRender: true,
-          wrapHorizontal: false,
-          collectionMode: true,
-          collectionRows: 1,
-          collectionTileMargin: -150,
-          collectionLayout: 'horizontal',
-          showNavigator: false,
-          gestureSettingsMouse: { clickToZoom: false }
-        })
-      )
-    } catch (error) {
-      console.log(error)
-    }
-  }, [viewer])
+        viewer && viewer.destroy()
+        setViewer(
+          OpenSeadragon({
+            id: 'openSeaDragon',
+            tileSources: result.data.pages.map(
+              ({ name, pagename }) => `${bucketRoot}/${pagename.split('_')[0]}/${pagename}/${pagename}.dzi`
+            ),
+            animationTime: 0.5,
+            immediateRender: true,
+            wrapHorizontal: false,
+            collectionMode: true,
+            collectionRows: 1,
+            collectionTileMargin: -150,
+            collectionLayout: 'horizontal',
+            showNavigator: false,
+            gestureSettingsMouse: { clickToZoom: false }
+          })
+        )
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    [viewer]
+  )
 
   const mouseEnterListener = (id, overlayIndex) => {
     const elements = document.getElementsByClassName(id)
@@ -86,48 +90,51 @@ const EditEntity = () => {
     viewer.viewport.zoomBy(4)
   }
 
-  const fetchCoords = useCallback(async (id) => {
-    try {
-      const result = await axios.get(`/overlay/coords/${id}`)
-      setArticles(result.data.pages)
+  const fetchCoords = useCallback(
+    async (id) => {
+      try {
+        const result = await axios.get(`/overlay/coords/${id}`)
+        setArticles(result.data.pages)
 
-      if (!result.data.success) throw new Error('Failed')
+        if (!result.data.success) throw new Error('Failed')
 
-      const coordsArr = result.data.pages
+        const coordsArr = result.data.pages
 
-      viewer.clearOverlays()
-      coordsArr.forEach(({ coords, id }) => {
-        coords.forEach(({ overlay }) => {
-          const overlayElement = document.createElement('div')
-          overlayElement.style.cursor = 'pointer'
-          overlayElement.setAttribute('class', `overlay ${id}`)
+        viewer.clearOverlays()
+        coordsArr.forEach(({ coords, id }) => {
+          coords.forEach(({ overlay }) => {
+            const overlayElement = document.createElement('div')
+            overlayElement.style.cursor = 'pointer'
+            overlayElement.setAttribute('class', `overlay ${id}`)
 
-          overlayElement.addEventListener('mouseenter', () => mouseEnterListener(id))
+            overlayElement.addEventListener('mouseenter', () => mouseEnterListener(id))
 
-          overlayElement.addEventListener('mouseout', () => mouseOutListener(id))
+            overlayElement.addEventListener('mouseout', () => mouseOutListener(id))
 
-          // overlayElement.addEventListener('click', () => {
-          //   const elements = document.getElementsByClassName(id)
+            // overlayElement.addEventListener('click', () => {
+            //   const elements = document.getElementsByClassName(id)
 
-          //   for (var i = 0; i < elements.length; i++) {
-          //     elements[i].removeEventListener('mouseenter', mouseEnterListener)
-          //     elements[i].removeEventListener('mouseout', mouseOutListener)
-          //     elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
-          //   }
+            //   for (var i = 0; i < elements.length; i++) {
+            //     elements[i].removeEventListener('mouseenter', mouseEnterListener)
+            //     elements[i].removeEventListener('mouseout', mouseOutListener)
+            //     elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
+            //   }
 
-          //   setSelectedId(id)
-          // })
+            //   setSelectedId(id)
+            // })
 
-          viewer.addOverlay(
-            overlayElement,
-            new OpenSeadragon.Rect(overlay.x, overlay.y, overlay.width, overlay.height)
-          )
+            viewer.addOverlay(
+              overlayElement,
+              new OpenSeadragon.Rect(overlay.x, overlay.y, overlay.width, overlay.height)
+            )
+          })
         })
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }, [viewer])
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    [viewer]
+  )
 
   // fetch the newspaper/document
   useEffect(() => {
@@ -145,7 +152,6 @@ const EditEntity = () => {
       fetchCoords(newspaperId)
     }
   }, [viewer, params.id, fetchCoords])
-
 
   const drawOverly = () => {
     if (!viewer || editStatus !== STATUS_NAVIGATING) return null
@@ -298,6 +304,7 @@ const EditEntity = () => {
           }}
         />
         <div id="openSeaDragon" className={style['edit-entity-viewer']} />
+        <EditDataSidebar />
       </div>
       <button onClick={() => onSubmit(overlays, params.id)} className={`button ${style['edit-entity-button']}`}>
         Submit
