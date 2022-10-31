@@ -26,19 +26,14 @@
   width: 5px;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: #a1a1a1;
-}
-
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgb(223, 24, 24);
+  background: lightgray;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(52, 7, 248);
+  background: gray;
 }
 .commentDiv {
   border: 1px solid black;
