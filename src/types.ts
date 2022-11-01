@@ -23,6 +23,7 @@ export interface IDocument {
   tags: ITagInput[]
   id: number | null
   name: string
+  categoryId?: number
 }
 
 export interface IpdfPage {

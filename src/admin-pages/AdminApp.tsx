@@ -17,6 +17,8 @@ import { useRecoilValue } from 'recoil'
 import { IUser } from 'types'
 import { userAtom } from 'utils/recoil/atoms'
 
+import 'moment/locale/en-gb'
+
 const { Header, Content, Sider } = Layout
 
 function AdminApp() {

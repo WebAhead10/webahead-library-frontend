@@ -51,7 +51,7 @@ function App() {
   if (window.location.pathname.indexOf('/a/admin') === 0) {
     return (
       <div className="App">
-        <ConfigProvider direction="ltr" locale={locale}>
+        <ConfigProvider direction="ltr">
           <Router basename="/a/admin">
             <AdminApp />
           </Router>
