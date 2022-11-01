@@ -6,7 +6,7 @@ import axios from 'utils/axios'
 import style from './style.module.css'
 import { IDocument, IMainCategory } from 'types'
 import { useQuery } from '@tanstack/react-query'
-import { removeNullCharacters } from 'pdfjs-dist'
+import moment from 'moment'
 
 const fetchDocuments = async () => {
   const res = await axios.get('/all/documents')
@@ -33,7 +33,8 @@ const ManageDocuments = () => {
     axios
       .post(`/documents/meta/${values.id}`, {
         ...values,
-        publishedDate: values.publishedDate.lang('en').format('YYYY-MM-DD')
+        // settings hours
+        publishedDate: values.publishedDate.lang('en').add(1, 'hours').format('YYYY-MM-DD')
       })
       .then((res) => {
         if (!res.data.success) {
@@ -61,7 +62,7 @@ const ManageDocuments = () => {
       <Card>
         <Form layout="vertical">
           <Row align="bottom">
-            <Col span={8}>
+            <Col span={6}>
               <Form.Item
                 label="Category"
                 style={{
@@ -77,6 +78,8 @@ const ManageDocuments = () => {
                   }}
                   value={filter.categoryId || ''}
                 >
+                  <Select.Option value={0}>All</Select.Option>
+
                   {data.map((category: IMainCategory) => (
                     <Select.Option key={category.id} value={category.id}>
                       {category.name}
@@ -85,7 +88,7 @@ const ManageDocuments = () => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col offset={1} span={8}>
+            <Col offset={1} span={6}>
               <Form.Item
                 label="Document Name"
                 style={{
@@ -105,22 +108,22 @@ const ManageDocuments = () => {
             </Col>
 
             <Col offset={1} span={4}>
-              <Button
-                type="ghost"
-                onClick={() => {
-                  setFilter({
-                    categoryId: 0,
-                    documentName: ''
-                  })
-                }}
-              >
-                Clear
-              </Button>
-            </Col>
-            <Col offset={1} span={3}>
-              <Button type="primary">
-                <Link to="/manage/document">Add document</Link>
-              </Button>
+              <Space>
+                <Button
+                  type="ghost"
+                  onClick={() => {
+                    setFilter({
+                      categoryId: 0,
+                      documentName: ''
+                    })
+                  }}
+                >
+                  Clear
+                </Button>
+                <Button type="primary">
+                  <Link to="/manage/document">Add document</Link>
+                </Button>
+              </Space>
             </Col>
           </Row>
         </Form>
@@ -129,7 +132,6 @@ const ManageDocuments = () => {
       <br />
       <Table
         dataSource={documents.filter((document: IDocument) => {
-          console.log(filter)
           if (filter.categoryId && filter.categoryId !== document.categoryId) {
             return false
           }
@@ -149,7 +151,8 @@ const ManageDocuments = () => {
           {
             title: 'Document name',
             dataIndex: 'name',
-            key: 'name'
+            key: 'name',
+            sorter: (a: IDocument, b: IDocument) => a.name.localeCompare(b.name)
           },
           {
             title: 'Category',
@@ -160,7 +163,8 @@ const ManageDocuments = () => {
             title: 'Published Date',
             dataIndex: 'publishedDate',
             key: 'publishedDate',
-            render: (text: string) => text?.split('T')[0]
+            render: (text: string) => text?.split('T')[0],
+            sorter: (a: any = {}, b: any = {}) => a?.publishedDate.localeCompare(b.publishedDate)
           },
           {
             title: 'Action',
@@ -185,7 +189,7 @@ const ManageDocuments = () => {
                       id: record.id,
                       documentName: record.name,
                       category: record.categoryId,
-                      publishedDate: record.publishedDate
+                      publishedDate: moment(record?.publishedDate).subtract(1, 'hours')
                     })
                   }}
                 >
