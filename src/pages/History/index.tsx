@@ -3,9 +3,10 @@ import axios from 'utils/axios'
 import { Button, Modal } from 'antd'
 
 const History = () => {
-  const [typeOfNotesState, setTypeOfNotesState] = useState('note')
+  const [typeOfNotesState, setTypeOfNotesState] = useState('all')
   const [historyData, setHistoryData] = useState<any>([])
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [historyIndex, setHistoryIndex] = useState(0)
 
   useEffect(() => {
     axios
@@ -17,7 +18,8 @@ const History = () => {
     //in this part should select the right username/email by user kind  admin/user/advanced
   }, [typeOfNotesState])
 
-  const showModal = () => {
+  const showModal = (index: number) => {
+    setHistoryIndex(index)
     setIsModalVisible(true)
   }
 
@@ -47,6 +49,7 @@ const History = () => {
           <th>ID</th>
           <th>Data ID</th>
           <th>Operation</th>
+          <th>Type</th>
           <th>User</th>
           <th>User Role</th>
           <th>New Data</th>
@@ -54,16 +57,17 @@ const History = () => {
         </thead>
         <tbody>
           {historyData.length ? (
-            historyData.map((historyRow: any) => (
-              <tr>
+            historyData.map((historyRow: any, index: number) => (
+              <tr key={index}>
                 <td>{historyRow.id}</td>
                 <td>{historyRow.entity_id}</td>
                 {/*in this part should select the right username/email by user kind  admin/user/advanced*/}
                 <td>{historyRow.entity_change_operation}</td>
+                <td>{historyRow.entity_type}</td>
                 <td>{historyRow.user_id}</td>
                 <td>{historyRow.user_role}</td>
                 <td>
-                  <Button type="link" onClick={showModal}>
+                  <Button type="link" onClick={() => showModal(index)}>
                     Click to show
                   </Button>
                 </td>
@@ -76,9 +80,11 @@ const History = () => {
         </tbody>
       </table>
 
-      <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        {historyData[0] && <span>{JSON.parse(historyData[0].req_body).text}</span>}
-      </Modal>
+      {!!historyIndex && (
+        <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+          {historyData[historyIndex] && <span>{historyData[historyIndex].req_body}</span>}
+        </Modal>
+      )}
     </div>
   )
 }

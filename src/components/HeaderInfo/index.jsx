@@ -6,19 +6,20 @@ import { useRecoilValue } from 'recoil'
 import { userAtom } from 'utils/recoil/atoms'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'utils/axios'
-
+import { useHistory } from 'react-router-dom'
 
 function HeaderInfo(props) {
   const { refetch } = useQuery(['logout'], () => axios.get('/user/logout'), { enabled: false })
   const queryClient = useQueryClient()
+  const history = useHistory()
 
   const signout = () => {
     refetch()
+    window.location.reload()
     queryClient.invalidateQueries('user')
   }
 
   const user = useRecoilValue(userAtom)
-
 
   return (
     <div className="headerInfo">

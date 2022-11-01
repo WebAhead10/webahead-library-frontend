@@ -91,7 +91,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
 
   const updateArticleText = async () => {
     try {
-      const res = await axiosOld.post(process.env.REACT_APP_API_URL + '/overlay/content/' + overlayId, {
+      const res = await axios.post(process.env.REACT_APP_API_URL + '/overlay/content/' + overlayId, {
         text: text,
         userId: 1,
         document_id: overlayId
@@ -133,12 +133,6 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
   if (!tags || !tagsData) return null
 
   const isLoading = isFetchingTags || isAttachingTag || isDetachingTag
-
-  console.log({
-    tagsData,
-    tags,
-    notesData
-  })
 
   return (
     <div className={style.showTextDiv}>
