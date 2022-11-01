@@ -105,6 +105,19 @@ const ManageDocuments = () => {
             </Col>
 
             <Col offset={1} span={4}>
+              <Button
+                type="ghost"
+                onClick={() => {
+                  setFilter({
+                    categoryId: 0,
+                    documentName: ''
+                  })
+                }}
+              >
+                Clear
+              </Button>
+            </Col>
+            <Col offset={1} span={3}>
               <Button type="primary">
                 <Link to="/manage/document">Add document</Link>
               </Button>
