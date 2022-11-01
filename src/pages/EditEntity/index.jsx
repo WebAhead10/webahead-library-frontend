@@ -303,6 +303,7 @@ const EditEntity = () => {
             onSubmit(overlays, params.id, articleId)
           }}
           setEditOverlayId={setEditOverlayId}
+          refreshCoords={() => fetchCoords(params.id)}
         />
         <div id="openSeaDragon" className={style['edit-entity-viewer']} />
         {editOverlayId && (
