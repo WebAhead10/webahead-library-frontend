@@ -24,7 +24,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
     ['overlay-notes', overlayId],
     async () => {
       const res = await axios.get(`/overlay/notes/${overlayId}`)
-      setInitialNote(res.data.mainNote)
+      setInitialNote(res.data.mainNote?.text || '')
       return res.data.notes
     },
     {
