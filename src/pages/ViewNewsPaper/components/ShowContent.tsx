@@ -149,7 +149,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
             <div className={style.scroll}>
               {notesData?.map(({ text }, index) => (
                 <div key={index} className={style.commentDiv}>
-                  {text}
+                  {String(text)}
                 </div>
               ))}
             </div>
