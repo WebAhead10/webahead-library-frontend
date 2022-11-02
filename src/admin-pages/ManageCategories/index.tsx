@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import MainCategorySquare from 'components/MainCategorySquare'
 import { IMainCategory, IViewTypeRadio } from 'types'
 import { viewTypes } from 'consts'
-import { Button, Modal, Form, Input, Radio } from 'antd'
+import { Button, Modal, Form, Input, Radio, message } from 'antd'
 
 import style from './style.module.css'
 
@@ -30,11 +30,16 @@ const ManageCategories = () => {
     form.validateFields().then(async (values) => {
       const { name, logo, viewType, id } = values
 
-      const res = await axios.post('/categories/add', { name, logo, viewType, id })
-      if (res.data.success) {
-        setIsModalVisible(false)
-        form.resetFields()
-        refetch()
+      try {
+        const res = await axios.post('/categories/add', { name, logo, viewType, id })
+        if (res.data.success) {
+          setIsModalVisible(false)
+          form.resetFields()
+          refetch()
+          setLoading(false)
+        }
+      } catch (error: any) {
+        message.error(error.response.data.message)
         setLoading(false)
       }
     })
