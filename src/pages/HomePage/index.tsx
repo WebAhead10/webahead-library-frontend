@@ -55,7 +55,7 @@ function HomePage() {
         >
           <Row justify="center" align="bottom" wrap style={{ margin: '0 120px' }}>
             <Col span={6}>
-              <Form.Item label="تصنيف" name="tags">
+              <Form.Item label="تاغس" name="tags">
                 <Select mode="tags" loading={isLoading}>
                   {tags.map((tag: ITagInput) => (
                     <Select.Option key={tag.id} value={tag.id}>
@@ -65,14 +65,14 @@ function HomePage() {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={6} offset={2}>
+            <Col span={6} offset={1}>
               <Form.Item label="عنوان" name="title">
                 <Input />
               </Form.Item>
             </Col>
 
             {/* make a category dropdown list for the filter */}
-            <Col span={6} offset={2}>
+            <Col span={6} offset={1}>
               <Form.Item label="تصنيف" name="categoryId">
                 <Select>
                   {categories.map((category: IMainCategory) => (

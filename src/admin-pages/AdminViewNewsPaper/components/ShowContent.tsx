@@ -76,7 +76,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
 
   const { data: tags } = useQuery(['tags'], async () => {
     const res = await axios.get(`/tag/all`)
-    return res.data
+    return res.data.data
   })
 
   useEffect(() => {
@@ -189,7 +189,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
               }}
               placeholder="تصنيف"
               onSelect={(value) => {
-                const tag = tags.data.find((tag: ITagInput) => tag.id === value)
+                const tag = tags.find((tag: ITagInput) => tag.id === value)
                 if (tag) {
                   attachTag(value, {
                     onSuccess: () => {
@@ -200,7 +200,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
                 }
               }}
               onDeselect={(value) => {
-                const tag = tags.data.find((tag: ITagInput) => tag.id === value)
+                const tag = tags.find((tag: ITagInput) => tag.id === value)
 
                 if (tag) {
                   detachTag(value, {
@@ -213,9 +213,9 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
               }}
               loading={isLoading}
               value={tagsData.map((tag) => tag.id)}
-            // tagRender={() => <> </>}
+              // tagRender={() => <> </>}
             >
-              {tags.data.map((tag: ITagInput) => (
+              {tags.map((tag: ITagInput) => (
                 <Select.Option key={tag.id} value={tag.id}>
                   {tag.name}
                 </Select.Option>
