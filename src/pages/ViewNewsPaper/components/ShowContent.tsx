@@ -144,8 +144,8 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
         {/* Notes panel */}
         <Tabs.TabPane tab="Notes" key="1">
           <div className={style.tabPanelBody}>
-            <div>{initialNote}</div>
             <h2>Notes</h2>
+            <div>{initialNote}</div>
             <div className={style.scroll}>
               {notesData?.map(({ text }, index) => (
                 <div key={index} className={style.commentDiv}>
