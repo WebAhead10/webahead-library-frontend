@@ -55,16 +55,30 @@ const ViewNewsPaper = () => {
 
   const fetchCoords = useCallback(
     async (id) => {
+      // get the coords id from the url
+      // const coordsId = para
+      const query = new URLSearchParams(history.location.search)
+      let coordsIdToHighlight = []
+
+      const rawCoordsId = query.get('coords')
+      if (rawCoordsId) {
+        coordsIdToHighlight = rawCoordsId.split('$').map((coord) => `overlay_${coord}`)
+      }
+
       try {
         const result = await axios.get(`${process.env.REACT_APP_API_URL}/overlay/coords/${id}`)
         if (!result.data.success) throw new Error('Failed')
 
         const coordsArr = result.data.pages
         coordsArr.forEach(({ coords, id }) => {
-          coords.forEach(({ overlay }) => {
+          coords.forEach(({ overlay, id: overlayId }) => {
             const overlayElement = document.createElement('div')
             overlayElement.style.cursor = 'pointer'
             overlayElement.setAttribute('class', `overlay ${id}`)
+
+            if (coordsIdToHighlight.includes(overlayId)) {
+              overlayElement.style.border = '1px solid red'
+            }
 
             const mouseEnterListener = () => {
               const elements = document.getElementsByClassName(id)
@@ -79,7 +93,7 @@ const ViewNewsPaper = () => {
               const elements = document.getElementsByClassName(id)
 
               for (var i = 0; i < elements.length; i++) {
-                elements[i].style.backgroundColor = 'rgba(0,0,255,0.0)'
+                elements[i].style.backgroundColor = 'rgba(0, 0, 0, 0.15)'
               }
             }
 

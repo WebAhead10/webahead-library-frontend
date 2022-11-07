@@ -8,7 +8,7 @@ import { documentSearchAtom } from 'utils/recoil/atoms'
 import { IDocumentSearch } from 'utils/recoil/types'
 import { useHistory } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Row, Col, Select, Form, Input, Divider, Carousel, Button, Card, Typography } from 'antd'
+import { Row, Col, Select, Form, Input, Divider, Carousel, Button, Card, Typography, message } from 'antd'
 
 const { Text } = Typography
 
@@ -96,7 +96,14 @@ function HomePage() {
                     cursor: 'pointer'
                   }}
                   onClick={() => {
-                    history.push(`/view/newspaper/${article.id}`)
+                    try {
+                      const coords = JSON.parse(article.coords)
+
+                      const coordsIds = coords.map((coord: any) => coord.id.replace('overlay_', '')).join('$')
+                      history.push(`/view/newspaper/${article.documentid}?coords=${coordsIds}`)
+                    } catch (error) {
+                      message.error('لا يمكن فتح هذا المقال')
+                    }
                   }}
                 >
                   <Text strong>{article.title || 'بدون عنوان'}</Text>
