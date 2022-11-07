@@ -3,7 +3,6 @@ import { Layout, Menu } from 'antd'
 import { DesktopOutlined, PieChartOutlined, FileOutlined, FolderOpenOutlined, TeamOutlined } from '@ant-design/icons'
 import { Route, Switch, useLocation, useHistory } from 'react-router-dom'
 import Signin from './Signin'
-import AddAdmin from './AddAdmin'
 import Dashboard from './Dashboard'
 import ManageDocument from './ManageDocument'
 import ManageDocuments from './ManageDocuments'
@@ -53,9 +52,6 @@ function AdminApp() {
         {/* <Header className="site-layout-background" style={{ padding: 0 }} /> */}
         <Sider collapsible collapsed={collapse} onCollapse={setCollapse}>
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-            <Menu.Item key="1" onClick={() => history.push('/addadmin')} icon={<PieChartOutlined />}>
-              Add Admin
-            </Menu.Item>
             <Menu.Item key="2" onClick={() => history.push('/tags')} icon={<DesktopOutlined />}>
               Tags
             </Menu.Item>
@@ -79,7 +75,6 @@ function AdminApp() {
             <Switch>
               <ProtectedRoute exact path="/" component={Users} />
               <Route path="/signin" component={Signin} />
-              <ProtectedRoute path="/addadmin" component={AddAdmin} />
               <ProtectedRoute path="/history" component={History} />
               <ProtectedRoute path="/manage/document" component={ManageDocument} />
               <ProtectedRoute path="/manage/documents" component={ManageDocument} />
