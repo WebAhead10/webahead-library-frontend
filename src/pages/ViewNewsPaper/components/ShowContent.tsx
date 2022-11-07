@@ -104,7 +104,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
 
       message.success('Upload done, Thank you for your efforts.')
     } catch (err) {
-      message.error('An error has occurred')
+      // message.error('An error has occurred')
     }
   }
 

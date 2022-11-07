@@ -128,7 +128,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
       setNote('')
       refetchNotes()
     } catch (err) {
-      message.error('An error has occurred')
+      // message.error('An error has occurred')
     }
   }
 

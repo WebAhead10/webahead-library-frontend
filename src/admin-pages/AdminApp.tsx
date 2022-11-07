@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Layout, Menu } from 'antd'
-import { DesktopOutlined, PieChartOutlined, FileOutlined, FolderOpenOutlined } from '@ant-design/icons'
+import { DesktopOutlined, PieChartOutlined, FileOutlined, FolderOpenOutlined, TeamOutlined } from '@ant-design/icons'
 import { Route, Switch, useLocation, useHistory } from 'react-router-dom'
 import Signin from './Signin'
 import AddAdmin from './AddAdmin'
@@ -12,6 +12,7 @@ import ManageCategories from './ManageCategories'
 import History from '../pages/History'
 import './style.css'
 import AdminViewNewsPaper from './AdminViewNewsPaper'
+import Users from './Users'
 import ProtectedRoute from '../components/ProtectedRoute'
 import { useRecoilValue } from 'recoil'
 import { IUser } from 'types'
@@ -56,12 +57,15 @@ function AdminApp() {
               Add Admin
             </Menu.Item>
             <Menu.Item key="2" onClick={() => history.push('/tags')} icon={<DesktopOutlined />}>
-              Manage Tags
+              Tags
             </Menu.Item>
-            <Menu.Item key="3" onClick={() => history.push('/documents')} icon={<FileOutlined />}>
-              Manage Documents
+            <Menu.Item key="3" onClick={() => history.push('/users')} icon={<TeamOutlined />}>
+              Users
             </Menu.Item>
-            <Menu.Item key="4" onClick={() => history.push('/manage/categories')} icon={<FileOutlined />}>
+            <Menu.Item key="4" onClick={() => history.push('/documents')} icon={<FileOutlined />}>
+              Documents
+            </Menu.Item>
+            <Menu.Item key="5" onClick={() => history.push('/manage/categories')} icon={<FileOutlined />}>
               Categories
             </Menu.Item>
 
@@ -73,7 +77,7 @@ function AdminApp() {
         <Content style={{ margin: '0 16px' }}>
           <div className="site-layout-background admin-app" style={{ padding: 24, minHeight: 360 }}>
             <Switch>
-              <ProtectedRoute exact path="/" component={Dashboard} />
+              <ProtectedRoute exact path="/" component={Users} />
               <Route path="/signin" component={Signin} />
               <ProtectedRoute path="/addadmin" component={AddAdmin} />
               <ProtectedRoute path="/history" component={History} />
@@ -83,6 +87,7 @@ function AdminApp() {
               <ProtectedRoute path="/documents" component={ManageDocuments} />
               <ProtectedRoute path="/tags" component={TagsAdmin} />
               <ProtectedRoute path="/manage/categories" component={ManageCategories} />
+              <ProtectedRoute path="/users" component={Users} />
 
               {/* A not found component needed here */}
               {/* <Route  component={NotFound} /> */}

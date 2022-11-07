@@ -14,7 +14,7 @@ const { Text } = Typography
 
 function HomePage() {
   const [documentSearch, setDocumentSearch] = useRecoilState<IDocumentSearch>(documentSearchAtom)
-  const [filteredDocuments, setFilteredDocuments] = useState([])
+  const [filteredArticles, setFilteredArticles] = useState([])
   const history = useHistory()
 
   const { data: categories } = useQuery(['categories'], async () => {
@@ -29,7 +29,7 @@ function HomePage() {
 
   // by default is not enabled and takes the filters from the form below
   const { mutate } = useMutation(['all-documents'], async (filters: IDocumentSearch) => {
-    const res = await axios.post(`/documents/all/search`, filters)
+    const res = await axios.post(`/overlays/all/search`, filters)
     return res.data
   })
 
@@ -47,7 +47,7 @@ function HomePage() {
             if (Object.values(values).filter((x) => x).length) {
               mutate(values, {
                 onSuccess: ({ data }) => {
-                  setFilteredDocuments(data)
+                  setFilteredArticles(data)
                 }
               })
             }
@@ -71,18 +71,6 @@ function HomePage() {
               </Form.Item>
             </Col>
 
-            {/* make a category dropdown list for the filter */}
-            <Col span={6} offset={1}>
-              <Form.Item label="تصنيف" name="categoryId">
-                <Select>
-                  {categories.map((category: IMainCategory) => (
-                    <Select.Option key={category.id} value={category.id}>
-                      {category.name}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
             <Col offset={1}>
               <Form.Item>
                 <Button type="primary" htmlType="submit">
@@ -97,21 +85,21 @@ function HomePage() {
         </Col>
       </Col>
 
-      {filteredDocuments.length && (
+      {filteredArticles.length && (
         <Col span={24}>
           <Row wrap justify="space-around">
-            {filteredDocuments.map((document: any) => (
-              <Col span={4} key={document.id}>
+            {filteredArticles.map((article: any) => (
+              <Col span={4} key={article.id}>
                 <Card
                   style={{
                     borderColor: 'black',
                     cursor: 'pointer'
                   }}
                   onClick={() => {
-                    history.push(`/view/newspaper/${document.id}`)
+                    history.push(`/view/newspaper/${article.id}`)
                   }}
                 >
-                  <Text strong>{document.name || 'بدون عنوان'}</Text>
+                  <Text strong>{article.title || 'بدون عنوان'}</Text>
                 </Card>
               </Col>
             ))}

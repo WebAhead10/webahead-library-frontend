@@ -2,6 +2,7 @@ import style from './style.module.css'
 import React, { FunctionComponent, useState } from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
+import { message } from 'antd'
 
 interface AddUserInfo {
   email: string
@@ -43,6 +44,7 @@ const AddUser: FunctionComponent = () => {
         if (!res.data.success) {
           setError('Something went wrong')
         } else {
+          message.success('Successfully registered')
           history.push('/user-signin')
         }
       })
