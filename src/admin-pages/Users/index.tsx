@@ -328,18 +328,19 @@ const Users = () => {
                       toggleActive(record.id)
                     }}
                   >
-                    {!record.hidden && (
-                      <Button
-                        type="primary"
-                        size="small"
-                        style={{
-                          backgroundColor: record.approved ? '#ff4d4f' : '#52c41a',
-                          borderColor: record.approved ? '#ff4d4f' : '#52c41a'
-                        }}
-                      >
-                        {record.approved ? 'Deactivate' : 'Activate'}
-                      </Button>
-                    )}
+                    {!record.hidden ||
+                      (record.role !== 'admin' && (
+                        <Button
+                          type="primary"
+                          size="small"
+                          style={{
+                            backgroundColor: record.approved ? '#ff4d4f' : '#52c41a',
+                            borderColor: record.approved ? '#ff4d4f' : '#52c41a'
+                          }}
+                        >
+                          {record.approved ? 'Deactivate' : 'Activate'}
+                        </Button>
+                      ))}
                   </Popconfirm>
                   <Button
                     type="primary"
