@@ -212,6 +212,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
               loading={isLoading}
               value={tagsData?.map((tag) => tag.id)}
               tagRender={() => <> </>}
+              optionFilterProp="children"
             >
               {tags?.map((tag: ITagInput) => (
                 <Select.Option key={tag.id} value={tag.id}>

@@ -20,6 +20,7 @@ const History = () => {
 
   const showModal = (index: number) => {
     setHistoryIndex(index)
+
     setIsModalVisible(true)
   }
 
@@ -44,16 +45,18 @@ const History = () => {
           } else {
             setTypeOfNotesState('all')
           } */}
-      <table style={{ width: '90%', margin: 'auto' }}>
+      <table style={{ width: '95%', margin: 'auto' }}>
         <thead>
-          <th>ID</th>
-          <th>Data ID</th>
-          <th>Operation</th>
-          <th>Type</th>
-          <th>User</th>
-          <th>User Role</th>
-          <th>New Data</th>
-          <th>Date of Change</th>
+          <tr>
+            <th>ID</th>
+            <th>Data ID</th>
+            <th>Operation</th>
+            <th>Type</th>
+            <th>User</th>
+            <th>User Role</th>
+            <th>New Data</th>
+            <th>Date of Change</th>
+          </tr>
         </thead>
         <tbody>
           {historyData.length ? (
@@ -64,7 +67,7 @@ const History = () => {
                 {/*in this part should select the right username/email by user kind  admin/user/advanced*/}
                 <td>{historyRow.entity_change_operation}</td>
                 <td>{historyRow.entity_type}</td>
-                <td>{historyRow.user_id}</td>
+                <td>{historyRow.name}</td>
                 <td>{historyRow.user_role}</td>
                 <td>
                   <Button type="link" onClick={() => showModal(index)}>
@@ -75,12 +78,14 @@ const History = () => {
               </tr>
             ))
           ) : (
-            <h1>No Records</h1>
+            <tr>
+              <td> No Records</td>
+            </tr>
           )}
         </tbody>
       </table>
 
-      {!!historyIndex && (
+      {Number.isInteger(historyIndex) && (
         <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
           {historyData[historyIndex] && <span>{historyData[historyIndex].req_body}</span>}
         </Modal>
