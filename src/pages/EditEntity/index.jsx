@@ -16,6 +16,7 @@ const EditEntity = () => {
   const [viewer, setViewer] = useState(null)
   const [overlays, setOverlays] = useState([])
   const [articles, setArticles] = useState([])
+  const [currentlyHovered, setCurrentlyHovered] = useState(null)
   const params = useParams()
   const history = useHistory()
   const [mouseTracker, setMouseTracker] = useState(null)
@@ -58,20 +59,22 @@ const EditEntity = () => {
   )
 
   const mouseEnterListener = (id, overlayIndex) => {
+    setCurrentlyHovered(id)
     const elements = document.getElementsByClassName(id)
     for (var i = 0; i < elements.length; i++) {
       if (overlayIndex === i) {
-        elements[i].style.backgroundColor = 'rgba(0,0,255,0.3)'
+        elements[i].style.backgroundColor = 'rgba(0,0,255,0.45)'
         break
       }
 
       if (typeof overlayIndex === 'undefined') {
-        elements[i].style.backgroundColor = 'rgba(0,0,255,0.3)'
+        elements[i].style.backgroundColor = 'rgba(0,0,255,0.45)'
       }
     }
   }
 
   const mouseOutListener = (id, overlayIndex) => {
+    setCurrentlyHovered(null)
     const elements = document.getElementsByClassName(id)
 
     for (var i = 0; i < elements.length; i++) {
@@ -108,9 +111,13 @@ const EditEntity = () => {
             overlayElement.style.cursor = 'pointer'
             overlayElement.setAttribute('class', `overlay ${id}`)
 
-            overlayElement.addEventListener('mouseenter', () => mouseEnterListener(id))
+            overlayElement.addEventListener('mouseenter', () => {
+              mouseEnterListener(id)
+            })
 
-            overlayElement.addEventListener('mouseout', () => mouseOutListener(id))
+            overlayElement.addEventListener('mouseout', () => {
+              mouseOutListener(id)
+            })
 
             // overlayElement.addEventListener('click', () => {
             //   const elements = document.getElementsByClassName(id)
@@ -302,6 +309,7 @@ const EditEntity = () => {
           updateOverlayCoords={(articleId) => {
             onSubmit(overlays, params.id, articleId)
           }}
+          currentlyHovered={currentlyHovered}
           setEditOverlayId={setEditOverlayId}
           refreshCoords={() => fetchCoords(params.id)}
         />

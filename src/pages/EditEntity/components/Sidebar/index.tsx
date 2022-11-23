@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from './style.module.css'
 import { DeleteFilled, PlusCircleOutlined, FileAddOutlined } from '@ant-design/icons'
 import axios from 'utils/axios'
@@ -33,6 +33,7 @@ interface SidebarProps {
   editStatus: string
   updateOverlayCoords: Function
   setEditOverlayId: Function
+  currentlyHovered: number
 }
 
 const Sidebar = ({
@@ -43,7 +44,8 @@ const Sidebar = ({
   refreshCoords,
   editStatus,
   updateOverlayCoords,
-  setEditOverlayId
+  setEditOverlayId,
+  currentlyHovered
 }: SidebarProps) => {
   const [toggled, setToggled] = useState<{ [key: number]: boolean }>({})
 
@@ -71,6 +73,9 @@ const Sidebar = ({
                 onMouseLeave={() => mouseOutListener(id)}
                 onClick={() => {
                   setToggled({ ...toggled, [id]: !toggled[id] })
+                }}
+                style={{
+                  backgroundColor: currentlyHovered === id ? 'yellow' : 'white'
                 }}
               >
                 <div>
