@@ -328,8 +328,7 @@ const Users = () => {
                       toggleActive(record.id)
                     }}
                   >
-                    {!record.hidden ||
-                      (record.role !== 'admin' && (
+                    {!record.hidden && record.role !== 'admin' && (
                         <Button
                           type="primary"
                           size="small"
@@ -340,7 +339,7 @@ const Users = () => {
                         >
                           {record.approved ? 'Deactivate' : 'Activate'}
                         </Button>
-                      ))}
+                      )}
                   </Popconfirm>
                   <Button
                     type="primary"
