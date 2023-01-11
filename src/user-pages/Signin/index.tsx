@@ -1,57 +1,70 @@
-import style from './style.module.css'
-import React, { useState } from 'react'
+// import style from './style.module.css'
 import axios from 'utils/axios'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
+import { Form, Input, Button, message, Typography, Row, Col } from 'antd'
+
+const { Title } = Typography
 
 const Signin = () => {
-  const [userData, setUserData] = useState({
-    email: '',
-    password: ''
-  })
-  const [error, setError] = useState('')
   const queryClient = useQueryClient()
 
   const history = useHistory()
 
-  const onChange =
-    (stateKey: string) =>
-    ({ target }: { target: HTMLInputElement }) =>
-      setUserData({ ...userData, [stateKey]: target.value })
+  const onFinish = async (userData: { email: string; password: string }) => {
+    try {
+      const res = await axios.post('/user/signin', userData)
+      if (!res.data.success) {
+        message.error('Something went wrong')
+        return
+      }
 
-  const onClick = () => {
-    axios
-      .post('/user/signin', userData)
-      .then((res) => {
-        if (!res.data.success) {
-          setError('Something went wrong')
-        } else {
-          history.push('/')
-          queryClient.invalidateQueries(['user'])
-        }
-      })
-      .catch((err) => {
-        setError('Something went wrong')
-      })
+      history.push('/')
+      queryClient.invalidateQueries(['user'])
+    } catch (error) {
+      message.error('Something went wrong')
+    }
   }
 
   return (
-    <div className={style.signin}>
-      <h1>تسجيل دخول المستخدم</h1>
-      <label htmlFor="email" className="label-input-combo">
-        بريد الكتروني
-        <input name="email" type="email" onChange={onChange('email')} value={userData.email} />
-      </label>
-      <br />
+    <Row wrap={true} align="middle" justify="center" gutter={[0, 30]} style={{ marginTop: '20px' }}>
+      <Col span={24}>
+        <Title level={2}>تسجيل دخول المستخدم</Title>
+      </Col>
+      <Col>
+        <Form
+          onFinish={onFinish}
+          // onFinishFailed={onFinishFailed}
 
-      <label htmlFor="password" className="label-input-combo">
-        كلمة المرور
-        <input name="password" type="password" onChange={onChange('password')} value={userData.password} />
-      </label>
-      <br />
-      <input type="button" className="button" value="دخول" onClick={onClick} />
-      <span className="error">{error}</span>
-    </div>
+          layout="vertical"
+        >
+          <Form.Item
+            label="البريد الالكتروني"
+            name="email"
+            rules={[{ required: true, message: 'Please input your email!' }]}
+            style={{ width: '400px' }}
+          >
+            <Input size="large" style={{ direction: 'ltr' }} />
+          </Form.Item>
+
+          <Form.Item
+            label="كلمة المرور"
+            name="password"
+            rules={[{ required: true, message: 'Please input your password!' }]}
+            style={{ width: '400px' }}
+          >
+            <Input.Password size="large" style={{ direction: 'ltr' }} />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" size="large">
+              دخول
+            </Button>
+          </Form.Item>
+        </Form>
+        <Link to="/forget-password">نسيت كلمة المرور؟</Link>
+      </Col>
+    </Row>
   )
 }
 

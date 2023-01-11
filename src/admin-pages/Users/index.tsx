@@ -1,12 +1,11 @@
 import { message, Table, Modal, Button, Space, Form, Select, Card, Input, Typography, Row, Col, Popconfirm } from 'antd'
-import { useState, useEffect } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useState } from 'react'
 // import MainCategorySquare from '../../components/MainCategorySquare'
 import axios from 'utils/axios'
-import style from './style.module.css'
-import { IDocument, IMainCategory } from 'types'
+// import style from './style.module.css'
+// import { IDocument, IMainCategory } from 'types'
 import { useQuery } from '@tanstack/react-query'
-import moment from 'moment'
+// import moment from 'moment'
 
 const { Text } = Typography
 
@@ -20,7 +19,6 @@ const Users = () => {
   const [form] = Form.useForm()
   const [formUser] = Form.useForm()
   const [formAdmin] = Form.useForm()
-  const history = useHistory()
   const { data: users, refetch } = useQuery(['users'], fetchUsers)
   const [editModalVisible, setEditModalVisible] = useState(false)
   const [addUserModalVisible, setAddUserModalVisible] = useState(false)
@@ -329,17 +327,17 @@ const Users = () => {
                     }}
                   >
                     {!record.hidden && record.role !== 'admin' && (
-                        <Button
-                          type="primary"
-                          size="small"
-                          style={{
-                            backgroundColor: record.approved ? '#ff4d4f' : '#52c41a',
-                            borderColor: record.approved ? '#ff4d4f' : '#52c41a'
-                          }}
-                        >
-                          {record.approved ? 'Deactivate' : 'Activate'}
-                        </Button>
-                      )}
+                      <Button
+                        type="primary"
+                        size="small"
+                        style={{
+                          backgroundColor: record.approved ? '#ff4d4f' : '#52c41a',
+                          borderColor: record.approved ? '#ff4d4f' : '#52c41a'
+                        }}
+                      >
+                        {record.approved ? 'Deactivate' : 'Activate'}
+                      </Button>
+                    )}
                   </Popconfirm>
                   <Button
                     type="primary"

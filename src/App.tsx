@@ -14,7 +14,9 @@ import ContactUs from './pages/ContactUs'
 import EditEntity from './pages/EditEntity'
 import DocumentsListView from './pages/DocumentsListView'
 import UserSignin from './user-pages/Signin'
+import ForgotPassword from './user-pages/ForgotPassword'
 import AddUser from './user-pages/AddUser'
+import ResetPassword from 'user-pages/ResetPassword'
 import { useQuery } from '@tanstack/react-query'
 import axios from './utils/axios'
 
@@ -79,6 +81,8 @@ function App() {
               <UserSignin />
             </Route>
             <Route path="/user-add" component={AddUser} />
+            <Route path="/forget-password" component={ForgotPassword} />
+            <Route path="/reset-password/:token" component={ResetPassword} />
             {/* A not found component needed here */}
             {/* <Route  component={NotFound} /> */}
           </Switch>
