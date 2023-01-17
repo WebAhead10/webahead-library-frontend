@@ -15,17 +15,37 @@ interface ImageInputProps {
   width: string
   onError(msg: string): void
   onChange(id: number): void
+  setPageCount(): void
   documentId: number | null
+  pageCount: number
 }
 
 interface PageResult {
   data: { documentId: number }
 }
 
-const ImageInput = ({ height, width, onError, onChange, documentId }: ImageInputProps) => {
+const ImageInput = ({ height, width, onError, onChange, documentId, setPageCount, pageCount }: ImageInputProps) => {
   const [error, setError] = React.useState<string>('')
   const [loading, setLoading] = React.useState<boolean>(false)
   const documentName = `${Date.now()}-${uuidv4()}`
+
+  const sendPage = async (file: string, index: number, isNewPage: boolean, documentId: number) => {
+    try {
+      const res = await axios.post(`/upload`, {
+        file,
+        // add 1 to the index just so the page numbers would be correct
+        index: index + 1,
+        documentName: documentName,
+        id: documentId,
+        isNewspaper: true,
+        isNewPage: true
+      })
+
+      return res.data.success
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   const upload = async (files: string[]) => {
     try {
@@ -42,24 +62,53 @@ const ImageInput = ({ height, width, onError, onChange, documentId }: ImageInput
         setLoading(false)
       }
 
-      const pagesResult: PageResult[] = await Promise.all(
-        files.slice(1).map((file, i: number) =>
-          axios.post(`/upload`, {
-            file,
-            // add 1 to the index just so the page numbers would be correct
-            index: i + 1,
-            documentName: documentName,
-            id: result.data.documentId,
-            isNewspaper: true,
-            isNewPage: true
-          })
-        )
-      )
+      // remove the first page
+      let restOfFiles = files.slice(1)
 
-      if (pagesResult.every(({ data }: any) => data.success)) {
-        onChange(pagesResult[0].data.documentId)
-        setLoading(false)
+      // send the rest of the pages but wait for each one to finish before sending the next one
+      // this is to prevent the server from getting overloaded
+      // also check if all the pages were uploaded successfully
+      // and if they were then update the document id
+      for (let i = 0; i < restOfFiles.length; i++) {
+        const success = await sendPage(restOfFiles[i], i, true, result.data.documentId)
+
+        if (!success) {
+          onError('Failed to upload page')
+          setLoading(false)
+          return
+        }
+
+        setPageCount()
       }
+
+      onChange(result.data.documentId)
+      setLoading(false)
+
+      // for (let i = 0; i < dataFile.length; i++) {
+      //   await sendPage(() => {
+      //     console.log('done')
+
+      //   },dataFile[i],i,true,result.data.documentId)
+      // }
+
+      // const pagesResult: PageResult[] = await Promise.all(
+      //   files.slice(1).map((file, i: number) =>
+      //     axios.post(`/upload`, {
+      //       file,
+      //       // add 1 to the index just so the page numbers would be correct
+      //       index: i + 1,
+      //       documentName: documentName,
+      //       id: result.data.documentId,
+      //       isNewspaper: true,
+      //       isNewPage: true
+      //     })
+      //   )
+      // )
+
+      // if (pagesResult.every(({ data }: any) => data.success)) {
+      //   onChange(pagesResult[0].data.documentId)
+      //   setLoading(false)
+      // }
     } catch (err) {
       console.log(err)
     }
@@ -138,6 +187,9 @@ const ImageInput = ({ height, width, onError, onChange, documentId }: ImageInput
         loading={loading}
         error={!!error}
       />
+      {pageCount > 0 && (
+        <span style={{ color: 'green', fontSize: '20px', fontWeight: 'bold' }}>{pageCount} pages uploaded</span>
+      )}
       {error && <span style={{ color: 'red' }}>{error}</span>}
     </div>
   )

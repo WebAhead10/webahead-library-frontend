@@ -160,7 +160,8 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
                   rows={5}
                   cols={40}
                   value={note}
-                  placeholder="هل لديك ملاحظه؟"
+                  placeholder={`هل لديك ملاحظه؟
+هل لديك تصنيفات جديدة لاقتراحها؟`}
                   onChange={(e) => setNote(e.target.value)}
                 />
               </label>

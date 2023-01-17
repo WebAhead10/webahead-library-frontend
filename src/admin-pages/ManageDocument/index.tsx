@@ -22,6 +22,7 @@ const UploadPDFDocument = () => {
   const [tagAutocomplete, setTagAutocomplete] = useState('')
   const [tags, setTags] = useState([])
   const [year, setYear] = useState('')
+  const [pageCount, setPageCount] = useState(0)
 
   const onChange: Function =
     (key: string) =>
@@ -212,6 +213,10 @@ const UploadPDFDocument = () => {
         onChange={(documentId: number) => {
           setNewDocument({ ...newDocument, id: documentId })
         }}
+        setPageCount={() => {
+          setPageCount((prev) => prev + 1)
+        }}
+        pageCount={pageCount}
         documentId={newDocument.id}
         onError={setError}
       />

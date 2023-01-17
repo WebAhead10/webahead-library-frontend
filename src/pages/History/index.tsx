@@ -74,7 +74,7 @@ const History = () => {
                     Click to show
                   </Button>
                 </td>
-                <td>{new Date(historyRow.created_at).toDateString()}</td>
+                <td>{historyRow.created_at}</td>
               </tr>
             ))
           ) : (
