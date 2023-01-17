@@ -74,7 +74,11 @@ const History = () => {
                     Click to show
                   </Button>
                 </td>
-                <td>{historyRow.created_at}</td>
+                <td>
+                  {new Date(historyRow.created_at).toDateString() +
+                    ' ' +
+                    new Date(historyRow.created_at).toLocaleTimeString()}
+                </td>
               </tr>
             ))
           ) : (
