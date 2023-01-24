@@ -1,6 +1,6 @@
 import React from 'react'
 import { Redirect, Route } from 'react-router-dom'
-import { useRecoilValue, RecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { IUser } from 'types'
 import { userAtom } from 'utils/recoil/atoms'
 
@@ -15,8 +15,6 @@ interface IProtectedRouteProps {
 function ProtectedRoute({ component: Component, admin = true, ...restOfProps }: IProtectedRouteProps) {
   const user = useRecoilValue<IUser>(userAtom)
   const isAuthenticated = !!user.id
-
-  console.log({ user })
 
   return (
     <Route

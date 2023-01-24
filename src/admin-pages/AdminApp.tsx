@@ -73,7 +73,7 @@ function AdminApp() {
         <Content style={{ margin: '0 16px' }}>
           <div className="site-layout-background admin-app" style={{ padding: 24, minHeight: 360 }}>
             <Switch>
-              <ProtectedRoute exact path="/" component={Users} />
+              <ProtectedRoute path="/users" component={Users} />
               <Route path="/signin" component={Signin} />
               <ProtectedRoute path="/history" component={History} />
               <ProtectedRoute path="/manage/document" component={ManageDocument} />
