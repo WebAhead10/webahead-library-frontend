@@ -60,7 +60,10 @@ const ImageInput = ({ height, width, onError, onChange, documentId, setPageCount
       if (!result.data.success) {
         onError(result.data.message)
         setLoading(false)
+        return
       }
+
+      setPageCount()
 
       // remove the first page
       let restOfFiles = files.slice(1)

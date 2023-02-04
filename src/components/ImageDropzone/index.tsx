@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { Modal } from 'antd'
 
 interface StyledDropzoneProps {
   height: string
@@ -44,9 +45,18 @@ export default function StyledDropzone({
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (files) => {
-      if (Array.isArray(files) && files.length) {
-        prepareUpload(files[0])
-      }
+      // confirm that the user has selected the correct file before uploading
+      Modal.confirm({
+        title: `Are you sure you want to upload this file? ${files[0].name}`,
+        onOk: () => {
+          if (Array.isArray(files) && files.length) {
+            prepareUpload(files[0])
+          }
+        },
+        onCancel: () => {
+          console.log('Cancel')
+        }
+      })
     }
   })
 

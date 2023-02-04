@@ -189,7 +189,7 @@ const ManageDocuments = () => {
                       id: record.id,
                       documentName: record.name,
                       category: record.categoryId,
-                      publishedDate: moment(record?.publishedDate).subtract(1, 'hours')
+                      publishedDate: moment(record?.publishedDate || moment()).subtract(1, 'hours')
                     })
                   }}
                 >
