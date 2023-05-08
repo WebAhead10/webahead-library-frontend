@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 export const Nav = styled.nav`
   background: #000;
-  height: 50px;
+  height: 60px;
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0vw 0.5rem 5vw;
@@ -15,6 +15,7 @@ export const NavLink = styled(Link)`
   display: flex;
   align-items: center;
   text-decoration: none;
+  font-size: 16px;
   padding: 0 1rem;
   height: 100%;
   cursor: pointer;

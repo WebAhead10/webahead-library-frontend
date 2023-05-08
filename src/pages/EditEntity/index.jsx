@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { message } from 'antd'
+import { message, Button, Space } from 'antd'
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import axios from 'utils/axios'
@@ -282,22 +282,28 @@ const EditEntity = () => {
   return (
     <div className={style['edit-entity-container']}>
       {editStatus !== STATUS_NAVIGATING && (
-        <div>
-          <button
-            onClick={() => updateDrawingStatus(STATUS_DRAWING_NAV, true)}
-            disabled={editStatus === STATUS_DRAWING_NAV}
-            className={`button ${style['edit-entity-button']}`}
-          >
-            Enable mouse
-          </button>
-          <button
-            onClick={() => updateDrawingStatus(STATUS_DRAWING, false)}
-            disabled={editStatus === STATUS_DRAWING}
-            className={`button ${style['edit-entity-button']}`}
-          >
-            Enable Draw
-          </button>
-        </div>
+        <Space direction="vertical" size={1}>
+          <br />
+          <Space>
+            <Button
+              onClick={() => updateDrawingStatus(STATUS_DRAWING_NAV, true)}
+              disabled={editStatus === STATUS_DRAWING_NAV}
+              type="primary"
+              size="large"
+            >
+              Enable mouse
+            </Button>
+            <Button
+              onClick={() => updateDrawingStatus(STATUS_DRAWING, false)}
+              disabled={editStatus === STATUS_DRAWING}
+              type="primary"
+              size="large"
+            >
+              Enable Draw
+            </Button>
+          </Space>
+          <br />
+        </Space>
       )}
       <div className={style.editWrapper}>
         <Sidebar
@@ -322,18 +328,18 @@ const EditEntity = () => {
           />
         )}
       </div>
-      <button onClick={() => onSubmit(overlays, params.id)} className={`button ${style['edit-entity-button']}`}>
-        Submit
-      </button>
-      <button className={`button ${style['edit-entity-button']}`} onClick={drawOverly}>
-        Draw
-      </button>
-      <button
-        className={`button ${style['edit-entity-button']}`}
-        onClick={() => history.push(`/view/document/${params.id}`)}
-      >
-        Manage texts
-      </button>
+      <br />
+      <Space>
+        <Button type="primary" size="large" onClick={() => onSubmit(overlays, params.id)}>
+          Submit
+        </Button>
+        <Button type="primary" size="large" onClick={drawOverly}>
+          Draw
+        </Button>
+        <Button type="primary" size="large" onClick={() => history.push(`/view/document/${params.id}`)}>
+          Manage texts
+        </Button>
+      </Space>
     </div>
   )
 }
