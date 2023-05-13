@@ -3,6 +3,7 @@ import style from './style.module.css'
 import { useHistory, useParams } from 'react-router-dom'
 import axios from 'utils/axios'
 import { INewspaperParams } from 'types'
+import { Breadcrumb } from 'antd'
 
 const months = [
   'يناير',
@@ -25,6 +26,7 @@ function ChooseYearMonth() {
   const [year, setYear] = useState('')
   const [month, setMonth] = useState('')
   const [publishedDocs, setPublishedDocs] = useState<{ [key: string]: string[] }>({})
+  const [breadcrumb, setBreadcrumb] = useState([])
 
   const fetchPublishDates = useCallback(async () => {
     if (!params.categoryId) {
@@ -35,6 +37,7 @@ function ChooseYearMonth() {
       const result = await axios.get(`/publish/dates/${params.categoryId}`)
 
       setPublishedDocs(result.data.data)
+      setBreadcrumb(result.data.breadcrumbs || [])
     } catch (error) {
       console.log(error)
     }
@@ -46,6 +49,30 @@ function ChooseYearMonth() {
 
   return (
     <div>
+      <Breadcrumb
+        style={{
+          margin: '20px',
+          fontSize: '18px'
+        }}
+      >
+        <Breadcrumb.Item>
+          <a href="/">الرئيسية</a>
+        </Breadcrumb.Item>
+        {breadcrumb.map(
+          (
+            item: {
+              name: string
+              path: string
+            },
+            index
+          ) => (
+            <Breadcrumb.Item key={index}>
+              <a href={item.path}>{item.name}</a>
+            </Breadcrumb.Item>
+          )
+        )}
+      </Breadcrumb>
+
       <div className={style['choose-year-top']}>
         <label className={style['date-dropdown-container']} htmlFor="dropdown-year">
           <span>سنة: </span>
@@ -103,9 +130,7 @@ function ChooseYearMonth() {
                       style[!publishedDocs[currentYear].includes(currentMonth) ? 'disabled__nav__item' : 'nav__item']
                     }
                     onClick={() => {
-                      if (currentMonth !== 'أكتوبر') {
-                        history.push(`/calendar/${params.categoryId}/${currentYear}/${currentMonth}`)
-                      }
+                      history.push(`/calendar/${params.categoryId}/${currentYear}/${currentMonth}`)
                     }}
                   >
                     {currentMonth}

@@ -23,7 +23,7 @@
   text-align: justify;
 }
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 12px;
 }
 
 /* Handle */

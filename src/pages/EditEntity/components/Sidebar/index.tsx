@@ -61,7 +61,8 @@ const Sidebar = ({
 
   return (
     <div className={style.articleSidebar}>
-      <h1>Add article</h1>
+      <h1>Article list</h1>
+      {/* translate this  */}
       <div className={style.articleWrapper}>
         {articles
           .sort(({ id: aId }, { id: bId }) => aId - bId)

@@ -1,11 +1,9 @@
 import Calendar from 'react-calendar'
 import { useCallback, useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import style from './style.module.css'
 import axios from 'utils/axios'
 import { INewspaperParams, IRandomKeys } from 'types'
-// import { Calendar } from 'antd';
-import type { Moment } from 'moment';
+import { Breadcrumb } from 'antd'
 
 const monthNameToNumber: IRandomKeys = {
   يناير: '01',
@@ -31,6 +29,7 @@ function Calendar_() {
   const history = useHistory()
   const { categoryId, year, month } = useParams<INewspaperParams>()
   const [publishedDays, setPublishedDays] = useState([])
+  const [breadcrumbs, setBreadcrumbs] = useState([])
 
   const fetchPublishDates = useCallback(async () => {
     if (!categoryId || !year || !month) {
@@ -41,6 +40,7 @@ function Calendar_() {
       const result = await axios.get(`/publish/dates/${categoryId}/${year}/${month}`)
 
       setPublishedDays(result.data.data)
+      setBreadcrumbs(result.data.breadcrumbs || [])
     } catch (error) {
       console.log(error)
     }
@@ -52,6 +52,22 @@ function Calendar_() {
 
   return (
     <div>
+      <Breadcrumb
+        style={{
+          margin: '20px',
+          fontSize: '18px'
+        }}
+      >
+        <Breadcrumb.Item>
+          <a href="/">الرئيسية</a>
+        </Breadcrumb.Item>
+        {breadcrumbs.map(({ path, name }: { path: string; name: string }, index: number) => (
+          <Breadcrumb.Item key={index}>
+            <a href={path}>{name}</a>
+          </Breadcrumb.Item>
+        ))}
+      </Breadcrumb>
+
       {/* TODO: Fix using recoil */}
       {/* <div className={style['year-month']}>
         <span>{context.value.newspaper}</span>
@@ -87,7 +103,6 @@ function Calendar_() {
           }
           return null
         }}
-
       />
     </div>
   )

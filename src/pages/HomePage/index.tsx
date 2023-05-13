@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import MainCategorySquare from '../../components/MainCategorySquare'
 import axios from 'utils/axios'
 import style from './style.module.css'
@@ -8,7 +8,7 @@ import { documentSearchAtom } from 'utils/recoil/atoms'
 import { IDocumentSearch } from 'utils/recoil/types'
 import { useHistory } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Row, Col, Select, Form, Input, Divider, Carousel, Button, Card, Typography, message } from 'antd'
+import { Row, Col, Select, Form, Input, Divider, Button, Card, Typography, message } from 'antd'
 
 const { Text } = Typography
 
@@ -55,7 +55,7 @@ function HomePage() {
         >
           <Row justify="center" align="bottom" wrap style={{ margin: '0 120px' }}>
             <Col span={6}>
-              <Form.Item label="تاغس" name="tags">
+              <Form.Item label="وسوم" name="tags">
                 <Select mode="tags" loading={isLoading}>
                   {tags.map((tag: ITagInput) => (
                     <Select.Option key={tag.id} value={tag.id}>
@@ -85,7 +85,7 @@ function HomePage() {
         </Col>
       </Col>
 
-      {filteredArticles.length && (
+      {filteredArticles.length ? (
         <Col span={24}>
           <Row wrap justify="space-around">
             {filteredArticles.map((article: any) => (
@@ -115,6 +115,8 @@ function HomePage() {
             <Divider />
           </Col>
         </Col>
+      ) : (
+        ''
       )}
 
       <Col span={24}>

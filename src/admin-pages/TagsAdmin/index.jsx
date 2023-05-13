@@ -49,7 +49,7 @@ function AddTag() {
     setTags(tags.filter((tag, index) => index !== indexToRemove))
 
     axios
-      .post('/deleteTag', tags[indexToRemove])
+      .get(`/tag/delete/${tags[indexToRemove].id}`)
       .then((res) => {
         if (!res.data.success) {
           // setError("Something went wrong")

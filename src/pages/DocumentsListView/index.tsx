@@ -38,7 +38,7 @@ const DocumentsListView = () => {
     >
       <div className={style.topForm}>
         <div className={style.inputContainer}>
-          <Text className={style.inputLabel}>تاغس:</Text>
+          <Text className={style.inputLabel}>وسوم:</Text>
           <Select
             mode="tags"
             style={{ width: '100%' }}

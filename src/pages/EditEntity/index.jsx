@@ -336,9 +336,9 @@ const EditEntity = () => {
         <Button type="primary" size="large" onClick={drawOverly}>
           Draw
         </Button>
-        <Button type="primary" size="large" onClick={() => history.push(`/view/document/${params.id}`)}>
+        {/* <Button type="primary" size="large" onClick={() => history.push(`/view/document/${params.id}`)}>
           Manage texts
-        </Button>
+        </Button> */}
       </Space>
     </div>
   )

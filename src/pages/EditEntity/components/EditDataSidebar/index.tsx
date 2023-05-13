@@ -130,7 +130,7 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
             </Form.Item>
           </Col>
           <Col offset={1} span={22}>
-            <Form.Item label="تاغس" name="tags">
+            <Form.Item label="وسوم" name="tags">
               <Select
                 loading={isAttachingTag || isDetachingTag}
                 mode="tags"
