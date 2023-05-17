@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import style from './style.module.css'
 import { DeleteFilled, PlusCircleOutlined, FileAddOutlined } from '@ant-design/icons'
 import axios from 'utils/axios'
-import { Modal, Form, Input, Row, Col, Select, Collapse, message } from 'antd'
-import { ITagInput } from 'types'
-import { useMutation, useQuery } from '@tanstack/react-query'
-
-const { Panel } = Collapse
 
 interface Overlay {
   x: number
@@ -61,8 +56,7 @@ const Sidebar = ({
 
   return (
     <div className={style.articleSidebar}>
-      <h1>Article list</h1>
-      {/* translate this  */}
+      <h1>قائمة المقالات</h1>
       <div className={style.articleWrapper}>
         {articles
           .sort(({ id: aId }, { id: bId }) => aId - bId)

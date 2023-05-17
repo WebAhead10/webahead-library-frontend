@@ -1,10 +1,74 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'utils/axios'
 import DeleteIcon from '@material-ui/icons/Delete'
 import './style.css'
+import dragula from 'dragula'
 
 function AddTag() {
   const [tags, setTags] = useState([])
+  const containerRef = useRef(null)
+
+  useEffect(() => {
+    const container = containerRef.current
+
+    // Initialize Dragula instance
+    // const drake = dragula([container])
+    const drake = dragula([container], {
+      moves: (el, container, handle) => {
+        // Return true to allow dragging
+        return !handle.classList.contains('no-drag')
+      }
+    })
+
+    // Handle drag events
+    drake.on('drag', (el, source) => {
+      // Handle drag start event
+      // Update element position to follow the mouse
+      el.style.left = `${el.getBoundingClientRect().left}px`
+      el.style.top = `${el.getBoundingClientRect().top}px`
+
+      // Add custom class to show dragging effect
+      el.classList.add('dragging')
+    })
+
+    drake.on('drop', (el, target, source, sibling) => {
+      // Handle drop event
+      const updatedOrder = Array.from(container.children).map((el) => el.id)
+
+      axios
+        .post('tags/order/update', {
+          order: updatedOrder
+        })
+        .then((res) => {
+          if (!res.data.success) {
+            // setError("Something went wrong")
+          } else {
+            console.log(res)
+            // history.push("/a/admin")
+          }
+        })
+        .catch((err) => {
+          // setError("Failed: " + err.message)
+          console.log('error', err.message)
+        })
+    })
+
+    drake.on('dragend', (el) => {
+      // Reset element position and remove custom class
+      el.style.left = ''
+      el.style.top = ''
+      el.classList.remove('dragging')
+    })
+
+    drake.on('over', (el, container) => {
+      // Handle drag over event
+    })
+
+    // Clean up Dragula instance
+    return () => {
+      drake.destroy()
+    }
+  }, [])
 
   useEffect(() => {
     axios
@@ -73,9 +137,9 @@ function AddTag() {
       <h1>Manage Tags</h1>
       <input className="tag-input" type="text" placeholder="" onKeyUp={addTags}></input>
       <div className="tags">
-        <ul className="tag-ul">
+        <ul className="tag-ul" ref={containerRef}>
           {tags.map((tag, index) => (
-            <li key={index} className="tag-li">
+            <li key={index} className="tag-li no-drag" id={tag.id}>
               <DeleteIcon onClick={() => removeTags(index)} style={{ transform: 'scale(1.2)', cursor: 'pointer' }} />
               <span className="tag-span">{tag.name}</span>
             </li>

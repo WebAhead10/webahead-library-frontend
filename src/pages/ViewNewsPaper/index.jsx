@@ -53,6 +53,21 @@ const ViewNewsPaper = () => {
     }
   }, [])
 
+  const mouseEnterListener = (selectedId) => {
+    const elements = document.getElementsByClassName(selectedId)
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].style.backgroundColor = 'rgba(0,0,255,0.3)'
+    }
+  }
+
+  const mouseOutListener = (selectedId) => {
+    const elements = document.getElementsByClassName(selectedId)
+
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].style.backgroundColor = 'rgba(0, 0, 0, 0.15)'
+    }
+  }
+
   const fetchCoords = useCallback(
     async (id) => {
       // get the coords id from the url
@@ -69,8 +84,11 @@ const ViewNewsPaper = () => {
         const result = await axios.get(`${process.env.REACT_APP_API_URL}/overlay/coords/${id}`)
         if (!result.data.success) throw new Error('Failed')
 
+        // coordsArr are the list of articles
+        // each article is split into multiple coords or overlays
         const coordsArr = result.data.pages
         coordsArr.forEach(({ coords, id }) => {
+          // for each overlay, create a div element and add it to the viewer
           coords.forEach(({ overlay, id: overlayId }) => {
             const overlayElement = document.createElement('div')
             overlayElement.style.cursor = 'pointer'
@@ -80,42 +98,38 @@ const ViewNewsPaper = () => {
               overlayElement.style.border = '1px solid red'
             }
 
-            const mouseEnterListener = () => {
-              const elements = document.getElementsByClassName(id)
-              for (var i = 0; i < elements.length; i++) {
-                elements[i].style.backgroundColor = 'rgba(0,0,255,0.3)'
-              }
-            }
-
-            overlayElement.addEventListener('mouseenter', mouseEnterListener)
-
-            const mouseOutListener = () => {
-              const elements = document.getElementsByClassName(id)
-
-              for (var i = 0; i < elements.length; i++) {
-                elements[i].style.backgroundColor = 'rgba(0, 0, 0, 0.15)'
-              }
-            }
-
-            overlayElement.addEventListener('mouseout', mouseOutListener)
-
-            overlayElement.addEventListener('click', () => {
-              const elements = document.getElementsByClassName(id)
-
-              for (var i = 0; i < elements.length; i++) {
-                elements[i].removeEventListener('mouseenter', mouseEnterListener)
-                elements[i].removeEventListener('mouseout', mouseOutListener)
-                elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
-              }
-
-              setSelectedId(id)
-            })
-
             viewer.addOverlay(
               overlayElement,
               new OpenSeadragon.Rect(overlay.x, overlay.y, overlay.width, overlay.height)
             )
           })
+
+          // after adding all the overlays, add event listeners to each overlay
+          const overlays = document.getElementsByClassName(id)
+          const mouseEnter = () => mouseEnterListener(id)
+          const mouseLeave = () => mouseOutListener(id)
+
+          for (var j = 0; j < overlays.length; j++) {
+            // first add the mouse enter that will highlight the overlay
+            overlays[j].addEventListener('mouseenter', mouseEnter)
+
+            // then add the mouse leave that will remove the highlight
+            overlays[j].addEventListener('mouseout', mouseLeave)
+
+            // then add the click event that will set the selected id (id of the article)
+            // and then remove the mouse enter and mouse leave event listeners from all the overlays
+            // that belong to the same article
+            overlays[j].addEventListener('click', () => {
+              const elements = document.getElementsByClassName(id)
+              for (var i = 0; i < overlays.length; i++) {
+                elements[i].removeEventListener('mouseenter', mouseEnter)
+                elements[i].removeEventListener('mouseout', mouseLeave)
+                elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
+                elements[i].style.border = '1px solid rgba(255,0,0,0.6)'
+              }
+              setSelectedId(id)
+            })
+          }
         })
       } catch (error) {
         console.log(error)
@@ -150,7 +164,48 @@ const ViewNewsPaper = () => {
           }}
         />
       </div>
-      {selectedId && <ShowContent overlayId={selectedId} close={() => setSelectedId(null)} />}
+      {selectedId && (
+        <ShowContent
+          overlayId={selectedId}
+          close={() => {
+            // When the sidebar is closed, I want to reset the article overlays
+            const elements = document.getElementsByClassName(selectedId)
+            const mouseEnter = () => mouseEnterListener(selectedId)
+            const mouseLeave = () => mouseOutListener(selectedId)
+
+            // first add back the listeners that were removed when the article was selected
+            for (var i = 0; i < elements.length; i++) {
+              elements[i].addEventListener('mouseenter', mouseEnter)
+              elements[i].addEventListener('mouseout', mouseLeave)
+              elements[i].style.border = '1px solid rgba(0,0,0,0)'
+              elements[i].style.backgroundColor = 'rgba(0,0,0,0.15)'
+
+              // create a click listener that will remove the mouse enter and mouse leave listeners
+              // when the article is selected again
+              const onClick = () => {
+                const elements = document.getElementsByClassName(selectedId)
+
+                for (var i = 0; i < elements.length; i++) {
+                  elements[i].removeEventListener('mouseenter', mouseEnter)
+                  elements[i].removeEventListener('mouseout', mouseLeave)
+                  elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
+                  elements[i].style.border = '1px solid rgba(255,0,0,0.6)'
+                }
+                setSelectedId(selectedId)
+              }
+
+              // remove click listeners from elements[i] if they exist
+              // so that we don't add multiple click listeners to the same element
+              elements[i].removeEventListener('click', onClick)
+
+              // add click listeners to elements[i]
+              elements[i].addEventListener('click', onClick)
+            }
+
+            setSelectedId(null)
+          }}
+        />
+      )}
     </div>
   )
 }

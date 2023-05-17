@@ -95,3 +95,17 @@ input[type='date']::-webkit-calendar-picker-indicator {
 .overlay {
   background-color: rgba(0, 0, 0, 0.15);
 }
+
+.no-drag {
+  /* Add any styles to indicate that the element is not draggable */
+  cursor: move;
+}
+
+.dragging {
+  /* Add any styles to visually indicate the dragging effect */
+  opacity: 0.5;
+  cursor: move;
+  /* Additional styles for the element's position */
+  /* position: fixed; */
+  z-index: 9999;
+}
