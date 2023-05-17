@@ -32,10 +32,9 @@ const Users = () => {
 
   const onFormFinish = (values: any) => {
     axios
-      .post(`/documents/meta/${values.id}`, {
-        ...values,
+      .post(`/user/update/${values.id}`, {
+        ...values
         // settings hours
-        publishedDate: values.publishedDate.lang('en').add(1, 'hours').format('YYYY-MM-DD')
       })
       .then((res) => {
         if (!res.data.success) {
