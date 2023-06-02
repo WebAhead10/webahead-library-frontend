@@ -12,10 +12,11 @@ import { ITagInput } from 'types'
 
 interface ShowContentProps {
   overlayId: number
+  documentId: number
   close: Function
 }
 
-const ShowContent = ({ overlayId, close }: ShowContentProps) => {
+const ShowContent = ({ overlayId, close, documentId }: ShowContentProps) => {
   const [text, setText] = useState('')
   const [note, setNote] = useState('')
   const [initialNote, setInitialNote] = useState('')
@@ -94,7 +95,8 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
       const res = await axios.post(process.env.REACT_APP_API_URL + '/overlay/content/' + overlayId, {
         text: text,
         userId: 1,
-        document_id: overlayId
+        overlayId: overlayId,
+        documentId
       })
 
       if (!res.data.success) {

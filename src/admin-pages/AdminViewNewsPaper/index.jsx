@@ -46,7 +46,6 @@ const ViewNewsPaper = () => {
 
     fetchNewspaper(newspaperId)
 
-
     return () => {
       viewer && viewer.destroy()
     }
@@ -128,7 +127,7 @@ const ViewNewsPaper = () => {
         }}
       />
       {/* Todo add button here to return the edit docuemnt page */}
-      {selectedId && <ShowContent overlayId={selectedId} close={setSelectedId} />}
+      {selectedId && <ShowContent overlayId={selectedId} close={setSelectedId} documentId={params.id} />}
     </div>
   )
 }

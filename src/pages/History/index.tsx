@@ -32,6 +32,45 @@ const History = () => {
     setIsModalVisible(false)
   }
 
+  const getDocumentIdAndRedirect = async (historyRow: any, hIndex: number) => {
+    try {
+      if (historyRow.entity_type === 'tag' || historyRow.entity_type === 'note') {
+        const parsedBody = JSON.parse(historyData[hIndex].req_body)
+        const overlayId = parsedBody.overlayId
+
+        const res = await axios.get(`/document-get-id/overlay/${overlayId}`)
+        const coordsRes = await axios.get(`/coords-get-id/overlay/${overlayId}`)
+
+        const documentId = res.data.documentId
+        const coordsId = JSON.parse(coordsRes.data.coords || '[]')
+          .map((coord: any) => coord.id.replace('overlay_', ''))
+          .join('$')
+
+        window.open(`/view/newspaper/${documentId}?coords=${coordsId}`, '_blank')
+      } else if (historyRow.entity_type === 'overlay_text') {
+        const overlayId = historyRow.entity_id
+
+        const res = await axios.get(`/coords-get-id/overlay/${overlayId}`)
+
+        const coordsId = JSON.parse(res.data.coords || '[]')
+          .map((coord: any) => coord.id.replace('overlay_', ''))
+          .join('$')
+
+        window.open(`/view/newspaper/${res.data.documentId}?coords=${coordsId}`, '_blank')
+      } else if (historyRow.entity_type === 'overlay_cut') {
+        const parsedBody = JSON.parse(historyData[hIndex].req_body)
+        const overlays = parsedBody.overlays
+        const documentId = historyRow.entity_id
+        const overlayIds = overlays.map((overlay: any) => overlay.id.replace('overlay_', ''))
+        // connect the ids with & between them
+        const overlayIdsString = overlayIds.join('$')
+        window.open(`/view/newspaper/${documentId}?coords=${overlayIdsString}`, '_blank')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div>
       {/* if (index === 0) {
@@ -63,7 +102,17 @@ const History = () => {
             historyData.map((historyRow: any, index: number) => (
               <tr key={index}>
                 <td>{historyRow.id}</td>
-                <td>{historyRow.entity_id}</td>
+                <td>
+                  <a
+                    onClick={() => {
+                      getDocumentIdAndRedirect(historyRow, index)
+                    }}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {historyRow.entity_id}
+                  </a>
+                </td>
                 {/*in this part should select the right username/email by user kind  admin/user/advanced*/}
                 <td>{historyRow.entity_change_operation}</td>
                 <td>{historyRow.entity_type}</td>

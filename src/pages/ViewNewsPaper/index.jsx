@@ -68,6 +68,38 @@ const ViewNewsPaper = () => {
     }
   }
 
+  const resetOverlaysToOriginal = useCallback((coords, skipId) => {
+    coords.forEach(({ coords, id }) => {
+      const overlays = document.getElementsByClassName(id)
+
+      if (id === skipId) return
+
+      for (var i = 0; i < overlays.length; i++) {
+        overlays[i].style.border = '1px solid rgba(0,0,0,0)'
+        overlays[i].style.backgroundColor = 'rgba(0,0,0,0.15)'
+      }
+
+      const mouseEnter = () => mouseEnterListener(id)
+      const mouseLeave = () => mouseOutListener(id)
+
+      for (var j = 0; j < overlays.length; j++) {
+        overlays[j].addEventListener('mouseenter', mouseEnter)
+        overlays[j].addEventListener('mouseout', mouseLeave)
+
+        overlays[j].addEventListener('click', () => {
+          const elements = document.getElementsByClassName(id)
+          for (var i = 0; i < overlays.length; i++) {
+            elements[i].removeEventListener('mouseenter', mouseEnter)
+            elements[i].removeEventListener('mouseout', mouseLeave)
+            elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
+            elements[i].style.border = '1px solid rgba(255,0,0,0.6)'
+          }
+          setSelectedId(id)
+        })
+      }
+    })
+  }, [])
+
   const fetchCoords = useCallback(
     async (id) => {
       // get the coords id from the url
@@ -120,6 +152,7 @@ const ViewNewsPaper = () => {
             // and then remove the mouse enter and mouse leave event listeners from all the overlays
             // that belong to the same article
             overlays[j].addEventListener('click', () => {
+              resetOverlaysToOriginal(coordsArr, id)
               const elements = document.getElementsByClassName(id)
               for (var i = 0; i < overlays.length; i++) {
                 elements[i].removeEventListener('mouseenter', mouseEnter)
@@ -135,7 +168,7 @@ const ViewNewsPaper = () => {
         console.log(error)
       }
     },
-    [viewer]
+    [history.location.search, resetOverlaysToOriginal, viewer]
   )
 
   useEffect(() => {
@@ -167,6 +200,7 @@ const ViewNewsPaper = () => {
       {selectedId && (
         <ShowContent
           overlayId={selectedId}
+          documentId={params.id}
           close={() => {
             // When the sidebar is closed, I want to reset the article overlays
             const elements = document.getElementsByClassName(selectedId)

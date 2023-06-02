@@ -1,12 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { Modal, Select, message } from 'antd'
 import axios from 'utils/axios'
-import DeleteIcon from '@material-ui/icons/Delete'
+import { DeleteFilled, SwapOutlined } from '@ant-design/icons'
 import './style.css'
 import dragula from 'dragula'
 
 function AddTag() {
   const [tags, setTags] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const containerRef = useRef(null)
+
+  // Both these states are for the replace tag
+  const [oldTag, setOldTag] = useState({})
+  const [newTag, setNewTag] = useState({})
 
   useEffect(() => {
     const container = containerRef.current
@@ -34,6 +40,7 @@ function AddTag() {
     drake.on('drop', (el, target, source, sibling) => {
       // Handle drop event
       const updatedOrder = Array.from(container.children).map((el) => el.id)
+      // reorder tags in state using updatedOrder
 
       axios
         .post('tags/order/update', {
@@ -127,6 +134,29 @@ function AddTag() {
         console.log('error', err.message)
       })
   }
+
+  const replaceTag = () => {
+    axios
+      .post('/tag/replace', {
+        oldTagId: oldTag.id,
+        newTagId: newTag.id
+      })
+      .then((res) => {
+        if (!res.data.success) {
+          message.error('Failed to replace tag')
+          // setError("Something went wrong")
+        } else {
+          message.success('Tag replaced successfully')
+          // history.push("/a/admin")
+        }
+      })
+      .catch((err) => {
+        // setError("Failed: " + err.message)
+        message.error('Failed to replace tag')
+        console.log('error', err.message)
+      })
+  }
+
   return (
     <div
       className="container"
@@ -140,12 +170,68 @@ function AddTag() {
         <ul className="tag-ul" ref={containerRef}>
           {tags.map((tag, index) => (
             <li key={index} className="tag-li no-drag" id={tag.id}>
-              <DeleteIcon onClick={() => removeTags(index)} style={{ transform: 'scale(1.2)', cursor: 'pointer' }} />
+              <DeleteFilled
+                onClick={() => {
+                  removeTags(index)
+                }}
+                style={{ transform: 'scale(1.2)', cursor: 'pointer', margin: '0px 5px' }}
+              />
+              <SwapOutlined
+                onClick={() => {
+                  // replace()
+                  setOldTag(tag)
+                  setIsModalOpen(true)
+                }}
+                style={{ transform: 'scale(1.2)', cursor: 'pointer', margin: '0px 5px' }}
+              />
+
               <span className="tag-span">{tag.name}</span>
             </li>
           ))}
         </ul>
       </div>
+      <Modal
+        title="Replace Tag"
+        visible={isModalOpen}
+        onCancel={() => {
+          setIsModalOpen(false)
+        }}
+        onOk={() => {
+          replaceTag()
+          setIsModalOpen(false)
+        }}
+        okText="Replace"
+      >
+        <div>
+          <span>Replace</span> &nbsp;
+          <span>
+            <b>{oldTag.name}</b>
+          </span>{' '}
+          &nbsp;
+          <span>with</span>&nbsp;
+          <Select
+            showSearch
+            style={{ width: 200 }}
+            placeholder="Select a tag"
+            optionFilterProp="children"
+            onChange={(value) => {
+              const tagChosen = tags.find((tag) => tag.id === value)
+
+              setNewTag(tagChosen)
+            }}
+            // onFocus={onFocus}
+            // onBlur={onBlur}
+            // onSearch={onSearch}
+            filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+          >
+            {tags.map((tag, index) => (
+              <Select.Option key={index} value={tag.id}>
+                {tag.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </div>
+      </Modal>
     </div>
   )
 }
