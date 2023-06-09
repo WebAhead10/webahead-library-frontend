@@ -56,7 +56,7 @@ function HomePage() {
           <Row justify="center" align="bottom" wrap style={{ margin: '0 120px' }}>
             <Col span={6}>
               <Form.Item label="وسوم" name="tags">
-                <Select mode="tags" loading={isLoading}>
+                <Select mode="tags" loading={isLoading} optionFilterProp="children">
                   {tags.map((tag: ITagInput) => (
                     <Select.Option key={tag.id} value={tag.id}>
                       {tag.name}

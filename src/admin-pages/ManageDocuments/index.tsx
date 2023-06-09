@@ -10,7 +10,6 @@ import moment from 'moment'
 
 const fetchDocuments = async () => {
   const res = await axios.get('/all/documents')
-
   return res.data.data
 }
 
