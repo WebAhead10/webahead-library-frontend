@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import style from './style.module.css'
 import { DeleteFilled, PlusCircleOutlined, FileAddOutlined } from '@ant-design/icons'
 import axios from 'utils/axios'
+import { Button } from 'antd'
+import { useHistory } from 'react-router-dom'
 
 interface Overlay {
   x: number
@@ -43,6 +45,7 @@ const Sidebar = ({
   currentlyHovered
 }: SidebarProps) => {
   const [toggled, setToggled] = useState<{ [key: number]: boolean }>({})
+  const history = useHistory()
 
   const deleteOverlay = async (coordId: string, overlayId: number) => {
     try {
@@ -56,6 +59,17 @@ const Sidebar = ({
 
   return (
     <div className={style.articleSidebar}>
+      <Button
+        style={{
+          width: '100%',
+          marginBottom: '10px'
+        }}
+        onClick={() => {
+          history.goBack()
+        }}
+      >
+        Back to view mode
+      </Button>
       <h1>قائمة المقالات</h1>
       <div className={style.articleWrapper}>
         {articles

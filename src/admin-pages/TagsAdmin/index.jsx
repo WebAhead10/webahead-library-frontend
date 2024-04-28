@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Modal, Select, message } from 'antd'
+import { Modal, Select, message, Input, Row, Col } from 'antd'
 import axios from 'utils/axios'
-import { DeleteFilled, SwapOutlined } from '@ant-design/icons'
+import { DeleteFilled, SwapOutlined, EditOutlined } from '@ant-design/icons'
 import './style.css'
 import dragula from 'dragula'
 
 function AddTag() {
   const [tags, setTags] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
   const containerRef = useRef(null)
 
   // Both these states are for the replace tag
@@ -117,15 +118,16 @@ function AddTag() {
   }
 
   const removeTags = (indexToRemove) => {
-    setTags(tags.filter((tag, index) => index !== indexToRemove))
-
     axios
       .get(`/tag/delete/${tags[indexToRemove].id}`)
       .then((res) => {
         if (!res.data.success) {
+          message.error('Failed to delete tag')
           // setError("Something went wrong")
         } else {
-          console.log(res)
+          message.success('Tag deleted successfully')
+          setTags(tags.filter((tag, index) => index !== indexToRemove))
+
           // history.push("/a/admin")
         }
       })
@@ -144,8 +146,14 @@ function AddTag() {
       .then((res) => {
         if (!res.data.success) {
           message.error('Failed to replace tag')
+          setIsModalOpen(false)
+          setNewTag({})
+          setOldTag({})
           // setError("Something went wrong")
         } else {
+          setIsModalOpen(false)
+          setNewTag({})
+          setOldTag({})
           message.success('Tag replaced successfully')
           // history.push("/a/admin")
         }
@@ -153,6 +161,35 @@ function AddTag() {
       .catch((err) => {
         // setError("Failed: " + err.message)
         message.error('Failed to replace tag')
+        console.log('error', err.message)
+      })
+  }
+
+  const updateTag = () => {
+    axios
+      .post('/tag/update', {
+        tagId: oldTag.id,
+        newTagName: newTag.name
+      })
+      .then((res) => {
+        if (!res.data.success) {
+          message.error('Failed to update tag')
+          setIsUpdateModalOpen(false)
+          setNewTag({})
+          setOldTag({})
+          // setError("Something went wrong")
+        } else {
+          setTags(tags.map((tag) => (tag.id === oldTag.id ? { ...tag, name: newTag.name } : tag)))
+          setIsUpdateModalOpen(false)
+          setNewTag({})
+          setOldTag({})
+          message.success('Tag updated successfully')
+          // history.push("/a/admin")
+        }
+      })
+      .catch((err) => {
+        // setError("Failed: " + err.message)
+        message.error('Failed to update tag')
         console.log('error', err.message)
       })
   }
@@ -185,6 +222,13 @@ function AddTag() {
                 style={{ transform: 'scale(1.2)', cursor: 'pointer', margin: '0px 5px' }}
               />
 
+              <EditOutlined
+                onClick={() => {
+                  setOldTag(tag)
+                  setIsUpdateModalOpen(true)
+                }}
+                style={{ transform: 'scale(1.2)', cursor: 'pointer', margin: '0px 5px' }}
+              />
               <span className="tag-span">{tag.name}</span>
             </li>
           ))}
@@ -231,6 +275,36 @@ function AddTag() {
             ))}
           </Select>
         </div>
+      </Modal>
+      <Modal
+        title="Update tag"
+        visible={isUpdateModalOpen}
+        onCancel={() => {
+          setIsUpdateModalOpen(false)
+        }}
+        onOk={() => {
+          updateTag()
+          setIsUpdateModalOpen(false)
+        }}
+        okText="Replace"
+      >
+        <Row align="middle">
+          <Col>Update</Col> &nbsp;
+          <Col>
+            <b>{oldTag.name}</b>
+          </Col>{' '}
+          &nbsp;
+          <Col>with</Col>&nbsp;
+          <Col>
+            <Input
+              placeholder="Enter new tag name"
+              value={newTag.name}
+              onChange={(e) => {
+                setNewTag({ name: e.target.value })
+              }}
+            />
+          </Col>
+        </Row>
       </Modal>
     </div>
   )

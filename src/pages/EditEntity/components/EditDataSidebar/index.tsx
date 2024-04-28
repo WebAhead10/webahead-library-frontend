@@ -99,21 +99,22 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
   }, [overlayData, form])
 
   const onFormFinish = async (values: any) => {
-    submitOverlayData(
-      {
-        id: overlayId,
-        title: values.title,
-        content: values.text,
-        mainNote: values.mainNote
-      },
-      {
-        onSuccess: () => {
-          message.success('👍')
-          refetch()
-          refreshCoords()
-        }
-      }
-    )
+    console.log(values)
+    // submitOverlayData(
+    //   {
+    //     id: overlayId,
+    //     title: values.title,
+    //     content: values.text,
+    //     mainNote: values.mainNote
+    //   },
+    //   {
+    //     onSuccess: () => {
+    //       message.success('👍')
+    //       refetch()
+    //       refreshCoords()
+    //     }
+    //   }
+    // )
   }
 
   if (!tags) {
@@ -140,7 +141,7 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
                     attachTag(value, {
                       onSuccess: () => {
                         message.success('تم اضافة التصنيف بنجاح')
-                        refetch()
+                        // refetch()
                       }
                     })
                   }
@@ -152,7 +153,7 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
                     detachTag(value, {
                       onSuccess: () => {
                         message.success('تم حذف التصنيف بنجاح')
-                        refetch()
+                        // refetch()
                       }
                     })
                   }
