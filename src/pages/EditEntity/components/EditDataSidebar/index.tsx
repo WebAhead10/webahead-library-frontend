@@ -99,22 +99,21 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
   }, [overlayData, form])
 
   const onFormFinish = async (values: any) => {
-    console.log(values)
-    // submitOverlayData(
-    //   {
-    //     id: overlayId,
-    //     title: values.title,
-    //     content: values.text,
-    //     mainNote: values.mainNote
-    //   },
-    //   {
-    //     onSuccess: () => {
-    //       message.success('👍')
-    //       refetch()
-    //       refreshCoords()
-    //     }
-    //   }
-    // )
+    submitOverlayData(
+      {
+        id: overlayId,
+        title: values.title,
+        content: values.text,
+        mainNote: values.mainNote
+      },
+      {
+        onSuccess: () => {
+          message.success('👍')
+          refetch()
+          refreshCoords()
+        }
+      }
+    )
   }
 
   if (!tags) {
