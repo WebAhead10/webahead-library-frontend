@@ -11,6 +11,7 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import { message, Select, Tag } from 'antd'
 import { ITagInput } from 'types'
 import { useOverlayNotes, useOverlayTags, useOverlayText } from 'api-hooks/overlay.hooks'
+import { useTags } from 'api-hooks/general.hook'
 
 interface ShowContentProps {
   overlayId: number
@@ -52,10 +53,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
     })
   })
 
-  const { data: tags } = useQuery(['tags'], async () => {
-    const res = await axios.get(`/tag/all`)
-    return res.data.data
-  })
+  const { data: tags } = useTags()
 
   useEffect(() => {
     setText(textData?.content)
