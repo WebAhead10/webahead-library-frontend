@@ -32,12 +32,7 @@ const Signin = () => {
         <Title level={2}>تسجيل دخول المستخدم</Title>
       </Col>
       <Col>
-        <Form
-          onFinish={onFinish}
-          // onFinishFailed={onFinishFailed}
-
-          layout="vertical"
-        >
+        <Form onFinish={onFinish} layout="vertical">
           <Form.Item
             label="البريد الالكتروني"
             name="email"

@@ -24,14 +24,14 @@ function HeaderInfo(props) {
   return (
     <div className="headerInfo">
       <div className="headerInfo__nav">
-        <UserOutlined
+        {/* <UserOutlined
           style={{
             fontSize: '30px',
             border: '2px solid #000',
             borderRadius: '50%',
             padding: '5px'
           }}
-        />
+        /> */}
       </div>
 
       <div className="headerInfo__buttons">
