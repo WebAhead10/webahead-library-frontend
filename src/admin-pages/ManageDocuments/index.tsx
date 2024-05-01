@@ -109,7 +109,6 @@ const ManageDocuments = () => {
             <Col offset={1} span={4}>
               <Space>
                 <Button
-                  type="ghost"
                   onClick={() => {
                     setFilter({
                       categoryId: 0,

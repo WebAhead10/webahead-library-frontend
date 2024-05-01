@@ -4,7 +4,7 @@ import axios from 'utils/axios'
 import style from '../style.module.css'
 import { CloseCircleFilled } from '@ant-design/icons'
 
-import { Tabs } from 'antd'
+import { Tabs, Button } from 'antd'
 
 import { useMutation } from '@tanstack/react-query'
 
@@ -139,13 +139,14 @@ const OverlayDataSiderProps = ({ overlayId, close }: OverlayDataSiderPropsProps)
                 />
               </label>
               <br />
-              <button
-                className="button view-newspaper-button"
+              <Button
+                type="primary"
+                size="large"
                 onClick={updateOverlayNote}
                 style={{ margin: 'auto', marginTop: '20px' }}
               >
                 Update
-              </button>
+              </Button>
             </div>
           </div>
         </Tabs.TabPane>
@@ -219,13 +220,14 @@ const OverlayDataSiderProps = ({ overlayId, close }: OverlayDataSiderPropsProps)
             <span className={style.overlayTitle}>{textData?.title}</span>
 
             <textarea rows={23} cols={60} value={text} onChange={(e) => setText(e.target.value)} />
-            <button
-              className="button view-newspaper-button"
+            <Button
+              type="primary"
+              size="large"
               onClick={() => updateArticleText()}
               style={{ margin: 'auto', marginTop: '10px' }}
             >
               Update text
-            </button>
+            </Button>
           </div>
         </Tabs.TabPane>
       </Tabs>

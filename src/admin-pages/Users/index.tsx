@@ -5,7 +5,6 @@ import axios from 'utils/axios'
 // import style from './style.module.css'
 // import { IDocument, IMainCategory } from 'types'
 import { useQuery } from '@tanstack/react-query'
-// import moment from 'moment'
 
 const { Text } = Typography
 
@@ -230,7 +229,6 @@ const Users = () => {
             <Col span={4}>
               <Space>
                 <Button
-                  type="ghost"
                   onClick={() => {
                     // setFilter({
                     // })

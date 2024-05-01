@@ -45,7 +45,6 @@ export const historyTableColumns = ({ showModal, getDocumentIdAndRedirect }) => 
       <Button
         icon={<MoreOutlined />}
         shape="circle"
-        type="ghost"
         onClick={() => {
           showModal(data.id)
         }}

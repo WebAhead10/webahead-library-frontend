@@ -139,7 +139,6 @@ const OverlayDataSiderProps = ({ overlayId, close, documentId }: OverlayDataSide
               <Button
                 type="primary"
                 size="large"
-                className="button view-newspaper-button"
                 onClick={updateOverlayNote}
                 style={{ margin: 'auto', marginTop: '20px' }}
               >
@@ -220,7 +219,7 @@ const OverlayDataSiderProps = ({ overlayId, close, documentId }: OverlayDataSide
             <textarea
               rows={23}
               style={{
-                width: '100%'
+                width: '95%'
               }}
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -228,7 +227,6 @@ const OverlayDataSiderProps = ({ overlayId, close, documentId }: OverlayDataSide
             <Button
               type="primary"
               size="large"
-              className="button view-newspaper-button"
               onClick={() => updateArticleText()}
               style={{ margin: 'auto', marginTop: '10px' }}
             >

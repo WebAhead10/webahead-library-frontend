@@ -126,7 +126,6 @@ const History = () => {
             <Col offset={1} span={4}>
               <Space>
                 <Button
-                  type="ghost"
                   onClick={() => {
                     setFilters({
                       userName: '',
