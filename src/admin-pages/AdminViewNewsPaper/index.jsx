@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import style from './style.module.css'
-import ShowContent from './components/ShowContent'
+import OverlayDataSider from './components/OverlayDataSider'
 
 const ViewNewsPaper = () => {
   const [viewer, setViewer] = useState(null)
@@ -127,7 +127,7 @@ const ViewNewsPaper = () => {
         }}
       />
       {/* Todo add button here to return the edit docuemnt page */}
-      {selectedId && <ShowContent overlayId={selectedId} close={setSelectedId} documentId={params.id} />}
+      {selectedId && <OverlayDataSider overlayId={selectedId} close={setSelectedId} documentId={params.id} />}
     </div>
   )
 }

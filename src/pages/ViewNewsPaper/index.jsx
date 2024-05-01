@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import axios from 'axios'
 import style from './style.module.css'
-import ShowContent from './components/ShowContent'
+import OverlayDataSider from './components/OverlayDataSider'
 import { ScissorOutlined } from '@ant-design/icons'
 
 const ViewNewsPaper = () => {
@@ -198,7 +198,7 @@ const ViewNewsPaper = () => {
         />
       </div>
       {selectedId && (
-        <ShowContent
+        <OverlayDataSider
           overlayId={selectedId}
           documentId={params.id}
           close={() => {

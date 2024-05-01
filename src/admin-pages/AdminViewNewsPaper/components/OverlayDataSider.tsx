@@ -6,19 +6,19 @@ import { CloseCircleFilled } from '@ant-design/icons'
 
 import { Tabs } from 'antd'
 
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import { message, Select, Tag } from 'antd'
 import { ITagInput } from 'types'
 import { useOverlayNotes, useOverlayTags, useOverlayText } from 'api-hooks/overlay.hooks'
 import { useTags } from 'api-hooks/general.hook'
 
-interface ShowContentProps {
+interface OverlayDataSiderPropsProps {
   overlayId: number
   close: Function
 }
 
-const ShowContent = ({ overlayId, close }: ShowContentProps) => {
+const OverlayDataSiderProps = ({ overlayId, close }: OverlayDataSiderPropsProps) => {
   const [text, setText] = useState('')
   const [note, setNote] = useState('')
   const [initialNote, setInitialNote] = useState(
@@ -233,4 +233,4 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
   )
 }
 
-export default ShowContent
+export default OverlayDataSiderProps

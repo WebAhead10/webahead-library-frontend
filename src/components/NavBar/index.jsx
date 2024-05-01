@@ -1,6 +1,6 @@
 import React from 'react'
 import { Nav, NavLink, NavMenu } from './NavbarElements'
-// import SearchIcon from '@material-ui/icons/Search'
+
 function NavBar() {
   return (
     <div>

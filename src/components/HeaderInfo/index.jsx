@@ -1,7 +1,7 @@
 import React from 'react'
 import './style.css'
 import { Link } from 'react-router-dom'
-import AccountCircleIcon from '@material-ui/icons/AccountCircle'
+import { UserOutlined } from '@ant-design/icons'
 import { useRecoilValue } from 'recoil'
 import { userAtom } from 'utils/recoil/atoms'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -24,7 +24,14 @@ function HeaderInfo(props) {
   return (
     <div className="headerInfo">
       <div className="headerInfo__nav">
-        <AccountCircleIcon style={{ fontSize: '50px' }} />
+        <UserOutlined
+          style={{
+            fontSize: '30px',
+            border: '2px solid #000',
+            borderRadius: '50%',
+            padding: '5px'
+          }}
+        />
       </div>
 
       <div className="headerInfo__buttons">
