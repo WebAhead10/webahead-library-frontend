@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import axiosOld from 'axios'
 import axios from 'utils/axios'
 import style from '../style.module.css'
-import { Tabs } from 'antd'
+import { Tabs, Button } from 'antd'
 import { CloseCircleFilled } from '@ant-design/icons'
 
 import { useQuery, useMutation } from '@tanstack/react-query'
@@ -37,10 +36,13 @@ const ShowContent = ({ overlayId, close, documentId }: ShowContentProps) => {
     ['overlay-text', overlayId],
     async () => {
       const res = await axios.get(`/overlay/content/${overlayId}`)
-      return res.data.content
+      return {
+        content: res.data.content,
+        title: res.data.title
+      }
     },
     {
-      enabled: false
+      enabled: !!overlayId
     }
   )
 
@@ -81,13 +83,12 @@ const ShowContent = ({ overlayId, close, documentId }: ShowContentProps) => {
   useEffect(() => {
     if (overlayId) {
       refetchNotes()
-      refetchText()
       refetchTags()
     }
   }, [overlayId, refetchNotes, refetchText, refetchTags])
 
   useEffect(() => {
-    setText(textData)
+    setText(textData?.content)
   }, [textData])
 
   const updateArticleText = async () => {
@@ -142,7 +143,7 @@ const ShowContent = ({ overlayId, close, documentId }: ShowContentProps) => {
         <CloseCircleFilled style={{ fontSize: '35px' }} />
       </div>
 
-      <Tabs defaultActiveKey="2" centered style={{ marginTop: '10px' }}>
+      <Tabs defaultActiveKey="2" centered>
         {/* Notes panel */}
         <Tabs.TabPane tab="Notes" key="1">
           <div className={style.tabPanelBody}>
@@ -168,13 +169,15 @@ const ShowContent = ({ overlayId, close, documentId }: ShowContentProps) => {
                 />
               </label>
               <br />
-              <button
+              <Button
+                type="primary"
+                size="large"
                 className="button view-newspaper-button"
                 onClick={updateOverlayNote}
                 style={{ margin: 'auto', marginTop: '20px' }}
               >
                 Update
-              </button>
+              </Button>
             </div>
           </div>
         </Tabs.TabPane>
@@ -245,14 +248,25 @@ const ShowContent = ({ overlayId, close, documentId }: ShowContentProps) => {
             </div>
             <br />
 
-            <textarea rows={23} cols={60} value={text} onChange={(e) => setText(e.target.value)} />
-            <button
+            <span className={style.overlayTitle}>{textData?.title}</span>
+
+            <textarea
+              rows={23}
+              style={{
+                width: '100%'
+              }}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+            <Button
+              type="primary"
+              size="large"
               className="button view-newspaper-button"
               onClick={() => updateArticleText()}
               style={{ margin: 'auto', marginTop: '10px' }}
             >
               Update text
-            </button>
+            </Button>
           </div>
         </Tabs.TabPane>
       </Tabs>

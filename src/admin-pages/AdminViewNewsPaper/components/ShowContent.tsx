@@ -38,13 +38,15 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
     ['overlay-text', overlayId],
     async () => {
       const res = await axios.get(`/overlay/content/${overlayId}`)
-      return res.data.content
+      return {
+        content: res.data.content,
+        title: res.data.title
+      }
     },
     {
-      enabled: false
+      enabled: !!overlayId
     }
   )
-
   const {
     data: tagsData,
     refetch: refetchTags,
@@ -88,7 +90,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
   }, [overlayId, refetchNotes, refetchText, refetchTags])
 
   useEffect(() => {
-    setText(textData)
+    setText(textData?.content)
   }, [textData])
 
   const updateArticleText = async () => {
@@ -241,7 +243,10 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
                 </Tag>
               ))}
             </div>
+
             <br />
+
+            <span className={style.overlayTitle}>{textData?.title}</span>
 
             <textarea rows={23} cols={60} value={text} onChange={(e) => setText(e.target.value)} />
             <button
