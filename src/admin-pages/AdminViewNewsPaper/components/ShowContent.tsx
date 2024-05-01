@@ -10,6 +10,7 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 
 import { message, Select, Tag } from 'antd'
 import { ITagInput } from 'types'
+import { useOverlayNotes, useOverlayTags, useOverlayText } from 'api-hooks/overlay.hooks'
 
 interface ShowContentProps {
   overlayId: number
@@ -23,44 +24,19 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
     'للُّغَة العَرَبِيّة هي أكثر اللغات السامية تحدثًا، وإحدى أكثر اللغات انتشاراً في العالم، يتحدثها أكثر من 467 مليون نسمة،(1) ويتوزع متحدثوها في الوطن العربي، بالإضافة إلى العديد من المناطق الأخرى المجاورة كالأهواز وتركيا وتشاد ومالي والسنغال وإرتيريا وإثيوبيا وجنوب السودان وإيران. وبذلك فهي تحتل المركز الرابع أو الخامس من حيث اللغات الأكثر انتشارًا في العالم، وهي تحتل المركز الثالث تبعًا لعدد الدول التي تعترف بها كلغة رسمية؛ إذ تعترف بها 27 دولة كلغة رسمية، واللغة الرابعة من حيث عدد المستخدمين على الإنترنت. اللغةُ العربيةُ ذات أهمية قصوى لدى المسلمين، فهي عندَهم لغةٌ مقدسة إذ أنها لغة القرآن، وهي لغةُ الصلاة وأساسيةٌ في القيام بالعديد من العبادات والشعائرِ الإسلامية'
   )
 
-  const { data: notesData = [], refetch: refetchNotes } = useQuery<[]>(
-    ['overlay-notes', overlayId],
-    async () => {
-      const res = await axios.get(`/overlay/notes/${overlayId}`)
-      return res.data.notes
-    },
-    {
-      enabled: false
-    }
-  )
-
-  const { data: textData, refetch: refetchText } = useQuery(
-    ['overlay-text', overlayId],
-    async () => {
-      const res = await axios.get(`/overlay/content/${overlayId}`)
-      return {
-        content: res.data.content,
-        title: res.data.title
-      }
-    },
-    {
-      enabled: !!overlayId
-    }
-  )
   const {
-    data: tagsData,
-    refetch: refetchTags,
-    isLoading: isFetchingTags
-  } = useQuery<ITagInput[]>(
-    ['overlay-tags', overlayId],
-    async () => {
-      const res = await axios.get(`/overlay/tags/${overlayId}`)
-      return res.data.data
+    data: notesData = {
+      mainNote: {
+        text: ''
+      },
+      notes: []
     },
-    {
-      enabled: false
-    }
-  )
+    refetch: refetchNotes
+  } = useOverlayNotes(overlayId)
+
+  const { data: textData } = useOverlayText(overlayId)
+
+  const { data: tagsData, refetch: refetchTags, isLoading: isFetchingTags } = useOverlayTags(overlayId)
 
   const { mutate: attachTag, isLoading: isAttachingTag } = useMutation((tagId: number) => {
     return axios.post('/tag/attach/overlay', {
@@ -82,16 +58,12 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
   })
 
   useEffect(() => {
-    if (overlayId) {
-      refetchNotes()
-      refetchText()
-      refetchTags()
-    }
-  }, [overlayId, refetchNotes, refetchText, refetchTags])
-
-  useEffect(() => {
     setText(textData?.content)
   }, [textData])
+
+  useEffect(() => {
+    setInitialNote(notesData.mainNote?.text || '')
+  }, [notesData])
 
   const updateArticleText = async () => {
     try {
@@ -151,7 +123,7 @@ const ShowContent = ({ overlayId, close }: ShowContentProps) => {
             <div>{initialNote}</div>
             <h2>Notes</h2>
             <div className={style.scroll}>
-              {notesData?.map(({ text }, index) => (
+              {notesData?.notes?.map(({ text }, index) => (
                 <div key={index} className={style.commentDiv}>
                   {text}
                 </div>

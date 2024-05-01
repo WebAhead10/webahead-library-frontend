@@ -8,6 +8,8 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 
 import { message, Select, Tag } from 'antd'
 import { ITagInput } from 'types'
+import { useOverlayNotes, useOverlayTags, useOverlayText } from 'api-hooks/overlay.hooks'
+import { useTags } from 'api-hooks/general.hook'
 
 interface ShowContentProps {
   overlayId: number
@@ -20,46 +22,19 @@ const ShowContent = ({ overlayId, close, documentId }: ShowContentProps) => {
   const [note, setNote] = useState('')
   const [initialNote, setInitialNote] = useState('')
 
-  const { data: notesData = [], refetch: refetchNotes } = useQuery<[]>(
-    ['overlay-notes', overlayId],
-    async () => {
-      const res = await axios.get(`/overlay/notes/${overlayId}`)
-      setInitialNote(res.data.mainNote?.text || '')
-      return res.data.notes
-    },
-    {
-      enabled: false
-    }
-  )
-
-  const { data: textData, refetch: refetchText } = useQuery(
-    ['overlay-text', overlayId],
-    async () => {
-      const res = await axios.get(`/overlay/content/${overlayId}`)
-      return {
-        content: res.data.content,
-        title: res.data.title
-      }
-    },
-    {
-      enabled: !!overlayId
-    }
-  )
-
   const {
-    data: tagsData,
-    refetch: refetchTags,
-    isLoading: isFetchingTags
-  } = useQuery<ITagInput[]>(
-    ['overlay-tags', overlayId],
-    async () => {
-      const res = await axios.get(`/overlay/tags/${overlayId}`)
-      return res.data.data
+    data: notesData = {
+      mainNote: {
+        text: ''
+      },
+      notes: []
     },
-    {
-      enabled: false
-    }
-  )
+    refetch: refetchNotes
+  } = useOverlayNotes(overlayId)
+
+  const { data: textData } = useOverlayText(overlayId)
+
+  const { data: tagsData, refetch: refetchTags, isLoading: isFetchingTags } = useOverlayTags(overlayId)
 
   const { mutate: attachTag, isLoading: isAttachingTag } = useMutation((tagId: number) => {
     return axios.post('/tag/attach/overlay', {
@@ -75,27 +50,20 @@ const ShowContent = ({ overlayId, close, documentId }: ShowContentProps) => {
     })
   })
 
-  const { data: tags } = useQuery(['tags'], async () => {
-    const res = await axios.get(`/tag/all`)
-    return res.data.data
-  })
-
-  useEffect(() => {
-    if (overlayId) {
-      refetchNotes()
-      refetchTags()
-    }
-  }, [overlayId, refetchNotes, refetchText, refetchTags])
+  const { data: tags } = useTags()
 
   useEffect(() => {
     setText(textData?.content)
   }, [textData])
 
+  useEffect(() => {
+    setInitialNote(notesData.mainNote?.text || '')
+  }, [notesData])
+
   const updateArticleText = async () => {
     try {
-      const res = await axios.post(process.env.REACT_APP_API_URL + '/overlay/content/' + overlayId, {
+      const res = await axios.post('/overlay/content/' + overlayId, {
         text: text,
-        userId: 1,
         overlayId: overlayId,
         documentId
       })
@@ -115,7 +83,6 @@ const ShowContent = ({ overlayId, close, documentId }: ShowContentProps) => {
     try {
       const res = await axios.post(`/overlay/note`, {
         text: note,
-        userId: 1,
         overlayId
       })
 
@@ -150,7 +117,7 @@ const ShowContent = ({ overlayId, close, documentId }: ShowContentProps) => {
             <h2>Notes</h2>
             <div>{initialNote}</div>
             <div className={style.scroll}>
-              {notesData?.map(({ text }, index) => (
+              {notesData?.notes?.map(({ text }, index) => (
                 <div key={index} className={style.commentDiv}>
                   {String(text)}
                 </div>
