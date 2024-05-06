@@ -88,7 +88,14 @@ const Sidebar = ({
                 }}
               >
                 <div>
-                  <span className={style.articleTitle}>{title || 'بدون عنوان'}</span>
+                  <span
+                    className={style.articleTitle}
+                    style={{
+                      paddingRight: editStatus === 'drawing' ? '40px' : '20px'
+                    }}
+                  >
+                    {title || 'بدون عنوان'}
+                  </span>
                   <span className={style.articleOpenArrow}> ^ </span>
                 </div>
                 {editStatus === 'drawing' && (
@@ -101,18 +108,21 @@ const Sidebar = ({
                     />
                   </span>
                 )}
-                <span
-                  className={style.showDataModal}
-                  style={{ fontSize: '20px' }}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setEditOverlayId(id)
-                  }}
-                >
-                  <FileAddOutlined />
-                </span>
               </div>
               <div className={style.overlayWrapper} style={{ height: toggled[id] ? 'auto' : '0' }}>
+                <Button
+                  onClick={() => {
+                    setEditOverlayId(id)
+                  }}
+                  type="primary"
+                  style={{
+                    width: '100%',
+                    marginBottom: '10px',
+                    borderRadius: '0'
+                  }}
+                >
+                  حتلن البيانات
+                </Button>
                 {coords.map(({ id: coordId, overlay }, index) => (
                   <div
                     className={style.overlay}

@@ -23,14 +23,15 @@
 .articleTitle {
   display: flex;
   justify-content: center;
-  max-width: 70%;
-  text-align: center;
-  margin: auto;
+  max-width: 85%;
+  width: 85%;
+  text-align: right;
+  padding-right: 10px;
 }
 
 .articleOpenArrow {
   position: absolute;
-  left: 20px;
+  left: 10px;
   top: -15px;
   font-size: 30px;
   transform: rotate(180deg);
