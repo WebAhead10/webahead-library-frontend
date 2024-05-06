@@ -22,7 +22,6 @@
 
 .articleTitle {
   display: flex;
-  justify-content: center;
   max-width: 85%;
   width: 85%;
   text-align: right;
