@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import style from './style.module.css'
 import { DeleteFilled, PlusCircleOutlined, FileAddOutlined } from '@ant-design/icons'
 import axios from 'utils/axios'
-import { Button } from 'antd'
+import { Button, Collapse } from 'antd'
 import { useHistory } from 'react-router-dom'
 
 interface Overlay {
@@ -75,76 +75,94 @@ const Sidebar = ({
         {articles
           .sort(({ id: aId }, { id: bId }) => aId - bId)
           .map(({ id, coords, title }, index) => (
-            <>
-              <div
-                className={style.articleContainer}
-                onMouseEnter={() => mouseEnterListener(id)}
-                onMouseLeave={() => mouseOutListener(id)}
-                onClick={() => {
-                  setToggled({ ...toggled, [id]: !toggled[id] })
-                }}
-                style={{
-                  backgroundColor: currentlyHovered === id ? 'yellow' : 'white'
-                }}
-              >
-                <div>
-                  <span
-                    className={style.articleTitle}
-                    style={{
-                      paddingRight: editStatus === 'drawing' ? '40px' : '20px',
-                      width: editStatus === 'drawing' ? '80%' : '85%'
-                    }}
-                  >
-                    {title || 'بدون عنوان'}
-                  </span>
-                  <span className={style.articleOpenArrow}> ^ </span>
-                </div>
-                {editStatus === 'drawing' && (
-                  <span className={style.addOverlays}>
-                    <PlusCircleOutlined
-                      style={{ fontSize: '20px' }}
-                      onClick={() => {
-                        updateOverlayCoords(id)
-                      }}
-                    />
-                  </span>
-                )}
-              </div>
-              <div className={style.overlayWrapper} style={{ height: toggled[id] ? 'auto' : '0' }}>
-                <Button
-                  onClick={() => {
-                    setEditOverlayId(id)
-                  }}
-                  type="primary"
-                  style={{
-                    width: '100%',
-                    marginBottom: '10px',
-                    borderRadius: '0'
-                  }}
-                >
-                  حتلن البيانات
-                </Button>
-                {coords.map(({ id: coordId, overlay }, index) => (
-                  <div
-                    className={style.overlay}
-                    onMouseEnter={() => mouseEnterListener(id, index)}
-                    onMouseLeave={() => mouseOutListener(id, index)}
-                    onClick={() => moveToOverlay(overlay.x, overlay.y)}
-                  >
-                    Overlay {index + 1}
-                    <span
-                      className={style.deleteOverlay}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        deleteOverlay(coordId, id)
-                      }}
-                    >
-                      <DeleteFilled />
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </>
+            <Collapse
+              key={index}
+              style={{
+                direction: 'rtl',
+                borderRadius: '0px',
+                backgroundColor: currentlyHovered === id ? 'yellow' : 'white',
+                padding: '0px'
+              }}
+              items={[
+                {
+                  key: '1',
+                  // showArrow: false,
+                  label: (
+                    <>
+                      <div
+                        className={style.articleContainer}
+                        onMouseEnter={() => mouseEnterListener(id)}
+                        onMouseLeave={() => mouseOutListener(id)}
+                        onClick={() => {
+                          setToggled({ ...toggled, [id]: !toggled[id] })
+                        }}
+                        style={{
+                          backgroundColor: currentlyHovered === id ? 'yellow' : 'white'
+                        }}
+                      >
+                        <div>
+                          <span
+                            className={style.articleTitle}
+                            style={{
+                              paddingRight: '10px',
+                              width: editStatus === 'drawing' ? '80%' : '85%'
+                            }}
+                          >
+                            {title || 'بدون عنوان'}
+                          </span>
+                        </div>
+                        {editStatus === 'drawing' && (
+                          <span>
+                            <PlusCircleOutlined
+                              style={{ fontSize: '20px' }}
+                              onClick={() => {
+                                updateOverlayCoords(id)
+                              }}
+                            />
+                          </span>
+                        )}
+                      </div>
+                    </>
+                  ),
+                  children: (
+                    <>
+                      <Button
+                        onClick={() => {
+                          setEditOverlayId(id)
+                        }}
+                        type="primary"
+                        style={{
+                          width: '100%',
+                          marginBottom: '10px',
+                          borderRadius: '0'
+                        }}
+                      >
+                        حتلن البيانات
+                      </Button>
+                      {coords.map(({ id: coordId, overlay }, index) => (
+                        <div
+                          className={style.overlay}
+                          onMouseEnter={() => mouseEnterListener(id, index)}
+                          onMouseLeave={() => mouseOutListener(id, index)}
+                          onClick={() => moveToOverlay(overlay.x, overlay.y)}
+                        >
+                          Overlay {index + 1}
+                          <span
+                            className={style.deleteOverlay}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              deleteOverlay(coordId, id)
+                            }}
+                          >
+                            <DeleteFilled />
+                          </span>
+                        </div>
+                      ))}
+                    </>
+                  )
+                }
+              ]}
+            />
           ))}
       </div>
       {/* {overlayData?.tags && (
