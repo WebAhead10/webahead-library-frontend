@@ -104,8 +104,7 @@ const Sidebar = ({
                           <span
                             className={style.articleTitle}
                             style={{
-                              paddingRight: '10px',
-                              width: editStatus === 'drawing' ? '80%' : '85%'
+                              paddingRight: '10px'
                             }}
                           >
                             {title || 'بدون عنوان'}

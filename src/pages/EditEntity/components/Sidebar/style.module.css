@@ -24,8 +24,7 @@
 
 .articleTitle {
   display: flex;
-  max-width: 85%;
-  width: 85%;
+  flex-grow: 1;
   text-align: right;
 }
 
