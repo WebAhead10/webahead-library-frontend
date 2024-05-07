@@ -220,7 +220,7 @@ const OverlayDataSiderProps = ({ overlayId, close, documentId }: OverlayDataSide
 
             {edit ? (
               <Input.TextArea
-                autoSize
+                autoSize={{ minRows: 10 }}
                 style={{
                   width: '95%',
                   fontSize: '20px'
