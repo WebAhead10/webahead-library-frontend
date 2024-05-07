@@ -6,7 +6,7 @@ import { CloseCircleFilled } from '@ant-design/icons'
 
 import { useMutation } from '@tanstack/react-query'
 
-import { message, Select, Tag } from 'antd'
+import { message, Select, Tag, Input } from 'antd'
 import { ITagInput } from 'types'
 import { useOverlayNotes, useOverlayTags, useOverlayText } from 'api-hooks/overlay.hooks'
 import { useTags } from 'api-hooks/general.hook'
@@ -21,6 +21,7 @@ const OverlayDataSiderProps = ({ overlayId, close, documentId }: OverlayDataSide
   const [text, setText] = useState('')
   const [note, setNote] = useState('')
   const [initialNote, setInitialNote] = useState('')
+  const [edit, setEdit] = useState(false)
 
   const {
     data: notesData = {
@@ -74,6 +75,7 @@ const OverlayDataSiderProps = ({ overlayId, close, documentId }: OverlayDataSide
       }
 
       message.success('Upload done, Thank you for your efforts.')
+      setEdit(false)
     } catch (err) {
       // message.error('An error has occurred')
     }
@@ -216,22 +218,53 @@ const OverlayDataSiderProps = ({ overlayId, close, documentId }: OverlayDataSide
 
             <span className={style.overlayTitle}>{textData?.title}</span>
 
-            <textarea
-              rows={23}
-              style={{
-                width: '95%'
-              }}
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-            />
-            <Button
-              type="primary"
-              size="large"
-              onClick={() => updateArticleText()}
-              style={{ margin: 'auto', marginTop: '10px' }}
-            >
-              Update text
-            </Button>
+            {edit ? (
+              <Input.TextArea
+                autoSize
+                style={{
+                  width: '95%',
+                  fontSize: '20px'
+                }}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+              />
+            ) : (
+              <p
+                style={{
+                  width: '95%',
+                  textAlign: 'justify',
+                  fontSize: '20px'
+                }}
+              >
+                {text}
+              </p>
+            )}
+            {edit ? (
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '10px'
+                }}
+              >
+                <Button type="primary" size="large" onClick={() => updateArticleText()} style={{ marginTop: '10px' }}>
+                  Update text
+                </Button>
+                <Button size="large" onClick={() => setEdit(false)} style={{ marginTop: '10px' }}>
+                  Cancel
+                </Button>
+              </div>
+            ) : (
+              <Button
+                type="primary"
+                size="large"
+                onClick={() => setEdit(true)}
+                style={{ margin: 'auto', marginTop: '10px' }}
+              >
+                Edit text
+              </Button>
+            )}
           </div>
         </Tabs.TabPane>
       </Tabs>
