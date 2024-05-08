@@ -48,6 +48,10 @@ function HomePage() {
               mutate(values, {
                 onSuccess: ({ data }) => {
                   setFilteredArticles(data)
+
+                  if (!data.length) {
+                    message.warning('لا توجد نتائج')
+                  }
                 }
               })
             }
