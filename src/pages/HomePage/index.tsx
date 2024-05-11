@@ -91,13 +91,20 @@ function HomePage() {
 
       {filteredArticles.length ? (
         <Col span={24}>
-          <Row wrap justify="space-around">
-            {filteredArticles.map((article: any) => (
-              <Col span={4} key={article.id}>
+          <Row
+            wrap
+            justify="start"
+            style={{
+              padding: '0 40px'
+            }}
+          >
+            {filteredArticles.map((article: any, index) => (
+              <Col span={4} key={index}>
                 <Card
                   style={{
                     borderColor: 'black',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    margin: '4px'
                   }}
                   onClick={() => {
                     try {
