@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import MainCategorySquare from '../../components/MainCategorySquare'
 import axios from 'utils/axios'
 import style from './style.module.css'
@@ -16,6 +16,7 @@ function HomePage() {
   const [documentSearch, setDocumentSearch] = useRecoilState<IDocumentSearch>(documentSearchAtom)
   const [filteredArticles, setFilteredArticles] = useState([])
   const history = useHistory()
+  const [form] = Form.useForm()
 
   const { data: categories } = useQuery(['categories'], async () => {
     const res = await axios.get('/categories')
@@ -33,6 +34,23 @@ function HomePage() {
     return res.data
   })
 
+  useEffect(() => {
+    // get the filters from the url
+    const urlParams = new URLSearchParams(window.location.search)
+    const filters = Object.fromEntries(urlParams.entries()) as any
+
+    filters.tags = filters.tags ? filters.tags.split(',').map((tag: string) => parseInt(tag)) : []
+
+    if (filters.title || filters.tags.length) {
+      form.setFieldsValue(filters)
+      mutate(filters, {
+        onSuccess: ({ data }) => {
+          setFilteredArticles(data)
+        }
+      })
+    }
+  }, [mutate, form])
+
   if (!categories || !tags) {
     return <span>Loading</span>
   }
@@ -41,9 +59,15 @@ function HomePage() {
     <Row wrap>
       <Col span={24} style={{ marginTop: '20px' }}>
         <Form
+          form={form}
           layout="vertical"
           onFinish={(values) => {
-            console.log(Object.values(values).filter((x) => x))
+            values.title = values.title || ''
+            values.tags = values.tags || []
+
+            // add the filters to the url
+            window.history.pushState({}, '', `?${new URLSearchParams(values).toString()}`)
+
             if (Object.values(values).filter((x) => x).length) {
               mutate(values, {
                 onSuccess: ({ data }) => {
