@@ -126,7 +126,7 @@ const ImageInput = ({ height, width, onError, onChange, documentId, setPageCount
 
     pdfjs.disableWorker = false
 
-    var reader = new FileReader() || {}
+    var reader = new FileReader() || ({} as any)
 
     reader.onload = async function (e) {
       try {

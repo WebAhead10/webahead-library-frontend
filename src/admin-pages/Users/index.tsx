@@ -1,9 +1,21 @@
-import { message, Table, Modal, Button, Space, Form, Select, Card, Input, Typography, Row, Col, Popconfirm } from 'antd'
-import { useState } from 'react'
-// import MainCategorySquare from '../../components/MainCategorySquare'
+import {
+  message,
+  Table,
+  Modal,
+  Button,
+  Space,
+  Form,
+  Select,
+  Card,
+  Input,
+  Typography,
+  Row,
+  Col,
+  Popconfirm,
+  Checkbox
+} from 'antd'
+import { useEffect, useState } from 'react'
 import axios from 'utils/axios'
-// import style from './style.module.css'
-// import { IDocument, IMainCategory } from 'types'
 import { useQuery } from '@tanstack/react-query'
 
 const { Text } = Typography
@@ -19,15 +31,29 @@ const Users = () => {
   const [formUser] = Form.useForm()
   const [formAdmin] = Form.useForm()
   const { data: users, refetch } = useQuery(['users'], fetchUsers)
-  const [editModalVisible, setEditModalVisible] = useState(false)
-  const [addUserModalVisible, setAddUserModalVisible] = useState(false)
-  const [addAdminModalVisible, setAddAdminModalVisible] = useState(false)
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [addUserModalOpen, setAddUserModalOpen] = useState(false)
+  const [addAdminModalOpen, setAddAdminModalOpen] = useState(false)
   const [tableLoading, setTableLoading] = useState(false)
   const [filter, setFilter] = useState({
     name: '',
     email: '',
     role: ''
   })
+  const userFormRoleWatch = Form.useWatch('role', formUser)
+  const editUserFormRoleWatch = Form.useWatch('role', form)
+
+  useEffect(() => {
+    if (userFormRoleWatch === 'contributor') {
+      formUser.setFieldsValue({
+        permissions: ['overlay-text', 'overlay-cut', 'overlay-tag', 'overlay-notes']
+      })
+    } else {
+      formUser.setFieldsValue({
+        permissions: []
+      })
+    }
+  }, [userFormRoleWatch, formUser])
 
   const onFormFinish = (values: any) => {
     axios
@@ -43,7 +69,7 @@ const Users = () => {
 
         message.success('Success')
         message.destroy('Loading')
-        setEditModalVisible(false)
+        setEditModalOpen(false)
         form.resetFields()
         refetch()
       })
@@ -64,7 +90,7 @@ const Users = () => {
         }
 
         message.success('Success')
-        setAddUserModalVisible(false)
+        setAddUserModalOpen(false)
         formUser.resetFields()
         refetch()
       })
@@ -85,7 +111,7 @@ const Users = () => {
         }
 
         message.success('Success')
-        setAddAdminModalVisible(false)
+        setAddAdminModalOpen(false)
         formAdmin.resetFields()
         // refetch() refetch admin list
       })
@@ -221,7 +247,7 @@ const Users = () => {
                 >
                   <Select.Option value="">All</Select.Option>
                   <Select.Option value="normal">Normal</Select.Option>
-                  <Select.Option value="advanced">Advanced</Select.Option>
+                  <Select.Option value="contributor">Contributor</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -239,7 +265,7 @@ const Users = () => {
                 <Button
                   type="primary"
                   onClick={() => {
-                    setAddUserModalVisible(true)
+                    setAddUserModalOpen(true)
                   }}
                 >
                   Add user
@@ -247,7 +273,7 @@ const Users = () => {
                 <Button
                   type="primary"
                   onClick={() => {
-                    setAddAdminModalVisible(true)
+                    setAddAdminModalOpen(true)
                   }}
                 >
                   Add admin
@@ -340,12 +366,13 @@ const Users = () => {
                     type="primary"
                     size="small"
                     onClick={() => {
-                      setEditModalVisible(true)
+                      setEditModalOpen(true)
                       form.setFieldsValue({
                         id: record.id,
                         name: record.name,
                         email: record.email,
-                        role: record.role
+                        role: record.role,
+                        permissions: record.permissions
                       })
                     }}
                   >
@@ -389,13 +416,13 @@ const Users = () => {
 
       <Modal
         title="Edit User"
-        visible={editModalVisible}
+        open={editModalOpen}
         onOk={() => {
           form.submit()
         }}
         okText="Save"
         onCancel={() => {
-          setEditModalVisible(false)
+          setEditModalOpen(false)
         }}
       >
         <Form form={form} layout="vertical" onFinish={onFormFinish}>
@@ -410,10 +437,19 @@ const Users = () => {
             <Form.Item name="role" label="Role">
               <Select>
                 <Select.Option value="normal">Normal</Select.Option>
-                <Select.Option value="advanced">Advanced</Select.Option>
+                <Select.Option value="contributor">Contributor</Select.Option>
               </Select>
             </Form.Item>
           )}
+
+          <Form.Item name="permissions" label="Permissions" hidden={editUserFormRoleWatch !== 'contributor'}>
+            <Checkbox.Group>
+              <Checkbox value="overlay-text">Update text</Checkbox>
+              <Checkbox value="overlay-cut">Cut articles</Checkbox>
+              <Checkbox value="overlay-tag">Update tags</Checkbox>
+              <Checkbox value="overlay-notes">Update notes</Checkbox>
+            </Checkbox.Group>
+          </Form.Item>
           <Form.Item name="id" noStyle>
             <Input type="hidden" />
           </Form.Item>
@@ -422,13 +458,13 @@ const Users = () => {
 
       <Modal
         title="Add User"
-        visible={addUserModalVisible}
+        open={addUserModalOpen}
         onOk={() => {
           formUser.submit()
         }}
         okText="Save"
         onCancel={() => {
-          setAddUserModalVisible(false)
+          setAddUserModalOpen(false)
         }}
       >
         <Form form={formUser} layout="vertical" onFinish={onAddUserFormFinish}>
@@ -447,8 +483,17 @@ const Users = () => {
           <Form.Item name="role" label="Role">
             <Select>
               <Select.Option value="normal">Normal</Select.Option>
-              <Select.Option value="advanced">Advanced</Select.Option>
+              <Select.Option value="contributor">Contributor</Select.Option>
             </Select>
+          </Form.Item>
+
+          <Form.Item name="permissions" label="Permissions" hidden={userFormRoleWatch !== 'contributor'}>
+            <Checkbox.Group>
+              <Checkbox value="overlay-text">Update text</Checkbox>
+              <Checkbox value="overlay-cut">Cut articles</Checkbox>
+              <Checkbox value="overlay-tag">Update tags</Checkbox>
+              <Checkbox value="overlay-notes">Update notes</Checkbox>
+            </Checkbox.Group>
           </Form.Item>
 
           <Form.Item name="id" noStyle>
@@ -459,13 +504,13 @@ const Users = () => {
 
       <Modal
         title="Add Admin"
-        visible={addAdminModalVisible}
+        open={addAdminModalOpen}
         onOk={() => {
           formAdmin.submit()
         }}
         okText="Save"
         onCancel={() => {
-          setAddAdminModalVisible(false)
+          setAddAdminModalOpen(false)
         }}
       >
         <Form form={formAdmin} layout="vertical" onFinish={onAddAdminFormFinish}>

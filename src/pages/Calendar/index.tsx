@@ -75,16 +75,6 @@ function Calendar_() {
         <span>{context.value.month}</span>
       </div> */}
       <Calendar
-        // antd calendar
-        // headerRender={() => null}
-        // mode="month"
-        // onSelect={(date: Moment) => {
-        //   const newspaperDay: INewspaperDay | any = publishedDays.find(({ day }) => +day === date.day())
-
-        //   if (newspaperDay) {
-        //     history.push(`/newspaper/${newspaperDay.id}`)
-        //   }
-        // }}
         locale="ar"
         activeStartDate={new Date(+year, +monthNameToNumber[month] - 1, 1)}
         calendarType="Arabic"

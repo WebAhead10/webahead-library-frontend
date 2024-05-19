@@ -1,25 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import { Layout, Menu } from 'antd'
-import { DesktopOutlined, PieChartOutlined, FileOutlined, FolderOpenOutlined, TeamOutlined } from '@ant-design/icons'
+import { DesktopOutlined, FileOutlined, FolderOpenOutlined, TeamOutlined } from '@ant-design/icons'
 import { Route, Switch, useLocation, useHistory } from 'react-router-dom'
-import Signin from './Signin'
-import Dashboard from './Dashboard'
-import ManageDocument from './ManageDocument'
-import ManageDocuments from './ManageDocuments'
-import TagsAdmin from './TagsAdmin'
-import ManageCategories from './ManageCategories'
-import History from './History'
 import './style.css'
-import AdminViewNewsPaper from './AdminViewNewsPaper'
-import Users from './Users'
 import ProtectedRoute from '../components/ProtectedRoute'
 import { useRecoilValue } from 'recoil'
 import { IUser } from 'types'
 import { userAtom } from 'utils/recoil/atoms'
 
-import 'moment/locale/en-gb'
-
 const { Header, Content, Sider } = Layout
+
+const Signin = React.lazy(() => import('./Signin'))
+const Dashboard = React.lazy(() => import('./Dashboard'))
+const ManageDocument = React.lazy(() => import('./ManageDocument'))
+const ManageDocuments = React.lazy(() => import('./ManageDocuments'))
+const TagsAdmin = React.lazy(() => import('./TagsAdmin'))
+const ManageCategories = React.lazy(() => import('./ManageCategories'))
+const History = React.lazy(() => import('./History'))
+const AdminViewNewsPaper = React.lazy(() => import('./AdminViewNewsPaper'))
+const Users = React.lazy(() => import('./Users'))
 
 function AdminApp() {
   const location = useLocation()
