@@ -41,7 +41,8 @@ const useOverlayText = (overlayId: number) => {
       const res = await axios.get(`/overlay/content/${overlayId}`)
       return {
         content: res.data.content,
-        title: res.data.title
+        title: res.data.title,
+        userName: res.data.userName
       }
     },
     {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'utils/axios'
 import style from '../style.module.css'
-import { Tabs, Button } from 'antd'
+import { Tabs, Button, Flex, Space } from 'antd'
 import { CloseCircleFilled } from '@ant-design/icons'
 
 import { useMutation } from '@tanstack/react-query'
@@ -36,7 +36,7 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
     refetch: refetchNotes
   } = useOverlayNotes(overlayId)
 
-  const { data: textData } = useOverlayText(overlayId)
+  const { data: textData, refetch: refetchText } = useOverlayText(overlayId)
 
   const { data: tagsData, refetch: refetchTags, isLoading: isFetchingTags } = useOverlayTags(overlayId)
 
@@ -105,6 +105,23 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
     }
   }
 
+  const removeArticleOwnership = async () => {
+    try {
+      const res = await axios.delete(`/overlay/user/ownership/${overlayId}`)
+
+      if (!res.data.success) {
+        console.log('error in adding note')
+        return
+      }
+
+      message.success('Ownership removed successfully')
+
+      refetchText()
+    } catch (err) {
+      message.error('An error has occurred')
+    }
+  }
+
   if (!tags || !tagsData) return null
 
   const isLoading = isFetchingTags || isAttachingTag || isDetachingTag
@@ -117,8 +134,6 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
 
   const isNoteEditAllow =
     (user.role === 'contributor' && user.permissions.includes('overlay-notes')) || user.role === 'admin'
-
-  console.log('user', user)
 
   return (
     <div className={style.showTextDiv}>
@@ -170,6 +185,31 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
 
         {/* Main panel */}
         <Tabs.TabPane tab="Content" key="2">
+          {user.role === 'admin' ? (
+            <Flex style={{ direction: 'ltr', padding: '20px 10px' }}>
+              <Space style={{ direction: 'ltr' }}>
+                <b style={{ direction: 'ltr' }}>Owner:</b>
+                <span>{textData.userName}</span>
+              </Space>
+
+              {textData.userName ? (
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={() => {
+                    removeArticleOwnership()
+                  }}
+                  style={{ margin: 'auto', marginTop: '10px' }}
+                >
+                  Remove ownership
+                </Button>
+              ) : (
+                ''
+              )}
+            </Flex>
+          ) : (
+            ''
+          )}
           <div className={style.tabPanelBody}>
             {isTagEditAllow ? (
               <>
