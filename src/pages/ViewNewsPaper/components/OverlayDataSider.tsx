@@ -189,10 +189,10 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
             <Flex style={{ direction: 'ltr', padding: '20px 10px' }}>
               <Space style={{ direction: 'ltr' }}>
                 <b style={{ direction: 'ltr' }}>Owner:</b>
-                <span>{textData.userName}</span>
+                <span>{textData?.userName}</span>
               </Space>
 
-              {textData.userName ? (
+              {textData?.userName ? (
                 <Button
                   type="primary"
                   size="large"

@@ -42,7 +42,7 @@ const useOverlayText = (overlayId: number) => {
       return {
         content: res.data.content,
         title: res.data.title,
-        userName: res.data.userName
+        userName: res.data?.userName
       }
     },
     {
