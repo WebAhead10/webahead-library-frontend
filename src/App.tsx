@@ -44,7 +44,7 @@ function App() {
           setUser(data.user)
         } else {
           if (user.email) {
-            message.error('Session expired')
+            message.error('لقد تم تسجيل خروجك')
           }
 
           setUser({} as IUser)
