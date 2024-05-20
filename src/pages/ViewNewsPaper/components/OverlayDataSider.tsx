@@ -187,7 +187,7 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
         <Tabs.TabPane tab="Content" key="2">
           {user.role === 'admin' ? (
             <Flex style={{ direction: 'ltr', padding: '20px 10px' }}>
-              <Space style={{ direction: 'ltr' }}>
+              <Space style={{ direction: 'ltr', fontSize: '20px' }}>
                 <b style={{ direction: 'ltr' }}>Owner:</b>
                 <span>{textData?.userName}</span>
               </Space>
