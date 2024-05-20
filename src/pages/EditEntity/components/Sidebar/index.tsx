@@ -30,6 +30,7 @@ interface SidebarProps {
   editStatus: string
   updateOverlayCoords: Function
   setEditOverlayId: Function
+  editOverlayId: number
   currentlyHovered: number
 }
 
@@ -42,6 +43,7 @@ const Sidebar = ({
   editStatus,
   updateOverlayCoords,
   setEditOverlayId,
+  editOverlayId,
   currentlyHovered
 }: SidebarProps) => {
   const [toggled, setToggled] = useState<{ [key: number]: boolean }>({})
@@ -72,7 +74,7 @@ const Sidebar = ({
       </Button>
       <h1>قائمة المقالات</h1>
       <div className={style.articleWrapper}>
-        {articles
+        {(articles || [])
           .sort(({ id: aId }, { id: bId }) => aId - bId)
           .map(({ id, coords, title }, index) => (
             <Collapse
@@ -141,9 +143,17 @@ const Sidebar = ({
                       {coords.map(({ id: coordId, overlay }, index) => (
                         <div
                           className={style.overlay}
-                          onMouseEnter={() => mouseEnterListener(id, index)}
-                          onMouseLeave={() => mouseOutListener(id, index)}
-                          onClick={() => moveToOverlay(overlay.x, overlay.y)}
+                          onMouseEnter={() => {
+                            if (editOverlayId === id) return
+
+                            mouseEnterListener(id, index)
+                          }}
+                          onMouseLeave={() => {
+                            if (editOverlayId === id) return
+
+                            mouseOutListener(id, index)
+                          }}
+                          onClick={() => moveToOverlay(overlay, id)}
                         >
                           Overlay {index + 1}
                           <span

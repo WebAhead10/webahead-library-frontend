@@ -1,12 +1,13 @@
 /* eslint-disable no-undef */
 import { message, Button, Space } from 'antd'
 import { useState, useEffect, useCallback } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import axios from 'utils/axios'
 import { v4 as uuidv4 } from 'uuid'
 import Sidebar from './components/Sidebar'
 import EditDataSidebar from './components/EditDataSidebar'
 import style from './style.module.css'
+import { useOverlayCoords } from '../../api-hooks/overlay.hooks'
 
 const STATUS_NAVIGATING = 'nagivating'
 const STATUS_DRAWING = 'drawing'
@@ -15,13 +16,14 @@ const STATUS_DRAWING_NAV = 'drawing-navigation'
 const EditEntity = () => {
   const [viewer, setViewer] = useState(null)
   const [overlays, setOverlays] = useState([])
-  const [articles, setArticles] = useState([])
   const [currentlyHovered, setCurrentlyHovered] = useState(null)
   const params = useParams()
-  const history = useHistory()
   const [mouseTracker, setMouseTracker] = useState(null)
   const [editStatus, setEditStatus] = useState(STATUS_NAVIGATING)
   const [editOverlayId, setEditOverlayId] = useState(null)
+
+  const { data: articles = {}, refetch } = useOverlayCoords(params.id)
+
   var drag
 
   const fetchNewspaper = useCallback(
@@ -58,91 +60,157 @@ const EditEntity = () => {
     [viewer]
   )
 
-  const mouseEnterListener = (id, overlayIndex) => {
-    setCurrentlyHovered(id)
-    const elements = document.getElementsByClassName(id)
-    for (var i = 0; i < elements.length; i++) {
-      if (overlayIndex === i) {
+  const mouseEnterListener = useCallback(
+    (id, overlayIndex) => {
+      if (editOverlayId && editOverlayId === id) {
+        const elements = document.getElementsByClassName(id)
+        for (var j = 0; j < elements.length; j++) {
+          elements[j].style.backgroundColor = 'rgba(0,0,0,0)'
+        }
+
+        return
+      }
+
+      setCurrentlyHovered(id)
+
+      const elements = document.getElementsByClassName(id)
+      for (var i = 0; i < elements.length; i++) {
+        if (overlayIndex === i) {
+          elements[i].style.backgroundColor = 'rgba(0,0,255,0.45)'
+          break
+        }
+
         elements[i].style.backgroundColor = 'rgba(0,0,255,0.45)'
-        break
-      }
-
-      if (typeof overlayIndex === 'undefined') {
-        elements[i].style.backgroundColor = 'rgba(0,0,255,0.45)'
-      }
-    }
-  }
-
-  const mouseOutListener = (id, overlayIndex) => {
-    setCurrentlyHovered(null)
-    const elements = document.getElementsByClassName(id)
-
-    for (var i = 0; i < elements.length; i++) {
-      if (overlayIndex === i) {
-        elements[i].style.backgroundColor = 'rgba(0,0,255,0.15)'
-        break
-      }
-
-      elements[i].style.backgroundColor = 'rgba(0,0,255,0.15)'
-    }
-  }
-
-  const moveToOverlay = (x, y) => {
-    const point = new OpenSeadragon.Point(x, y)
-    viewer.viewport.goHome()
-    viewer.viewport.panTo(point)
-    viewer.viewport.zoomBy(4)
-  }
-
-  const fetchCoords = useCallback(
-    async (id) => {
-      try {
-        const result = await axios.get(`/overlay/coords/${id}`)
-        setArticles(result.data.pages)
-
-        if (!result.data.success) throw new Error('Failed')
-
-        const coordsArr = result.data.pages
-
-        viewer.clearOverlays()
-        coordsArr.forEach(({ coords, id }) => {
-          coords.forEach(({ overlay }) => {
-            const overlayElement = document.createElement('div')
-            overlayElement.style.cursor = 'pointer'
-            overlayElement.setAttribute('class', `overlay ${id}`)
-
-            overlayElement.addEventListener('mouseenter', () => {
-              mouseEnterListener(id)
-            })
-
-            overlayElement.addEventListener('mouseout', () => {
-              mouseOutListener(id)
-            })
-
-            // overlayElement.addEventListener('click', () => {
-            //   const elements = document.getElementsByClassName(id)
-
-            //   for (var i = 0; i < elements.length; i++) {
-            //     elements[i].removeEventListener('mouseenter', mouseEnterListener)
-            //     elements[i].removeEventListener('mouseout', mouseOutListener)
-            //     elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
-            //   }
-
-            //   setSelectedId(id)
-            // })
-
-            viewer.addOverlay(
-              overlayElement,
-              new OpenSeadragon.Rect(overlay.x, overlay.y, overlay.width, overlay.height)
-            )
-          })
-        })
-      } catch (error) {
-        console.log(error)
       }
     },
-    [viewer]
+    [editOverlayId]
   )
+
+  const mouseOutListener = useCallback(
+    (id, overlayIndex) => {
+      if (editOverlayId && editOverlayId === id) {
+        const elements = document.getElementsByClassName(id)
+        for (var j = 0; j < elements.length; j++) {
+          elements[j].style.backgroundColor = 'rgba(0,0,0,0)'
+        }
+
+        return
+      }
+
+      const elements = document.getElementsByClassName(id)
+
+      setCurrentlyHovered(null)
+
+      for (var i = 0; i < elements.length; i++) {
+        if (overlayIndex === i) {
+          elements[i].style.backgroundColor = 'rgba(0,0,255,0.15)'
+          break
+        }
+
+        elements[i].style.backgroundColor = 'rgba(0,0,255,0.15)'
+      }
+    },
+    [editOverlayId]
+  )
+
+  const moveToOverlay = useCallback(
+    (overlayData, overlayId) => {
+      if (editOverlayId && overlayId !== editOverlayId) {
+        const prevElements = document.getElementsByClassName(editOverlayId)
+
+        for (var i = 0; i < prevElements.length; i++) {
+          prevElements[i].style.backgroundColor = 'rgba(0,0,255,0.15)'
+          prevElements[i].style.border = 'none'
+        }
+      }
+
+      const { x, y, width, height } = overlayData
+
+      const rect = new OpenSeadragon.Rect(x, y, width, height)
+
+      viewer.viewport.fitBounds(rect)
+
+      const elements = document.getElementsByClassName(overlayId)
+
+      for (var j = 0; j < elements.length; j++) {
+        elements[j].style.backgroundColor = 'rgba(0,0,0,0)'
+        elements[j].style.border = '1px solid red'
+      }
+
+      setCurrentlyHovered(null)
+      setEditOverlayId(overlayId)
+    },
+    [viewer, editOverlayId]
+  )
+
+  useEffect(() => {
+    try {
+      if (!articles.pages) return
+
+      const addCoords = (coords, id) => {
+        coords.forEach(({ overlay }) => {
+          const overlayElement = document.createElement('div')
+          overlayElement.style.cursor = 'pointer'
+          overlayElement.setAttribute('class', `overlay ${id}`)
+
+          overlayElement.addEventListener('mouseenter', () => {
+            mouseEnterListener(id)
+          })
+
+          overlayElement.addEventListener('mouseout', () => {
+            mouseOutListener(id)
+          })
+
+          overlayElement.addEventListener('click', () => {
+            moveToOverlay(overlay, id)
+          })
+
+          viewer.addOverlay(overlayElement, new OpenSeadragon.Rect(overlay.x, overlay.y, overlay.width, overlay.height))
+        })
+      }
+
+      const updateListener = (id) => {
+        const elements = document.getElementsByClassName(id)
+
+        const currentOverlaysData = articles.pages.find((article) => article.id === id).coords
+
+        for (var i = 0; i < elements.length; i++) {
+          elements[i].removeEventListener('mouseenter', mouseEnterListener)
+          elements[i].removeEventListener('mouseout', mouseOutListener)
+          elements[i].removeEventListener('click', moveToOverlay)
+
+          elements[i].addEventListener('mouseenter', () => {
+            mouseEnterListener(id)
+          })
+
+          elements[i].addEventListener('mouseout', () => {
+            mouseOutListener(id)
+          })
+
+          const overlay = currentOverlaysData[i].overlay
+
+          elements[i].addEventListener('click', () => {
+            moveToOverlay(overlay, id)
+          })
+        }
+      }
+
+      const coordsArr = articles.pages
+
+      coordsArr.forEach(({ coords, id }) => {
+        const elements = document.getElementsByClassName(id)
+
+        if (elements.length) {
+          updateListener(id)
+          return
+        }
+
+        addCoords(coords, id)
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }, [viewer, articles.pages, mouseEnterListener, mouseOutListener, moveToOverlay])
 
   // fetch the newspaper/document
   useEffect(() => {
@@ -153,13 +221,6 @@ const EditEntity = () => {
       viewer && viewer.destroy()
     }
   }, [])
-
-  useEffect(() => {
-    const newspaperId = params.id
-    if (viewer) {
-      fetchCoords(newspaperId)
-    }
-  }, [viewer, params.id, fetchCoords])
 
   const drawOverly = () => {
     if (!viewer || editStatus !== STATUS_NAVIGATING) return null
@@ -261,7 +322,8 @@ const EditEntity = () => {
       viewer.setMouseNavEnabled(true)
       setEditStatus(STATUS_NAVIGATING)
 
-      fetchCoords(params.id)
+      // fetchCoords(params.id)
+      refetch()
     } catch (err) {
       message.error('Error has occured')
       console.error(err)
@@ -307,7 +369,7 @@ const EditEntity = () => {
       )}
       <div className={style.editWrapper}>
         <Sidebar
-          articles={articles}
+          articles={articles.pages}
           mouseEnterListener={mouseEnterListener}
           mouseOutListener={mouseOutListener}
           moveToOverlay={moveToOverlay}
@@ -317,15 +379,12 @@ const EditEntity = () => {
           }}
           currentlyHovered={currentlyHovered}
           setEditOverlayId={setEditOverlayId}
-          refreshCoords={() => fetchCoords(params.id)}
+          editOverlayId={editOverlayId}
+          refreshCoords={() => refetch()}
         />
         <div id="openSeaDragon" className={style['edit-entity-viewer']} />
         {editOverlayId && (
-          <EditDataSidebar
-            editOverlayId={editOverlayId}
-            editStatus={editStatus}
-            refreshCoords={() => fetchCoords(params.id)}
-          />
+          <EditDataSidebar editOverlayId={editOverlayId} editStatus={editStatus} refreshCoords={() => refetch()} />
         )}
       </div>
       <br />

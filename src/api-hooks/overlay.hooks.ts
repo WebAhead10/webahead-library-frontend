@@ -51,4 +51,18 @@ const useOverlayText = (overlayId: number) => {
   )
 }
 
-export { useOverlayNotes, useOverlayTags, useOverlayText }
+const useOverlayCoords = (articleId: number) => {
+  return useQuery(
+    ['overlay-coords', articleId],
+    async () => {
+      const res = await axios.get(`/overlay/coords/${articleId}`)
+      return res.data
+    },
+    {
+      enabled: !!articleId,
+      refetchOnWindowFocus: false
+    }
+  )
+}
+
+export { useOverlayNotes, useOverlayTags, useOverlayText, useOverlayCoords }
