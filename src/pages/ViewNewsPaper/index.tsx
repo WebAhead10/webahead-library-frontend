@@ -199,7 +199,7 @@ const ViewNewsPaper = () => {
           margin: 'auto'
         }}
       />
-      {user.role === 'contributor' && user.permissions.includes('overlay-cut') ? (
+      {(user.role === 'contributor' && user.permissions.includes('overlay-cut')) || user.role === 'admin' ? (
         <div className={style.editOverlays}>
           <ScissorOutlined
             style={{ fontSize: '20px' }}
