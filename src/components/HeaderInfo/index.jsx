@@ -16,8 +16,11 @@ function HeaderInfo(props) {
 
   const signout = () => {
     refetch()
-    queryClient.invalidateQueries('user')
-    setUser({})
+
+    setTimeout(() => {
+      queryClient.invalidateQueries('user')
+      setUser({})
+    }, 500)
   }
 
   return (
