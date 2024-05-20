@@ -43,10 +43,6 @@ function App() {
         if (data?.success) {
           setUser(data.user)
         } else {
-          if (user.email) {
-            message.error('لقد تم تسجيل خروجك')
-          }
-
           setUser({} as IUser)
         }
       }
