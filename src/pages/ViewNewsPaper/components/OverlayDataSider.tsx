@@ -7,9 +7,11 @@ import { CloseCircleFilled } from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
 
 import { message, Select, Tag, Input } from 'antd'
-import { ITagInput } from 'types'
+import { ITagInput, IUser } from 'types'
 import { useOverlayNotes, useOverlayTags, useOverlayText } from 'api-hooks/overlay.hooks'
 import { useTags } from 'api-hooks/general.hook'
+import { useRecoilValue } from 'recoil'
+import { userAtom } from 'utils/recoil/atoms'
 
 interface OverlayDataSiderProps {
   overlayId: number
@@ -22,6 +24,7 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
   const [note, setNote] = useState('')
   const [initialNote, setInitialNote] = useState('')
   const [edit, setEdit] = useState(false)
+  const user = useRecoilValue<IUser>(userAtom)
 
   const {
     data: notesData = {
@@ -106,6 +109,17 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
 
   const isLoading = isFetchingTags || isAttachingTag || isDetachingTag
 
+  const isTextEditAllow =
+    (user.role === 'contributor' && user.permissions.includes('overlay-text')) || user.role === 'admin'
+
+  const isTagEditAllow =
+    (user.role === 'contributor' && user.permissions.includes('overlay-tag')) || user.role === 'admin'
+
+  const isNoteEditAllow =
+    (user.role === 'contributor' && user.permissions.includes('overlay-notes')) || user.role === 'admin'
+
+  console.log('user', user)
+
   return (
     <div className={style.showTextDiv}>
       <div className={style.closeButton} onClick={() => close()} style={{ cursor: 'pointer', zIndex: 2 }}>
@@ -116,7 +130,7 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
         {/* Notes panel */}
         <Tabs.TabPane tab="Notes" key="1">
           <div className={style.tabPanelBody}>
-            <h2>Notes</h2>
+            <h2>ملاحظات</h2>
             <div>{initialNote}</div>
             <div className={style.scroll}>
               {notesData?.notes?.map(({ text }, index) => (
@@ -125,77 +139,88 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
                 </div>
               ))}
             </div>
-            <div className="autocomplete-container" style={{ width: '100%' }}>
-              <label>
-                <span className={style.addNote}>اضافة ملاحظه</span>
-                <textarea
-                  rows={5}
-                  cols={40}
-                  value={note}
-                  placeholder={`هل لديك ملاحظه؟
+            {isNoteEditAllow ? (
+              <div className="autocomplete-container" style={{ width: '100%' }}>
+                <label>
+                  <span className={style.addNote}>اضافة ملاحظه</span>
+                  <textarea
+                    rows={5}
+                    cols={40}
+                    value={note}
+                    placeholder={`هل لديك ملاحظه؟
 هل لديك تصنيفات جديدة لاقتراحها؟`}
-                  onChange={(e) => setNote(e.target.value)}
-                />
-              </label>
-              <br />
-              <Button
-                type="primary"
-                size="large"
-                onClick={updateOverlayNote}
-                style={{ margin: 'auto', marginTop: '20px' }}
-              >
-                Update
-              </Button>
-            </div>
+                    onChange={(e) => setNote(e.target.value)}
+                  />
+                </label>
+                <br />
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={updateOverlayNote}
+                  style={{ margin: 'auto', marginTop: '20px' }}
+                >
+                  Update
+                </Button>
+              </div>
+            ) : (
+              ''
+            )}
           </div>
         </Tabs.TabPane>
 
         {/* Main panel */}
         <Tabs.TabPane tab="Content" key="2">
           <div className={style.tabPanelBody}>
-            <Select
-              mode="tags"
-              style={{
-                width: '50%',
-                margin: 'auto'
-              }}
-              placeholder="تصنيف"
-              onSelect={(value) => {
-                const tag = tags.find((tag: ITagInput) => tag.id === value)
-                if (tag) {
-                  attachTag(value, {
-                    onSuccess: () => {
-                      message.success('تم اضافة التصنيف بنجاح')
-                      refetchTags()
+            {isTagEditAllow ? (
+              <>
+                <Select
+                  mode="tags"
+                  style={{
+                    width: '50%',
+                    margin: 'auto'
+                  }}
+                  placeholder="تصنيف"
+                  onSelect={(value) => {
+                    const tag = tags.find((tag: ITagInput) => tag.id === value)
+                    if (tag) {
+                      attachTag(value, {
+                        onSuccess: () => {
+                          message.success('تم اضافة التصنيف بنجاح')
+                          refetchTags()
+                        }
+                      })
                     }
-                  })
-                }
-              }}
-              onDeselect={(value) => {
-                const tag = tags.find((tag: ITagInput) => tag.id === value)
+                  }}
+                  onDeselect={(value) => {
+                    const tag = tags.find((tag: ITagInput) => tag.id === value)
 
-                if (tag) {
-                  detachTag(value, {
-                    onSuccess: () => {
-                      message.success('تم حذف التصنيف بنجاح')
-                      refetchTags()
+                    if (tag) {
+                      detachTag(value, {
+                        onSuccess: () => {
+                          message.success('تم حذف التصنيف بنجاح')
+                          refetchTags()
+                        }
+                      })
                     }
-                  })
-                }
-              }}
-              loading={isLoading}
-              value={tagsData?.map((tag) => tag.id)}
-              tagRender={() => <> </>}
-              optionFilterProp="children"
-            >
-              {tags?.map((tag: ITagInput) => (
-                <Select.Option key={tag.id} value={tag.id}>
-                  {tag.name}
-                </Select.Option>
-              ))}
-            </Select>
-            <br />
-            <br />
+                  }}
+                  loading={isLoading}
+                  value={tagsData?.map((tag) => tag.id)}
+                  tagRender={() => <> </>}
+                  optionFilterProp="children"
+                >
+                  {tags?.map((tag: ITagInput) => (
+                    <Select.Option key={tag.id} value={tag.id}>
+                      {tag.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+                <br />
+                <br />
+              </>
+            ) : (
+              ''
+            )}
+
             <div>
               {tagsData?.map((tag) => (
                 <Tag
@@ -239,31 +264,42 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
                 {text}
               </p>
             )}
-            {edit ? (
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: '10px'
-                }}
-              >
-                <Button type="primary" size="large" onClick={() => updateArticleText()} style={{ marginTop: '10px' }}>
-                  Update text
-                </Button>
-                <Button size="large" onClick={() => setEdit(false)} style={{ marginTop: '10px' }}>
-                  Cancel
-                </Button>
-              </div>
+            {isTextEditAllow ? (
+              <>
+                {edit ? (
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: '10px'
+                    }}
+                  >
+                    <Button
+                      type="primary"
+                      size="large"
+                      onClick={() => updateArticleText()}
+                      style={{ marginTop: '10px' }}
+                    >
+                      Update text
+                    </Button>
+                    <Button size="large" onClick={() => setEdit(false)} style={{ marginTop: '10px' }}>
+                      Cancel
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    type="primary"
+                    size="large"
+                    onClick={() => setEdit(true)}
+                    style={{ margin: 'auto', marginTop: '10px' }}
+                  >
+                    Edit text
+                  </Button>
+                )}
+              </>
             ) : (
-              <Button
-                type="primary"
-                size="large"
-                onClick={() => setEdit(true)}
-                style={{ margin: 'auto', marginTop: '10px' }}
-              >
-                Edit text
-              </Button>
+              ''
             )}
           </div>
         </Tabs.TabPane>

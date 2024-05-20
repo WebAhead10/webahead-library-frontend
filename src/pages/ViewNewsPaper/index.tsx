@@ -18,8 +18,6 @@ const ViewNewsPaper = () => {
   const history = useHistory()
   const user = useRecoilValue<IUser>(userAtom)
 
-  console.log('User', user)
-
   const fetchNewspaper = async (id) => {
     try {
       const result = await axios.get(`${process.env.REACT_APP_API_URL}/document/${id}`)
