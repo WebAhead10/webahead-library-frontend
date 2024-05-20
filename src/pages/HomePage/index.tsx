@@ -30,7 +30,7 @@ function HomePage() {
 
   // by default is not enabled and takes the filters from the form below
   const { mutate } = useMutation(['all-documents'], async (filters: IDocumentSearch) => {
-    const res = await axios.post(`/overlays/all/search`, filters)
+    const res = await axios.post(`/overlay/all/search`, filters)
     return res.data
   })
 

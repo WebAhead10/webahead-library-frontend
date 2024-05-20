@@ -37,7 +37,7 @@ function Calendar_() {
     }
 
     try {
-      const result = await axios.get(`/publish/dates/${categoryId}/${year}/${month}`)
+      const result = await axios.get(`/document/publish/dates/${categoryId}/${year}/${month}`)
 
       setPublishedDays(result.data.data)
       setBreadcrumbs(result.data.breadcrumbs || [])

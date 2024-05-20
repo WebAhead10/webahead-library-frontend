@@ -12,7 +12,7 @@ const ViewNewsPaper = () => {
 
   const fetchNewspaper = async (id) => {
     try {
-      const result = await axios.get(`${process.env.REACT_APP_API_URL}/newspaper/${id}`)
+      const result = await axios.get(`${process.env.REACT_APP_API_URL}/document/${id}`)
 
       if (!result.data.success) throw new Error('Failed')
 

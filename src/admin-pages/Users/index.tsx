@@ -21,7 +21,7 @@ import { useQuery } from '@tanstack/react-query'
 const { Text } = Typography
 
 const fetchUsers = async () => {
-  const res = await axios.get('/all/users')
+  const res = await axios.get('/user/all/users')
 
   return res.data.users
 }

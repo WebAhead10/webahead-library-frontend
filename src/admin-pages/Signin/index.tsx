@@ -30,9 +30,10 @@ const Signin = () => {
       }
 
       const userRes = await axios.get('/user')
-      console.log(userRes.data)
+
       setUser(userRes.data)
       history.push('/users')
+
       window.location.reload()
       // window.location.href = '/a/admin/'
     } catch (error) {

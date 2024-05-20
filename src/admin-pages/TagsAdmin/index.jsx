@@ -44,7 +44,7 @@ function AddTag() {
       // reorder tags in state using updatedOrder
 
       axios
-        .post('tags/order/update', {
+        .post('tag/order/update', {
           order: updatedOrder
         })
         .then((res) => {

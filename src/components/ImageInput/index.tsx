@@ -43,7 +43,7 @@ const ImageInput = ({ height, width, onError, onChange, value }: ImageInputProps
     setLoading(true)
 
     return axios
-      .post(`/category/upload/signedRequest`, {
+      .post(`/categories/upload/signedRequest`, {
         fileName: file.name,
         fileType: file.type
       })

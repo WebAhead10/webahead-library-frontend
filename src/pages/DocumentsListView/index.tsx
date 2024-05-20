@@ -13,7 +13,7 @@ const DocumentsListView = () => {
   const [selectedTags, setSelectedTags] = useState<number[]>([])
 
   const { data: documents } = useQuery(['documents'], async () => {
-    const res = await axios.get(`/documents/list-view/${categoryId}`)
+    const res = await axios.get(`/document/list-view/${categoryId}`)
     return res.data
   })
 

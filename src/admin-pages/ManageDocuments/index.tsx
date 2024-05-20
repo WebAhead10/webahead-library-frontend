@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query'
 import moment from 'moment'
 
 const fetchDocuments = async () => {
-  const res = await axios.get('/all/documents')
+  const res = await axios.get('/document/all')
   return res.data.data
 }
 
@@ -30,7 +30,7 @@ const ManageDocuments = () => {
 
   const onFormFinish = (values: any) => {
     axios
-      .post(`/documents/meta/${values.id}`, {
+      .post(`/document/meta/${values.id}`, {
         ...values,
         // settings hours
         publishedDate: values.publishedDate.lang('en').add(1, 'hours').format('YYYY-MM-DD')

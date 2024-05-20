@@ -34,7 +34,7 @@ function ChooseYearMonth() {
     }
 
     try {
-      const result = await axios.get(`/publish/dates/${params.categoryId}`)
+      const result = await axios.get(`/document/publish/dates/${params.categoryId}`)
 
       setPublishedDocs(result.data.data)
       setBreadcrumb(result.data.breadcrumbs || [])

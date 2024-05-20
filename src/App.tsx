@@ -8,12 +8,13 @@ import AdminApp from './admin-pages/AdminApp'
 import { useQuery } from '@tanstack/react-query'
 import axios from './utils/axios'
 
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { userAtom } from 'utils/recoil/atoms'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, message } from 'antd'
 
 // arabic
 import locale from 'antd/es/locale/ar_EG'
+import { IUser } from 'types'
 
 const HomePage = React.lazy(() => import('./pages/HomePage'))
 const ChooseYearMonth = React.lazy(() => import('./pages/ChooseYearMonth'))
@@ -29,7 +30,7 @@ const AddUser = React.lazy(() => import('./user-pages/AddUser'))
 const ResetPassword = React.lazy(() => import('./user-pages/ResetPassword'))
 
 function App() {
-  const setUser = useSetRecoilState(userAtom)
+  const [user, setUser] = useRecoilState(userAtom)
 
   const { data } = useQuery(
     ['user'],
@@ -41,6 +42,12 @@ function App() {
       onSuccess: (data) => {
         if (data?.success) {
           setUser(data.user)
+        } else {
+          if (user.email) {
+            message.error('Session expired')
+          }
+
+          setUser({} as IUser)
         }
       }
     }

@@ -17,7 +17,7 @@ interface OverlayDataSiderProps {
   close: Function
 }
 
-const OverlayDataSiderProps = ({ overlayId, close, documentId }: OverlayDataSiderProps) => {
+const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProps) => {
   const [text, setText] = useState('')
   const [note, setNote] = useState('')
   const [initialNote, setInitialNote] = useState('')
@@ -272,4 +272,4 @@ const OverlayDataSiderProps = ({ overlayId, close, documentId }: OverlayDataSide
   )
 }
 
-export default OverlayDataSiderProps
+export default OverlayDataSider

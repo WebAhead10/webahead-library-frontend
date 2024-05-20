@@ -31,7 +31,7 @@ const ImageInput = ({ height, width, onError, onChange, documentId, setPageCount
 
   const sendPage = async (file: string, index: number, isNewPage: boolean, documentId: number) => {
     try {
-      const res = await axios.post(`/upload`, {
+      const res = await axios.post(`/document/upload`, {
         file,
         // add 1 to the index just so the page numbers would be correct
         index: index + 1,
@@ -50,7 +50,7 @@ const ImageInput = ({ height, width, onError, onChange, documentId, setPageCount
   const upload = async (files: string[]) => {
     try {
       // save the first page to prepare the db for the rest of the pages
-      const result = await axios.post(`/upload`, {
+      const result = await axios.post(`/document/upload`, {
         file: files[0],
         index: 0,
         isNewspaper: true,

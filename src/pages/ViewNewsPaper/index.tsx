@@ -5,16 +5,24 @@ import axios from 'axios'
 import style from './style.module.css'
 import OverlayDataSider from './components/OverlayDataSider'
 import { ScissorOutlined } from '@ant-design/icons'
+import { userAtom } from 'utils/recoil/atoms'
+import { useRecoilValue } from 'recoil'
+import { IUser } from 'types'
 
 const ViewNewsPaper = () => {
   const [viewer, setViewer] = useState(null)
   const [selectedId, setSelectedId] = useState(null)
-  const params = useParams()
+  const params = useParams<{
+    id: string
+  }>()
   const history = useHistory()
+  const user = useRecoilValue<IUser>(userAtom)
+
+  console.log('User', user)
 
   const fetchNewspaper = async (id) => {
     try {
-      const result = await axios.get(`${process.env.REACT_APP_API_URL}/newspaper/${id}`)
+      const result = await axios.get(`${process.env.REACT_APP_API_URL}/document/${id}`)
 
       if (!result.data.success) throw new Error('Failed')
 
@@ -54,14 +62,14 @@ const ViewNewsPaper = () => {
   }, [])
 
   const mouseEnterListener = (selectedId) => {
-    const elements = document.getElementsByClassName(selectedId)
+    const elements = document.getElementsByClassName(selectedId) as HTMLCollectionOf<HTMLElement>
     for (var i = 0; i < elements.length; i++) {
       elements[i].style.backgroundColor = 'rgba(0,0,255,0.3)'
     }
   }
 
   const mouseOutListener = (selectedId) => {
-    const elements = document.getElementsByClassName(selectedId)
+    const elements = document.getElementsByClassName(selectedId) as HTMLCollectionOf<HTMLElement>
 
     for (var i = 0; i < elements.length; i++) {
       elements[i].style.backgroundColor = 'rgba(0, 0, 0, 0.15)'
@@ -70,7 +78,7 @@ const ViewNewsPaper = () => {
 
   const resetOverlaysToOriginal = useCallback((coords, skipId) => {
     coords.forEach(({ coords, id }) => {
-      const overlays = document.getElementsByClassName(id)
+      const overlays = document.getElementsByClassName(id) as HTMLCollectionOf<HTMLElement>
 
       if (id === skipId) return
 
@@ -86,8 +94,9 @@ const ViewNewsPaper = () => {
         overlays[j].addEventListener('mouseenter', mouseEnter)
         overlays[j].addEventListener('mouseout', mouseLeave)
 
+        // eslint-disable-next-line no-loop-func
         overlays[j].addEventListener('click', () => {
-          const elements = document.getElementsByClassName(id)
+          const elements = document.getElementsByClassName(id) as HTMLCollectionOf<HTMLElement>
           for (var i = 0; i < overlays.length; i++) {
             elements[i].removeEventListener('mouseenter', mouseEnter)
             elements[i].removeEventListener('mouseout', mouseLeave)
@@ -151,9 +160,10 @@ const ViewNewsPaper = () => {
             // then add the click event that will set the selected id (id of the article)
             // and then remove the mouse enter and mouse leave event listeners from all the overlays
             // that belong to the same article
+            // eslint-disable-next-line no-loop-func
             overlays[j].addEventListener('click', () => {
               resetOverlaysToOriginal(coordsArr, id)
-              const elements = document.getElementsByClassName(id)
+              const elements = document.getElementsByClassName(id) as HTMLCollectionOf<HTMLElement>
               for (var i = 0; i < overlays.length; i++) {
                 elements[i].removeEventListener('mouseenter', mouseEnter)
                 elements[i].removeEventListener('mouseout', mouseLeave)
@@ -189,21 +199,25 @@ const ViewNewsPaper = () => {
           margin: 'auto'
         }}
       />
-      <div className={style.editOverlays}>
-        <ScissorOutlined
-          style={{ fontSize: '20px' }}
-          onClick={() => {
-            history.push(`/edit/newspaper/${params.id}`)
-          }}
-        />
-      </div>
+      {user.role === 'contributor' && user.permissions.includes('overlay-cut') ? (
+        <div className={style.editOverlays}>
+          <ScissorOutlined
+            style={{ fontSize: '20px' }}
+            onClick={() => {
+              history.push(`/edit/newspaper/${params.id}`)
+            }}
+          />
+        </div>
+      ) : (
+        ''
+      )}
       {selectedId && (
         <OverlayDataSider
           overlayId={selectedId}
-          documentId={params.id}
+          documentId={+params.id}
           close={() => {
             // When the sidebar is closed, I want to reset the article overlays
-            const elements = document.getElementsByClassName(selectedId)
+            const elements = document.getElementsByClassName(selectedId) as HTMLCollectionOf<HTMLElement>
             const mouseEnter = () => mouseEnterListener(selectedId)
             const mouseLeave = () => mouseOutListener(selectedId)
 
@@ -216,8 +230,9 @@ const ViewNewsPaper = () => {
 
               // create a click listener that will remove the mouse enter and mouse leave listeners
               // when the article is selected again
+              // eslint-disable-next-line no-loop-func
               const onClick = () => {
-                const elements = document.getElementsByClassName(selectedId)
+                const elements = document.getElementsByClassName(selectedId) as HTMLCollectionOf<HTMLElement>
 
                 for (var i = 0; i < elements.length; i++) {
                   elements[i].removeEventListener('mouseenter', mouseEnter)

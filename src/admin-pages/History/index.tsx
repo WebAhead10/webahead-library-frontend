@@ -18,7 +18,7 @@ const History = () => {
     ['history', page, filters.userName, filters.documentName],
     async () => {
       const res = await axios.get(
-        `/history/all?page=${page}&userName=${filters.userName}&documentName=${filters.documentName}`
+        `/admin/history/all?page=${page}&userName=${filters.userName}&documentName=${filters.documentName}`
       )
       return res.data
     },
@@ -48,8 +48,8 @@ const History = () => {
         const parsedBody = JSON.parse(historyRow.req_body)
         const overlayId = parsedBody.overlayId
 
-        const res = await axios.get(`/document-get-id/overlay/${overlayId}`)
-        const coordsRes = await axios.get(`/coords-get-id/overlay/${overlayId}`)
+        const res = await axios.get(`/document/get-id/overlay/${overlayId}`)
+        const coordsRes = await axios.get(`/overlay/coords-get-id/${overlayId}`)
 
         const documentId = res.data.documentId
         const coordsId = JSON.parse(coordsRes.data.coords || '[]')
@@ -60,7 +60,7 @@ const History = () => {
       } else if (historyRow.entity_type === 'overlay_text') {
         const overlayId = historyRow.entity_id
 
-        const res = await axios.get(`/coords-get-id/overlay/${overlayId}`)
+        const res = await axios.get(`/overlay/coords-get-id/${overlayId}`)
 
         const coordsId = JSON.parse(res.data.coords || '[]')
           .map((coord: any) => coord.id.replace('overlay_', ''))

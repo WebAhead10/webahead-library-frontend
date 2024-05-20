@@ -98,7 +98,7 @@ const UploadPDFDocument = () => {
 
   const submitDocument = async () => {
     try {
-      await axios.post(`/newspaper`, {
+      await axios.post(`/document`, {
         ...newDocument,
         documentId: newDocument.id
       })
