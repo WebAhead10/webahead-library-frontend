@@ -27,7 +27,7 @@ const EditEntity = () => {
   const fetchNewspaper = useCallback(
     async (id) => {
       try {
-        const result = await axios.get(`/document/${id}`)
+        const result = await axios.get(`/document/single/${id}`)
 
         if (!result.data.success) throw new Error('Failed')
 
