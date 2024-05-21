@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from './style.module.css'
 import { DeleteFilled, PlusCircleOutlined, FileAddOutlined } from '@ant-design/icons'
 import axios from 'utils/axios'
@@ -59,6 +59,17 @@ const Sidebar = ({
     }
   }
 
+  // when editOverlayId changes we should scroll to the collpase
+  useEffect(() => {
+    if (editOverlayId) {
+      const el = document.getElementById(`collapse_${editOverlayId}`)
+
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    }
+  }, [editOverlayId])
+
   return (
     <div className={style.articleSidebar}>
       <Button
@@ -73,6 +84,7 @@ const Sidebar = ({
         Back to view mode
       </Button>
       <h1>قائمة المقالات</h1>
+
       <div className={style.articleWrapper}>
         {(articles || [])
           .sort(({ id: aId }, { id: bId }) => aId - bId)
@@ -82,7 +94,7 @@ const Sidebar = ({
               style={{
                 direction: 'rtl',
                 borderRadius: '0px',
-                backgroundColor: currentlyHovered === id ? 'yellow' : 'white',
+                backgroundColor: currentlyHovered === id || editOverlayId === id ? 'yellow' : 'white',
                 padding: '0px'
               }}
               items={[
@@ -92,6 +104,7 @@ const Sidebar = ({
                   label: (
                     <>
                       <div
+                        id={`collapse_${id}`}
                         className={style.articleContainer}
                         onMouseEnter={() => mouseEnterListener(id)}
                         onMouseLeave={() => mouseOutListener(id)}
@@ -99,7 +112,7 @@ const Sidebar = ({
                           setToggled({ ...toggled, [id]: !toggled[id] })
                         }}
                         style={{
-                          backgroundColor: currentlyHovered === id ? 'yellow' : 'white'
+                          backgroundColor: currentlyHovered === id || editOverlayId === id ? 'yellow' : 'white'
                         }}
                       >
                         <div>
@@ -154,6 +167,7 @@ const Sidebar = ({
                             mouseOutListener(id, index)
                           }}
                           onClick={() => moveToOverlay(overlay, id)}
+                          key={index}
                         >
                           Overlay {index + 1}
                           <span

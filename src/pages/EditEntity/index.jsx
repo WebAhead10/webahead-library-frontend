@@ -71,7 +71,7 @@ const EditEntity = () => {
         return
       }
 
-      setCurrentlyHovered(id)
+      setCurrentlyHovered(+id)
 
       const elements = document.getElementsByClassName(id)
       for (var i = 0; i < elements.length; i++) {
@@ -85,6 +85,13 @@ const EditEntity = () => {
     },
     [editOverlayId]
   )
+
+  const mouseEnterWrapper = useCallback((e) => {
+    if (e.target.getAttribute('selected')) return
+
+    const id = e.target.className.split(' ')[1]
+    mouseEnterListener(id)
+  }, [])
 
   const mouseOutListener = useCallback(
     (id, overlayIndex) => {
@@ -113,14 +120,35 @@ const EditEntity = () => {
     [editOverlayId]
   )
 
+  const mouseOutWrapper = useCallback((e) => {
+    // if the target element has the selected attribute, then do not change the background color
+    if (e.target.getAttribute('selected')) return
+
+    const id = e.target.className.split(' ')[1]
+    mouseOutListener(id)
+  }, [])
+
   const moveToOverlay = useCallback(
     (overlayData, overlayId) => {
-      if (editOverlayId && overlayId !== editOverlayId) {
-        const prevElements = document.getElementsByClassName(editOverlayId)
+      if (editOverlayId === overlayId) return
+      if (!viewer) return
+      const elements = document.getElementsByClassName(overlayId)
+
+      if (!elements.length) return
+      if (elements[0].getAttribute('selected')) return
+
+      // from the main wrapper get the selected overlay id
+      // and undo the changes
+      const mainWrapper = document.getElementById('main-wrapper')
+      const previousSelectedOverlayId = mainWrapper.getAttribute('selected')
+
+      if (overlayId && previousSelectedOverlayId && +previousSelectedOverlayId !== +overlayId) {
+        const prevElements = document.getElementsByClassName(previousSelectedOverlayId)
 
         for (var i = 0; i < prevElements.length; i++) {
           prevElements[i].style.backgroundColor = 'rgba(0,0,255,0.15)'
           prevElements[i].style.border = 'none'
+          prevElements[i].removeAttribute('selected')
         }
       }
 
@@ -130,40 +158,57 @@ const EditEntity = () => {
 
       viewer.viewport.fitBounds(rect)
 
-      const elements = document.getElementsByClassName(overlayId)
-
       for (var j = 0; j < elements.length; j++) {
+        // add attribute to indicate that the overlay is selected
+        elements[j].setAttribute('selected', 'true')
+
         elements[j].style.backgroundColor = 'rgba(0,0,0,0)'
         elements[j].style.border = '1px solid red'
       }
 
       setCurrentlyHovered(null)
-      setEditOverlayId(overlayId)
+      setEditOverlayId(+overlayId)
+      // to main wrapper add attribute to indicate of the selected overlayid
+      document.getElementById('main-wrapper').setAttribute('selected', overlayId)
     },
     [viewer, editOverlayId]
+  )
+
+  const moveToOverlayWrapper = useCallback(
+    (e) => {
+      const id = e.target.className.split(' ')[1]
+      const overlay = JSON.parse(e.target.getAttribute('overlay'))
+
+      moveToOverlay(overlay, id)
+    },
+    [viewer]
   )
 
   useEffect(() => {
     try {
       if (!articles.pages) return
+      if (!viewer) return
 
       const addCoords = (coords, id) => {
         coords.forEach(({ overlay }) => {
           const overlayElement = document.createElement('div')
           overlayElement.style.cursor = 'pointer'
           overlayElement.setAttribute('class', `overlay ${id}`)
+          overlayElement.setAttribute('overlay', JSON.stringify(overlay))
 
-          overlayElement.addEventListener('mouseenter', () => {
-            mouseEnterListener(id)
-          })
+          overlayElement.addEventListener('mouseenter', mouseEnterWrapper)
 
-          overlayElement.addEventListener('mouseout', () => {
-            mouseOutListener(id)
-          })
+          overlayElement.addEventListener('mouseout', mouseOutWrapper)
 
-          overlayElement.addEventListener('click', () => {
-            moveToOverlay(overlay, id)
-          })
+          overlayElement.addEventListener(
+            'click',
+            (e) => {
+              moveToOverlay(overlay, id)
+            },
+            {
+              once: true
+            }
+          )
 
           viewer.addOverlay(overlayElement, new OpenSeadragon.Rect(overlay.x, overlay.y, overlay.width, overlay.height))
         })
@@ -172,26 +217,14 @@ const EditEntity = () => {
       const updateListener = (id) => {
         const elements = document.getElementsByClassName(id)
 
-        const currentOverlaysData = articles.pages.find((article) => article.id === id).coords
-
         for (var i = 0; i < elements.length; i++) {
-          elements[i].removeEventListener('mouseenter', mouseEnterListener)
-          elements[i].removeEventListener('mouseout', mouseOutListener)
-          elements[i].removeEventListener('click', moveToOverlay)
+          elements[i].removeEventListener('mouseenter', mouseEnterWrapper)
+          elements[i].removeEventListener('mouseout', mouseOutWrapper)
+          elements[i].removeEventListener('click', moveToOverlayWrapper)
 
-          elements[i].addEventListener('mouseenter', () => {
-            mouseEnterListener(id)
-          })
-
-          elements[i].addEventListener('mouseout', () => {
-            mouseOutListener(id)
-          })
-
-          const overlay = currentOverlaysData[i].overlay
-
-          elements[i].addEventListener('click', () => {
-            moveToOverlay(overlay, id)
-          })
+          elements[i].addEventListener('mouseenter', mouseEnterWrapper)
+          elements[i].addEventListener('mouseout', mouseOutWrapper)
+          elements[i].addEventListener('click', moveToOverlayWrapper)
         }
       }
 
@@ -210,7 +243,16 @@ const EditEntity = () => {
     } catch (error) {
       console.log(error)
     }
-  }, [viewer, articles.pages, mouseEnterListener, mouseOutListener, moveToOverlay])
+  }, [
+    viewer,
+    articles.pages,
+    mouseEnterListener,
+    mouseOutListener,
+    moveToOverlay,
+    mouseEnterWrapper,
+    mouseOutWrapper,
+    moveToOverlayWrapper
+  ])
 
   // fetch the newspaper/document
   useEffect(() => {
@@ -342,7 +384,7 @@ const EditEntity = () => {
   }
 
   return (
-    <div className={style['edit-entity-container']}>
+    <div className={style['edit-entity-container']} id="main-wrapper">
       {editStatus !== STATUS_NAVIGATING && (
         <Space direction="vertical" size={1}>
           <br />
