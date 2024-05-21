@@ -10,17 +10,17 @@ import { useHistory } from 'react-router-dom'
 
 function HeaderInfo(props) {
   const { refetch } = useQuery(['logout'], () => axios.get('/user/logout'), { enabled: false })
-  const queryClient = useQueryClient()
-  const history = useHistory()
+  // const queryClient = useQueryClient()
+  // const history = useHistory()
   const [user, setUser] = useRecoilState(userAtom)
 
   const signout = () => {
     refetch()
 
     setTimeout(() => {
-      queryClient.invalidateQueries('user')
+      // queryClient.invalidateQueries('user')
       setUser({})
-    }, 500)
+    }, 100)
   }
 
   return (
