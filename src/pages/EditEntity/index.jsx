@@ -80,6 +80,11 @@ const EditEntity = () => {
           break
         }
 
+        // if overlayIndex is not provided, go to next element
+        if (overlayIndex !== undefined) {
+          continue
+        }
+
         elements[i].style.backgroundColor = 'rgba(0,0,255,0.45)'
       }
     },
@@ -189,12 +194,14 @@ const EditEntity = () => {
       if (!articles.pages) return
       if (!viewer) return
 
-      const addCoords = (coords, id) => {
-        coords.forEach(({ overlay }) => {
+      const addCoords = (coords, articleId) => {
+        coords.forEach(({ overlay, id: overlayId }) => {
           const overlayElement = document.createElement('div')
           overlayElement.style.cursor = 'pointer'
-          overlayElement.setAttribute('class', `overlay ${id}`)
+          overlayElement.setAttribute('class', `overlay ${articleId}`)
+          overlayElement.setAttribute('id', overlayId)
           overlayElement.setAttribute('overlay', JSON.stringify(overlay))
+          overlayElement.style.backgroundColor = 'rgba(0,0,255,0.15)'
 
           overlayElement.addEventListener('mouseenter', mouseEnterWrapper)
 
@@ -203,7 +210,7 @@ const EditEntity = () => {
           overlayElement.addEventListener(
             'click',
             (e) => {
-              moveToOverlay(overlay, id)
+              moveToOverlay(overlay, articleId)
             },
             {
               once: true
@@ -214,8 +221,8 @@ const EditEntity = () => {
         })
       }
 
-      const updateListener = (id) => {
-        const elements = document.getElementsByClassName(id)
+      const updateListener = (articleId) => {
+        const elements = document.getElementsByClassName(articleId)
 
         for (var i = 0; i < elements.length; i++) {
           elements[i].removeEventListener('mouseenter', mouseEnterWrapper)
@@ -230,15 +237,27 @@ const EditEntity = () => {
 
       const coordsArr = articles.pages
 
-      coordsArr.forEach(({ coords, id }) => {
-        const elements = document.getElementsByClassName(id)
+      coordsArr.forEach(({ coords, id: articleId }) => {
+        const elements = document.getElementsByClassName(articleId)
 
-        if (elements.length) {
-          updateListener(id)
+        if (elements.length && elements.length === coords.length) {
+          updateListener(articleId)
           return
         }
 
-        addCoords(coords, id)
+        if (elements.length && elements.length !== coords.length) {
+          for (var i = 0; i < elements.length; i++) {
+            console.log(elements[i].id)
+            setTimeout(() => {
+              viewer.removeOverlay(elements[i].id)
+            }, 10 * i)
+            // elements[i]?.remove()
+          }
+
+          // setOverlays((prevOverlays) => prevOverlays.filter(({ id }) => id !== articleId))
+        }
+
+        addCoords(coords, articleId)
       })
     } catch (error) {
       console.log(error)
@@ -434,7 +453,8 @@ const EditEntity = () => {
           currentlyHovered={currentlyHovered}
           setEditOverlayId={setEditOverlayId}
           editOverlayId={editOverlayId}
-          refreshCoords={() => refetch()}
+          refetch={refetch}
+          removeOverlay={removeOverlay}
         />
         <div id="openSeaDragon" className={style['edit-entity-viewer']} />
         {editOverlayId && (
