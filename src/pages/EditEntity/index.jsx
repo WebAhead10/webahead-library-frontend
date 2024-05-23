@@ -277,6 +277,7 @@ const EditEntity = () => {
         const overlayElement = document.createElement('div')
         overlayElement.style.background = 'rgba(255, 0, 0, 0.3)'
         overlayElement.setAttribute('id', `overlay_${uuidv4()}`)
+        overlayElement.classList.add('overlay')
 
         overlayElement.ondblclick = () => {
           removeOverlay(overlayElement.id.split('_')[1])
@@ -306,6 +307,7 @@ const EditEntity = () => {
           Math.abs(diffX),
           Math.abs(diffY)
         )
+
         viewer.updateOverlay(drag.overlayElement, location)
       },
       releaseHandler: function (event) {
@@ -322,6 +324,9 @@ const EditEntity = () => {
           removeOverlay(element.id.split('_')[1])
           return
         }
+
+        // add class unsaved to the overlay
+        element.classList.add('unsaved')
 
         const newOverlay = { x, y, height, width }
 
@@ -366,6 +371,13 @@ const EditEntity = () => {
 
       // fetchCoords(params.id)
       refetch()
+
+      // remove all elements with class unsaved
+      const unsavedElements = document.getElementsByClassName('unsaved')
+
+      for (var i = 0; i < unsavedElements.length; i++) {
+        viewer.removeOverlay(unsavedElements[i])
+      }
     } catch (err) {
       message.error('Error has occured')
       console.error(err)
@@ -437,9 +449,6 @@ const EditEntity = () => {
         <Button type="primary" size="large" onClick={drawOverly}>
           Draw
         </Button>
-        {/* <Button type="primary" size="large" onClick={() => history.push(`/view/document/${params.id}`)}>
-          Manage texts
-        </Button> */}
       </Space>
     </div>
   )
