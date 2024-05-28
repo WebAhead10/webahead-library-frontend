@@ -26,12 +26,13 @@ interface SidebarProps {
   mouseEnterListener: Function
   mouseOutListener: Function
   moveToOverlay: Function
-  refreshCoords: Function
   editStatus: string
   updateOverlayCoords: Function
   setEditOverlayId: Function
   editOverlayId: number
   currentlyHovered: number
+  refetch: Function
+  removeOverlay: Function
 }
 
 const Sidebar = ({
@@ -39,21 +40,23 @@ const Sidebar = ({
   mouseEnterListener,
   mouseOutListener,
   moveToOverlay,
-  refreshCoords,
   editStatus,
   updateOverlayCoords,
   setEditOverlayId,
   editOverlayId,
-  currentlyHovered
+  refetch,
+  currentlyHovered,
+  removeOverlay
 }: SidebarProps) => {
   const [toggled, setToggled] = useState<{ [key: number]: boolean }>({})
   const history = useHistory()
 
-  const deleteOverlay = async (coordId: string, overlayId: number) => {
+  const deleteOverlay = async (overlayId: string, articleId: number) => {
     try {
-      await axios.delete(`/overlay/${overlayId}/${coordId}`)
+      await axios.delete(`/overlay/${articleId}/${overlayId}`)
 
-      refreshCoords()
+      removeOverlay(overlayId.split('_')[1])
+      refetch()
     } catch (error) {
       console.log(error)
     }
