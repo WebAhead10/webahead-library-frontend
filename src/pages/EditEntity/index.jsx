@@ -414,6 +414,18 @@ const EditEntity = () => {
     viewer.setMouseNavEnabled(enableMouse)
   }
 
+  const updateOverlaySizing = (id, x, y, width, height) => {
+    const overlayElement = document.getElementById(id)
+    const overlay = JSON.parse(overlayElement.getAttribute('overlay'))
+    overlay.x = x
+    overlay.y = y
+    overlay.width = width
+    overlay.height = height
+    overlayElement.setAttribute('overlay', JSON.stringify(overlay))
+
+    viewer.updateOverlay(overlayElement, new OpenSeadragon.Rect(x, y, width, height))
+  }
+
   return (
     <div className={style['edit-entity-container']} id="main-wrapper">
       {editStatus !== STATUS_NAVIGATING && (
@@ -450,6 +462,7 @@ const EditEntity = () => {
           updateOverlayCoords={(articleId) => {
             onSubmit(overlays, params.id, articleId)
           }}
+          updateOverlaySizing={updateOverlaySizing}
           currentlyHovered={currentlyHovered}
           setEditOverlayId={setEditOverlayId}
           editOverlayId={editOverlayId}

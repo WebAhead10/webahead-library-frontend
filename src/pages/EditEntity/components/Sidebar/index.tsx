@@ -1,13 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import style from './style.module.css'
-import { DeleteFilled, PlusCircleOutlined, FileAddOutlined } from '@ant-design/icons'
+import {
+  DeleteFilled,
+  PlusCircleOutlined,
+  FileAddOutlined,
+  CaretUpOutlined,
+  CaretLeftOutlined,
+  CaretDownOutlined,
+  CaretRightOutlined,
+  ShrinkOutlined,
+  ArrowsAltOutlined
+} from '@ant-design/icons'
 import axios from 'utils/axios'
-import { Button, Collapse } from 'antd'
+import { Button, Collapse, Flex, InputNumber } from 'antd'
 import { useHistory } from 'react-router-dom'
-
 interface Overlay {
   x: number
   y: number
+  width: number
+  height: number
 }
 
 interface Coord {
@@ -33,6 +44,7 @@ interface SidebarProps {
   currentlyHovered: number
   refetch: Function
   removeOverlay: Function
+  updateOverlaySizing: (id: string, x: number, y: number, width: number, height: number) => void
 }
 
 const Sidebar = ({
@@ -46,10 +58,13 @@ const Sidebar = ({
   editOverlayId,
   refetch,
   currentlyHovered,
-  removeOverlay
+  removeOverlay,
+  updateOverlaySizing
 }: SidebarProps) => {
   const [toggled, setToggled] = useState<{ [key: number]: boolean }>({})
   const history = useHistory()
+  const [openDimensions, setOpenDimensions] = useState('')
+  const [overlayDimensions, setOverlayDimensions] = useState<Overlay | null>(null)
 
   const deleteOverlay = async (overlayId: string, articleId: number) => {
     try {
@@ -72,6 +87,28 @@ const Sidebar = ({
       }
     }
   }, [editOverlayId])
+
+  useEffect(() => {
+    if (openDimensions) {
+      const overlayId = openDimensions.split('/')[1]
+
+      const el = document.getElementById(overlayId)
+
+      el.style.borderColor = 'blue'
+    }
+  }, [openDimensions])
+
+  useEffect(() => {
+    if (overlayDimensions) {
+      updateOverlaySizing(
+        openDimensions.split('/')[1],
+        overlayDimensions.x,
+        overlayDimensions.y,
+        overlayDimensions.width,
+        overlayDimensions.height
+      )
+    }
+  }, [overlayDimensions])
 
   return (
     <div className={style.articleSidebar}>
@@ -172,16 +209,155 @@ const Sidebar = ({
                           onClick={() => moveToOverlay(overlay, id)}
                           key={index}
                         >
-                          Overlay {index + 1}
-                          <span
-                            className={style.deleteOverlay}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              deleteOverlay(coordId, id)
-                            }}
-                          >
-                            <DeleteFilled />
-                          </span>
+                          <Flex vertical align="center">
+                            <Flex justify="space-between">
+                              <span>Overlay {index + 1}</span>
+                              <span
+                                className={style.deleteOverlay}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  deleteOverlay(coordId, id)
+                                }}
+                              >
+                                <DeleteFilled />
+                              </span>
+                              {/* <span
+                                className={style.resizeOverlay}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setOpenDimensions(id + '/' + coordId)
+                                  setOverlayDimensions(overlay)
+                                }}
+                              >
+                                U
+                              </span> */}
+                            </Flex>
+
+                            {openDimensions === id + '/' + coordId ? (
+                              <Flex
+                                vertical
+                                style={{
+                                  width: '200px'
+                                }}
+                              >
+                                <Flex
+                                  justify="center"
+                                  gap="10px"
+                                  style={{
+                                    margin: '10px 0px'
+                                  }}
+                                >
+                                  <CaretLeftOutlined
+                                    onClick={() => {
+                                      setOverlayDimensions({
+                                        ...overlayDimensions,
+                                        x: overlayDimensions.x - 1
+                                      })
+                                    }}
+                                    style={{ fontSize: '20px' }}
+                                  />
+                                  <CaretUpOutlined
+                                    onClick={() => {
+                                      setOverlayDimensions({
+                                        ...overlayDimensions,
+                                        y: overlayDimensions.y - 1
+                                      })
+                                    }}
+                                    style={{ fontSize: '20px' }}
+                                  />
+                                  <CaretDownOutlined
+                                    onClick={() => {
+                                      setOverlayDimensions({
+                                        ...overlayDimensions,
+                                        y: overlayDimensions.y + 1
+                                      })
+                                    }}
+                                    style={{ fontSize: '20px' }}
+                                  />
+                                  <CaretRightOutlined
+                                    onClick={() => {
+                                      setOverlayDimensions({
+                                        ...overlayDimensions,
+                                        x: overlayDimensions.x + 1
+                                      })
+                                    }}
+                                    style={{ fontSize: '20px' }}
+                                  />
+                                </Flex>
+
+                                <Flex
+                                  justify="center"
+                                  align="center"
+                                  gap="10px"
+                                  style={{
+                                    margin: '10px 0px'
+                                  }}
+                                >
+                                  <span>W:</span>
+                                  <ShrinkOutlined
+                                    onClick={() => {
+                                      setOverlayDimensions({
+                                        ...overlayDimensions,
+                                        width: overlayDimensions.width - 1
+                                      })
+                                    }}
+                                    style={{ fontSize: '25px', transform: 'rotate(45deg)' }}
+                                  />
+                                  <ArrowsAltOutlined
+                                    onClick={() => {
+                                      setOverlayDimensions({
+                                        ...overlayDimensions,
+                                        width: overlayDimensions.width + 1
+                                      })
+                                    }}
+                                    style={{ fontSize: '25px', transform: 'rotate(45deg)' }}
+                                  />
+                                </Flex>
+
+                                <Flex
+                                  justify="center"
+                                  align="center"
+                                  gap="10px"
+                                  style={{
+                                    margin: '10px 0px'
+                                  }}
+                                >
+                                  <span>H:</span>
+                                  <ShrinkOutlined
+                                    onClick={() => {
+                                      setOverlayDimensions({
+                                        ...overlayDimensions,
+                                        height: overlayDimensions.height - 1
+                                      })
+                                    }}
+                                    style={{ fontSize: '25px', transform: 'rotate(45deg)' }}
+                                  />
+                                  <ArrowsAltOutlined
+                                    onClick={() => {
+                                      setOverlayDimensions({
+                                        ...overlayDimensions,
+                                        height: overlayDimensions.height + 1
+                                      })
+                                    }}
+                                    style={{ fontSize: '25px', transform: 'rotate(45deg)' }}
+                                  />
+                                </Flex>
+
+                                <Button
+                                  onClick={() => {
+                                    setOpenDimensions('')
+
+                                    // update the overlay with an api request
+                                    // then refetch
+                                  }}
+                                >
+                                  حفظ
+                                </Button>
+                              </Flex>
+                            ) : (
+                              ''
+                            )}
+                          </Flex>
                         </div>
                       ))}
                     </>
