@@ -1,12 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import style from './style.module.css'
-import { DeleteFilled, PlusCircleOutlined, FileAddOutlined } from '@ant-design/icons'
 import axios from 'utils/axios'
-import { Modal, Form, Input, Row, Col, Select, Collapse, message, Button } from 'antd'
+import { Form, Input, Row, Col, Select, message, Button, Radio } from 'antd'
 import { ITagInput } from 'types'
 import { useMutation, useQuery } from '@tanstack/react-query'
-
-const { Panel } = Collapse
 
 interface EditDataSidebarProps {
   editStatus: string
@@ -30,6 +27,7 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
     mainNote: string
     title: string
     content: string
+    status: string
   }>(
     ['overlay-data', overlayId],
     async () => {
@@ -82,7 +80,8 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
         tags: overlayData.tags.map((tag) => tag.id),
         title: overlayData.title,
         mainNote: overlayData.mainNote,
-        text: overlayData.content
+        text: overlayData.content,
+        status: overlayData.status === 'closed' ? 'close-article' : 'open-article'
       })
     }
   }, [overlayData, form])
@@ -93,7 +92,8 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
         tags: overlayData.tags.map((tag) => tag.id),
         title: overlayData.title,
         mainNote: overlayData.mainNote,
-        text: overlayData.content
+        text: overlayData.content,
+        status: overlayData.status === 'closed' ? 'close-article' : 'open-article'
       })
     }
   }, [overlayData, form])
@@ -104,7 +104,8 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
         id: overlayId,
         title: values.title,
         content: values.text,
-        mainNote: values.mainNote
+        mainNote: values.mainNote,
+        status: values.status === 'close-article' ? 'closed' : 'open'
       },
       {
         onSuccess: () => {
@@ -171,6 +172,16 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
           <Col offset={1} span={22}>
             <Form.Item label="ملاحظه اساسية" name="mainNote">
               <Input.TextArea cols={120} rows={5} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col offset={1} span={24}>
+            <Form.Item label="النوع" name="status">
+              <Radio.Group>
+                <Radio value="close-article">أغلق المقالة للتعديلات</Radio>
+                <Radio value="open-article">إبقاء مفتوحة للتعديلات</Radio>
+              </Radio.Group>
             </Form.Item>
           </Col>
         </Row>

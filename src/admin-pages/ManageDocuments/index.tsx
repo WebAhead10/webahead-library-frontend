@@ -6,7 +6,7 @@ import axios from 'utils/axios'
 // import style from './style.module.css'
 import { IDocument, IMainCategory } from 'types'
 import { useQuery } from '@tanstack/react-query'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 const fetchDocuments = async () => {
   const res = await axios.get('/document/all')
@@ -17,7 +17,7 @@ const ManageDocuments = () => {
   const [form] = Form.useForm()
   const history = useHistory()
   const { data: documents, refetch } = useQuery(['documents'], fetchDocuments)
-  const [editModalVisible, setEditModalVisible] = useState(false)
+  const [editModalOpen, setEditModalOpen] = useState(false)
   const [filter, setFilter] = useState({
     categoryId: 0,
     documentName: ''
@@ -33,7 +33,8 @@ const ManageDocuments = () => {
       .post(`/document/meta/${values.id}`, {
         ...values,
         // settings hours
-        publishedDate: values.publishedDate.lang('en').add(1, 'hours').format('YYYY-MM-DD')
+        // publishedDate: values.publishedDate.lang('en').add(1, 'hours').format('YYYY-MM-DD')
+        publishedDate: values.publishedDate.add(1, 'hours').format('YYYY-MM-DD')
       })
       .then((res) => {
         if (!res.data.success) {
@@ -43,7 +44,7 @@ const ManageDocuments = () => {
 
         message.success('Success')
         message.destroy('Loading')
-        setEditModalVisible(false)
+        setEditModalOpen(false)
         form.resetFields()
         refetch()
       })
@@ -182,12 +183,12 @@ const ManageDocuments = () => {
                   type="primary"
                   size="small"
                   onClick={() => {
-                    setEditModalVisible(true)
+                    setEditModalOpen(true)
                     form.setFieldsValue({
                       id: record.id,
                       documentName: record.name,
                       category: record.categoryId,
-                      publishedDate: moment(record?.publishedDate || moment()).subtract(1, 'hours')
+                      publishedDate: dayjs(record?.publishedDate || dayjs())
                     })
                   }}
                 >
@@ -201,13 +202,13 @@ const ManageDocuments = () => {
 
       <Modal
         title="Edit Document"
-        visible={editModalVisible}
+        open={editModalOpen}
         onOk={() => {
           form.submit()
         }}
         okText="Save"
         onCancel={() => {
-          setEditModalVisible(false)
+          setEditModalOpen(false)
         }}
       >
         <Form form={form} layout="vertical" onFinish={onFormFinish}>

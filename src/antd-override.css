@@ -9,3 +9,8 @@
 .ant-picker-calendar th {
   display: none;
 }
+
+.ql-editor {
+  direction: rtl !important;
+  text-align: right !important;
+}
