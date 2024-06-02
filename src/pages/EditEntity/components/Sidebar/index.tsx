@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import style from './style.module.css'
-import { DeleteFilled, PlusCircleOutlined, FileAddOutlined } from '@ant-design/icons'
+import { DeleteFilled, PlusCircleOutlined } from '@ant-design/icons'
 import axios from 'utils/axios'
 import { Button, Collapse } from 'antd'
 import { useHistory } from 'react-router-dom'

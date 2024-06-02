@@ -5,6 +5,7 @@ import { Tabs, Button, Flex, Space } from 'antd'
 import { CloseCircleFilled } from '@ant-design/icons'
 
 import { useMutation } from '@tanstack/react-query'
+import Editor from '../../Editor'
 
 import { message, Select, Tag, Input } from 'antd'
 import { ITagInput, IUser } from 'types'
@@ -284,24 +285,19 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
             <span className={style.overlayTitle}>{textData?.title}</span>
 
             {edit ? (
-              <Input.TextArea
-                autoSize={{ minRows: 10 }}
-                style={{
-                  width: '95%',
-                  fontSize: '20px'
-                }}
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-              />
+              // <Input.TextArea
+              //   autoSize={{ minRows: 10 }}
+              //   style={{
+              //     width: '95%',
+              //     fontSize: '20px'
+              //   }}
+              //   value={text}
+              //   onChange={(e) => setText(e.target.value)}
+              // />
+              <Editor content={text} onChange={(html) => setText(html)} />
             ) : (
-              <p
-                style={{
-                  width: '95%',
-                  textAlign: 'justify',
-                  fontSize: '20px'
-                }}
-              >
-                {text}
+              <p className={style.text}>
+                <div dangerouslySetInnerHTML={{ __html: text }} />
               </p>
             )}
             {isTextEditAllow ? (

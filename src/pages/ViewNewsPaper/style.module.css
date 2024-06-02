@@ -102,3 +102,13 @@
   width: 100%;
   display: flex;
 }
+
+.text {
+  width: 95%;
+  text-align: justify;
+  font-size: 20px;
+}
+
+.text h2 {
+  margin-bottom: 0px;
+}

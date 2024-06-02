@@ -28,6 +28,7 @@ const UserSignin = React.lazy(() => import('./user-pages/Signin'))
 const ForgotPassword = React.lazy(() => import('./user-pages/ForgotPassword'))
 const AddUser = React.lazy(() => import('./user-pages/AddUser'))
 const ResetPassword = React.lazy(() => import('./user-pages/ResetPassword'))
+const Editor = React.lazy(() => import('./pages/Editor'))
 
 function App() {
   const [user, setUser] = useRecoilState(userAtom)
@@ -89,6 +90,7 @@ function App() {
               <Route path="/user-add" component={AddUser} />
               <Route path="/forget-password" component={ForgotPassword} />
               <Route path="/reset-password/:token" component={ResetPassword} />
+              <Route path="/editor" component={Editor} />
               {/* A not found component needed here */}
               {/* <Route  component={NotFound} /> */}
             </Switch>
