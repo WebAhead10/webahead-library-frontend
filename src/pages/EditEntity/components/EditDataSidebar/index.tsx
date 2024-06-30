@@ -82,36 +82,58 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
 
   useEffect(() => {
     if (overlayData) {
+      let status = 'open-article'
+
+      if (overlayData.status === 'closed') {
+        status = 'close-article'
+      } else if (overlayData.status === 'ready-for-review') {
+        status = 'ready-for-review'
+      }
+
       form.setFieldsValue({
         tags: overlayData.tags.map((tag) => tag.id),
         title: overlayData.title,
         mainNote: overlayData.mainNote,
         text: overlayData.content,
-        status: overlayData.status === 'closed' ? 'close-article' : 'open-article'
+        status: status
       })
     }
   }, [overlayData, form])
 
   useEffect(() => {
     if (overlayData) {
+      let status = 'open-article'
+      if (overlayData.status === 'closed') {
+        status = 'close-article'
+      } else if (overlayData.status === 'ready-for-review') {
+        status = 'ready-for-review'
+      }
+
       form.setFieldsValue({
         tags: overlayData.tags.map((tag) => tag.id),
         title: overlayData.title,
         mainNote: overlayData.mainNote,
         text: overlayData.content,
-        status: overlayData.status === 'closed' ? 'close-article' : 'open-article'
+        status: status
       })
     }
   }, [overlayData, form])
 
   const onFormFinish = async (values: any) => {
+    let status = 'open'
+
+    if (values.status === 'close-article') {
+      status = 'closed'
+    } else if (values.status === 'ready-for-review') {
+      status = 'ready-for-review'
+    }
     submitOverlayData(
       {
         id: overlayId,
         title: values.title,
         content: values.text,
         mainNote: values.mainNote,
-        status: values.status === 'close-article' ? 'closed' : 'open'
+        status: status
       },
       {
         onSuccess: () => {
@@ -137,48 +159,52 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
     <div className={style.articleSidebar}>
       <Form layout="vertical" form={form} onFinish={onFormFinish}>
         <Row wrap gutter={[16, 0]}>
-          <Col span={22} offset={1}>
-            <Form.Item label="عنوان" name="title">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col offset={1} span={22}>
-            <Form.Item label="وسوم" name="tags">
-              <Select
-                loading={isAttachingTag || isDetachingTag}
-                mode="tags"
-                onSelect={(value: number) => {
-                  const tag = tags.find((tag: ITagInput) => tag.id === value)
-                  if (tag) {
-                    attachTag(value, {
-                      onSuccess: () => {
-                        message.success('تم اضافة التصنيف بنجاح')
-                        // refetch()
-                      }
-                    })
-                  }
-                }}
-                onDeselect={(value) => {
-                  const tag = tags.find((tag: ITagInput) => tag.id === value)
+          {isTextEditAllow && (
+            <Col span={22} offset={1}>
+              <Form.Item label="عنوان" name="title">
+                <Input />
+              </Form.Item>
+            </Col>
+          )}
+          {isTagEditAllow && (
+            <Col offset={1} span={22}>
+              <Form.Item label="وسوم" name="tags">
+                <Select
+                  loading={isAttachingTag || isDetachingTag}
+                  mode="tags"
+                  onSelect={(value: number) => {
+                    const tag = tags.find((tag: ITagInput) => tag.id === value)
+                    if (tag) {
+                      attachTag(value, {
+                        onSuccess: () => {
+                          message.success('تم اضافة التصنيف بنجاح')
+                          // refetch()
+                        }
+                      })
+                    }
+                  }}
+                  onDeselect={(value) => {
+                    const tag = tags.find((tag: ITagInput) => tag.id === value)
 
-                  if (tag) {
-                    detachTag(value, {
-                      onSuccess: () => {
-                        message.success('تم حذف التصنيف بنجاح')
-                        // refetch()
-                      }
-                    })
-                  }
-                }}
-              >
-                {tags.map((tag: ITagInput) => (
-                  <Select.Option key={tag.id} value={tag.id}>
-                    {tag.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
+                    if (tag) {
+                      detachTag(value, {
+                        onSuccess: () => {
+                          message.success('تم حذف التصنيف بنجاح')
+                          // refetch()
+                        }
+                      })
+                    }
+                  }}
+                >
+                  {tags.map((tag: ITagInput) => (
+                    <Select.Option key={tag.id} value={tag.id}>
+                      {tag.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          )}
         </Row>
         <Row>
           <Col offset={1} span={22}>
@@ -190,36 +216,43 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
         <Row>
           <Col offset={1} span={24}>
             <Form.Item label="النوع" name="status">
-              <Radio.Group>
+              <Radio.Group
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  flexWrap: 'wrap'
+                }}
+              >
                 <Radio value="close-article">أغلق المقالة للتعديلات</Radio>
                 <Radio value="open-article">إبقاء مفتوحة للتعديلات</Radio>
+                <Radio value="ready-for-review">جاهزة للمراجعة</Radio>
               </Radio.Group>
             </Form.Item>
           </Col>
         </Row>
-        <Row>
-          <Col offset={1} span={22}>
-            <Form.Item label="نص" name="text">
-              {/* <Input.TextArea cols={120} rows={5} /> */}
-
-              <div
-                style={{
-                  height: '300px',
-                  marginBottom: '60px'
-                }}
-              >
-                <Editor
-                  content={formText}
-                  onChange={(html) =>
-                    form.setFieldsValue({
-                      text: html
-                    })
-                  }
-                />
-              </div>
-            </Form.Item>
-          </Col>
-        </Row>
+        {isTextEditAllow && (
+          <Row>
+            <Col offset={1} span={22}>
+              <Form.Item label="نص" name="text">
+                <div
+                  style={{
+                    height: '300px',
+                    marginBottom: '60px'
+                  }}
+                >
+                  <Editor
+                    content={formText}
+                    onChange={(html) =>
+                      form.setFieldsValue({
+                        text: html
+                      })
+                    }
+                  />
+                </div>
+              </Form.Item>
+            </Col>
+          </Row>
+        )}
         <Button type="primary" loading={isSubmittingOverlayData} htmlType="submit">
           Submit
         </Button>

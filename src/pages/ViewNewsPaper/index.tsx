@@ -187,6 +187,12 @@ const ViewNewsPaper = () => {
     }
   }, [viewer])
 
+  const hasAnyEditPermission =
+    (user.role === 'contributor' && user.permissions.includes('overlay-cut')) ||
+    user.role === 'admin' ||
+    (user.role === 'contributor' && user.permissions.includes('overlay-text')) ||
+    (user.role === 'contributor' && user.permissions.includes('overlay-tag'))
+
   return (
     <div className={style['main-container']}>
       <div
@@ -198,7 +204,7 @@ const ViewNewsPaper = () => {
           margin: 'auto'
         }}
       />
-      {(user.role === 'contributor' && user.permissions.includes('overlay-cut')) || user.role === 'admin' ? (
+      {hasAnyEditPermission ? (
         <div className={style.editOverlays}>
           <Button
             style={{

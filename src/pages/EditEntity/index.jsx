@@ -183,7 +183,7 @@ const EditEntity = () => {
     (e) => {
       const id = e.target.className.split(' ')[1]
       const overlay = JSON.parse(e.target.getAttribute('overlay'))
-
+      if (overlay.status === 'closed') return
       moveToOverlay(overlay, id)
     },
     [viewer]
@@ -194,10 +194,11 @@ const EditEntity = () => {
       if (!articles.pages) return
       if (!viewer) return
 
-      const addCoords = (coords, articleId) => {
+      const addCoords = (coords, articleId, status) => {
         coords.forEach(({ overlay, id: overlayId }) => {
           const overlayElement = document.createElement('div')
           overlayElement.style.cursor = 'pointer'
+          overlay.status = status
           overlayElement.setAttribute('class', `overlay ${articleId}`)
           overlayElement.setAttribute('id', overlayId)
           overlayElement.setAttribute('overlay', JSON.stringify(overlay))
@@ -210,6 +211,7 @@ const EditEntity = () => {
           overlayElement.addEventListener(
             'click',
             (e) => {
+              if (status === 'closed') return
               moveToOverlay(overlay, articleId)
             },
             {
@@ -237,7 +239,7 @@ const EditEntity = () => {
 
       const coordsArr = articles.pages
 
-      coordsArr.forEach(({ coords, id: articleId }) => {
+      coordsArr.forEach(({ coords, id: articleId, status }) => {
         const elements = document.getElementsByClassName(articleId)
 
         if (elements.length && elements.length === coords.length) {
@@ -247,7 +249,6 @@ const EditEntity = () => {
 
         if (elements.length && elements.length !== coords.length) {
           for (var i = 0; i < elements.length; i++) {
-            console.log(elements[i].id)
             setTimeout(() => {
               viewer.removeOverlay(elements[i].id)
             }, 10 * i)
@@ -257,7 +258,7 @@ const EditEntity = () => {
           // setOverlays((prevOverlays) => prevOverlays.filter(({ id }) => id !== articleId))
         }
 
-        addCoords(coords, articleId)
+        addCoords(coords, articleId, status)
       })
     } catch (error) {
       console.log(error)
