@@ -79,20 +79,35 @@ function Calendar_() {
         activeStartDate={new Date(+year, +monthNameToNumber[month] - 1, 1)}
         calendarType="Arabic"
         showNavigation={false}
+        onClickDay={(value) => {
+          const newspaperDay: INewspaperDay | any = publishedDays.find(({ day }) => +day === value.getDate())
+
+          if (newspaperDay) {
+            history.push(`/view/newspaper/${newspaperDay.id}`)
+          }
+        }}
         tileClassName="day-tile"
-        tileContent={({ date }) => {
+        tileDisabled={({ date }) => {
           const newspaperDay: INewspaperDay | any = publishedDays.find(({ day }) => +day === date.getDate())
 
           if (newspaperDay && +monthNameToNumber[month] - 1 === date.getMonth()) {
-            // if (newspaperDay) {
-            return (
-              <div className="calendar-tileContent">
-                <span onClick={() => history.push(`/view/newspaper/${newspaperDay.id}`)}>Here</span>
-              </div>
-            )
+            return false
           }
-          return null
+          return true
         }}
+        // tileContent={({ date }) => {
+        //   const newspaperDay: INewspaperDay | any = publishedDays.find(({ day }) => +day === date.getDate())
+
+        //   if (newspaperDay && +monthNameToNumber[month] - 1 === date.getMonth()) {
+        //     // if (newspaperDay) {
+        //     return (
+        //       <div className="calendar-tileContent">
+        //         {/* <span onClick={() => history.push(`/view/newspaper/${newspaperDay.id}`)}>Here</span> */}
+        //       </div>
+        //     )
+        //   }
+        //   return null
+        // }}
       />
     </div>
   )

@@ -73,6 +73,23 @@ input[type='date']::-webkit-calendar-picker-indicator {
   background-color: white;
   border: 1px solid black;
   font-size: 20px;
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
+}
+/* .day-tile where not disabled */
+.day-tile:disabled {
+  cursor: not-allowed;
+  color: black;
+  text-decoration: none;
+}
+
+.day-tile:hover {
+  background-color: #f0f0f0;
+}
+
+.day-tile:hover:disabled {
+  background-color: white;
 }
 
 .calendar-tileContent {
