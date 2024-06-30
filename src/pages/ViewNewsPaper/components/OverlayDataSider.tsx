@@ -145,7 +145,12 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
       <Tabs defaultActiveKey="2" centered>
         {/* Notes panel */}
         <Tabs.TabPane tab="Notes" key="1">
-          <div className={style.tabPanelBody}>
+          <div
+            className={style.tabPanelBody}
+            style={{
+              height: user.role === 'admin' ? 'calc(100vh - 300px)' : 'calc(100vh - 170px)'
+            }}
+          >
             <h2>ملاحظات</h2>
             <div>{initialNote}</div>
             <div className={style.scroll}>
@@ -211,7 +216,12 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
           ) : (
             ''
           )}
-          <div className={style.tabPanelBody}>
+          <div
+            className={style.tabPanelBody}
+            style={{
+              height: user.role === 'admin' ? 'calc(100vh - 300px)' : 'calc(100vh - 220px)'
+            }}
+          >
             {isTagEditAllow ? (
               <>
                 <Select

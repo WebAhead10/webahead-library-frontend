@@ -221,7 +221,7 @@ const Sidebar = ({
                               >
                                 <DeleteFilled />
                               </span>
-                              {/* <span
+                              <span
                                 className={style.resizeOverlay}
                                 onClick={(e) => {
                                   e.stopPropagation()
@@ -230,7 +230,7 @@ const Sidebar = ({
                                 }}
                               >
                                 U
-                              </span> */}
+                              </span>
                             </Flex>
 
                             {openDimensions === id + '/' + coordId ? (
@@ -290,7 +290,8 @@ const Sidebar = ({
                                   align="center"
                                   gap="10px"
                                   style={{
-                                    margin: '10px 0px'
+                                    margin: '10px 0px',
+                                    userSelect: 'none'
                                   }}
                                 >
                                   <span>W:</span>
@@ -301,7 +302,13 @@ const Sidebar = ({
                                         width: overlayDimensions.width - 1
                                       })
                                     }}
-                                    style={{ fontSize: '25px', transform: 'rotate(45deg)' }}
+                                    style={{
+                                      fontSize: '25px',
+                                      transform: 'rotate(45deg)',
+                                      border: '1px solid #000',
+                                      borderRadius: '50%',
+                                      padding: '4px'
+                                    }}
                                   />
                                   <ArrowsAltOutlined
                                     onClick={() => {
@@ -310,7 +317,13 @@ const Sidebar = ({
                                         width: overlayDimensions.width + 1
                                       })
                                     }}
-                                    style={{ fontSize: '25px', transform: 'rotate(45deg)' }}
+                                    style={{
+                                      fontSize: '25px',
+                                      transform: 'rotate(45deg)',
+                                      border: '1px solid #000',
+                                      borderRadius: '50%',
+                                      padding: '4px'
+                                    }}
                                   />
                                 </Flex>
 
@@ -319,7 +332,8 @@ const Sidebar = ({
                                   align="center"
                                   gap="10px"
                                   style={{
-                                    margin: '10px 0px'
+                                    margin: '10px 0px',
+                                    userSelect: 'none'
                                   }}
                                 >
                                   <span>H:</span>
@@ -330,7 +344,13 @@ const Sidebar = ({
                                         height: overlayDimensions.height - 1
                                       })
                                     }}
-                                    style={{ fontSize: '25px', transform: 'rotate(45deg)' }}
+                                    style={{
+                                      fontSize: '25px',
+                                      transform: 'rotate(135deg)',
+                                      border: '1px solid #000',
+                                      borderRadius: '50%',
+                                      padding: '4px'
+                                    }}
                                   />
                                   <ArrowsAltOutlined
                                     onClick={() => {
@@ -339,7 +359,13 @@ const Sidebar = ({
                                         height: overlayDimensions.height + 1
                                       })
                                     }}
-                                    style={{ fontSize: '25px', transform: 'rotate(45deg)' }}
+                                    style={{
+                                      fontSize: '25px',
+                                      transform: 'rotate(135deg)',
+                                      border: '1px solid #000',
+                                      borderRadius: '50%',
+                                      padding: '4px'
+                                    }}
                                   />
                                 </Flex>
 
