@@ -4,10 +4,11 @@ import { useParams, useHistory } from 'react-router-dom'
 import axios from 'axios'
 import style from './style.module.css'
 import OverlayDataSider from './components/OverlayDataSider'
-import { ScissorOutlined } from '@ant-design/icons'
+import { EditOutlined } from '@ant-design/icons'
 import { userAtom } from 'utils/recoil/atoms'
 import { useRecoilValue } from 'recoil'
 import { IUser } from 'types'
+import { Button } from 'antd'
 
 const ViewNewsPaper = () => {
   const [viewer, setViewer] = useState(null)
@@ -199,12 +200,18 @@ const ViewNewsPaper = () => {
       />
       {(user.role === 'contributor' && user.permissions.includes('overlay-cut')) || user.role === 'admin' ? (
         <div className={style.editOverlays}>
-          <ScissorOutlined
-            style={{ fontSize: '20px' }}
+          <Button
+            style={{
+              width: '100%',
+              marginBottom: '10px'
+            }}
             onClick={() => {
               history.push(`/edit/newspaper/${params.id}`)
             }}
-          />
+            icon={<EditOutlined />}
+          >
+            Edit mode
+          </Button>
         </div>
       ) : (
         ''

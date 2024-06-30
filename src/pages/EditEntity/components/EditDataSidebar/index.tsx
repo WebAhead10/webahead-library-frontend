@@ -2,8 +2,11 @@ import { useEffect } from 'react'
 import style from './style.module.css'
 import axios from 'utils/axios'
 import { Form, Input, Row, Col, Select, message, Button, Radio } from 'antd'
-import { ITagInput } from 'types'
+import { ITagInput, IUser } from 'types'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import Editor from 'pages/Editor'
+import { useRecoilValue } from 'recoil'
+import { userAtom } from 'utils/recoil/atoms'
 
 interface EditDataSidebarProps {
   editStatus: string
@@ -18,6 +21,9 @@ interface Overlay {
 
 const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }: EditDataSidebarProps) => {
   const [form] = Form.useForm()
+
+  const formText = Form.useWatch('text', form)
+  const user = useRecoilValue<IUser>(userAtom)
 
   const { data: overlayData, refetch } = useQuery<{
     id: number
@@ -121,6 +127,12 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
     return null
   }
 
+  const isTextEditAllow =
+    (user.role === 'contributor' && user.permissions.includes('overlay-text')) || user.role === 'admin'
+
+  const isTagEditAllow =
+    (user.role === 'contributor' && user.permissions.includes('overlay-tag')) || user.role === 'admin'
+
   return (
     <div className={style.articleSidebar}>
       <Form layout="vertical" form={form} onFinish={onFormFinish}>
@@ -188,7 +200,23 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
         <Row>
           <Col offset={1} span={22}>
             <Form.Item label="نص" name="text">
-              <Input.TextArea cols={120} rows={5} />
+              {/* <Input.TextArea cols={120} rows={5} /> */}
+
+              <div
+                style={{
+                  height: '300px',
+                  marginBottom: '60px'
+                }}
+              >
+                <Editor
+                  content={formText}
+                  onChange={(html) =>
+                    form.setFieldsValue({
+                      text: html
+                    })
+                  }
+                />
+              </div>
             </Form.Item>
           </Col>
         </Row>

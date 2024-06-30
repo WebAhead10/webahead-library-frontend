@@ -278,6 +278,11 @@ const EditEntity = () => {
     const newspaperId = params.id
     fetchNewspaper(newspaperId)
 
+    // scroll all way down smoothly after half second
+    setTimeout(() => {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+    }, 500)
+
     return () => {
       viewer && viewer.destroy()
     }
