@@ -37,7 +37,6 @@
   border-bottom: 1px solid #b8b8b8;
   display: flex;
   margin: 10px;
-  flex-direction: row-reverse;
   justify-content: space-evenly;
   flex-wrap: wrap;
   list-style-type: none;
