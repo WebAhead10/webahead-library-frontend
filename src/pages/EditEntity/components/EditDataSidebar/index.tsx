@@ -172,43 +172,45 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
                 <Select
                   loading={isAttachingTag || isDetachingTag}
                   mode="tags"
+                  showSearch
+                  filterOption={(input, option) =>
+                    option?.label?.toString().toLowerCase().includes(input.toLowerCase())
+                  }
+                  options={tags.map((tag: ITagInput) => ({
+                    label: tag.name,
+                    value: tag.id,
+                  }))}
                   onSelect={(value: number) => {
-                    const tag = tags.find((tag: ITagInput) => tag.id === value)
+                    const tag = tags.find((tag: ITagInput) => tag.id === value);
                     if (tag) {
                       attachTag(value, {
                         onSuccess: () => {
-                          message.success('تم اضافة التصنيف بنجاح')
-                          // refetch()
-                        }
-                      })
+                        message.success('تم اضافة التصنيف بنجاح');
+                        // refetch();
+                        },
+                      });
                     }
                   }}
                   onDeselect={(value) => {
-                    const tag = tags.find((tag: ITagInput) => tag.id === value)
-
+                    const tag = tags.find((tag: ITagInput) => tag.id === value);
                     if (tag) {
                       detachTag(value, {
                         onSuccess: () => {
-                          message.success('تم حذف التصنيف بنجاح')
-                          // refetch()
-                        }
-                      })
+                          message.success('تم حذف التصنيف بنجاح');
+                          // refetch();
+                        },
+                      });
                     }
                   }}
-                >
-                  {tags.map((tag: ITagInput) => (
-                    <Select.Option key={tag.id} value={tag.id}>
-                      {tag.name}
-                    </Select.Option>
-                  ))}
-                </Select>
+                />
               </Form.Item>
+
             </Col>
           )}
         </Row>
         <Row>
           <Col offset={1} span={22}>
-            <Form.Item label="ملاحظه اساسية" name="mainNote">
+            <Form.Item label="ملاحظة أساسية" name="mainNote">
               <Input.TextArea cols={120} rows={5} />
             </Form.Item>
           </Col>
