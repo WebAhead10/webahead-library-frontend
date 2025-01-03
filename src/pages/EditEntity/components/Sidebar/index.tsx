@@ -13,7 +13,7 @@ import {
   EditFilled
 } from '@ant-design/icons'
 import axios from 'utils/axios'
-import { Button, Collapse, Flex } from 'antd'
+import { Button, Collapse, Flex, Modal } from 'antd'
 import { useHistory } from 'react-router-dom'
 interface Overlay {
   x: number
@@ -48,6 +48,8 @@ interface SidebarProps {
   removeOverlay: Function
   updateOverlaySizing: (id: string, x: number, y: number, width: number, height: number) => void
 }
+
+const { confirm } = Modal;
 
 const Sidebar = ({
   articles,
@@ -224,7 +226,24 @@ const Sidebar = ({
                                   className={style.deleteOverlay}
                                   onClick={(e) => {
                                     e.stopPropagation()
-                                    deleteOverlay(coordId, id)
+                                    confirm({
+                                      title: (
+                                        <div style={{ direction: 'rtl', textAlign: 'right' }}>
+                                             هل أنت متأكد انك تريد حذف هذه القصاصة؟
+                                        </div>
+                                      ),
+                                      content: (
+                                        <div style={{ direction: 'rtl', textAlign: 'right' }}>
+                                           اذا كانت اجابتك نعم فلا يمكن التراجع عن هذا القرار                                                 
+                                        </div> 
+                                      ),
+                                      okText: 'نعم',
+                                      cancelText: 'لا',
+                                      onOk() {
+                              
+                                        deleteOverlay(coordId, id);
+                                      },
+                                    });
                                   }}
                                   style={{ marginRight: '10px' }}
                                   title='Delete Overlay'
