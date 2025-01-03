@@ -9,10 +9,11 @@ import {
   CaretDownOutlined,
   CaretRightOutlined,
   ShrinkOutlined,
-  ArrowsAltOutlined
+  ArrowsAltOutlined,
+  EditFilled
 } from '@ant-design/icons'
 import axios from 'utils/axios'
-import { Button, Collapse, Flex, InputNumber } from 'antd'
+import { Button, Collapse, Flex } from 'antd'
 import { useHistory } from 'react-router-dom'
 interface Overlay {
   x: number
@@ -225,6 +226,8 @@ const Sidebar = ({
                                     e.stopPropagation()
                                     deleteOverlay(coordId, id)
                                   }}
+                                  style={{ marginRight: '10px' }}
+                                  title='Delete Overlay'
                                 >
                                   <DeleteFilled />
                                 </span>
@@ -235,8 +238,10 @@ const Sidebar = ({
                                     setOpenDimensions(id + '/' + coordId)
                                     setOverlayDimensions(overlay)
                                   }}
+                                  style={{ marginRight: '10px' }}
+                                  title='Edit Overlay Dimensions'
                                 >
-                                  U
+                                  { < EditFilled />  }
                                 </span>
                               </Flex>
 
