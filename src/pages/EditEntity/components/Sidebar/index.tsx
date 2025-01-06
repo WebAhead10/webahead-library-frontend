@@ -221,7 +221,7 @@ const Sidebar = ({
                           >
                             <Flex vertical align="center">
                               <Flex justify="space-between">
-                                <span>Overlay {index + 1}</span>
+                                <span>قصاصة رقم {index + 1}</span>
                                 <span
                                   className={style.deleteOverlay}
                                   onClick={(e) => {
