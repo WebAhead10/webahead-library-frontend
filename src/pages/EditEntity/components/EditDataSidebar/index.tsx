@@ -256,7 +256,7 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
           </Row>
         )}
         <Button type="primary" loading={isSubmittingOverlayData} htmlType="submit">
-          Submit
+          حـفـظ
         </Button>
       </Form>
     </div>

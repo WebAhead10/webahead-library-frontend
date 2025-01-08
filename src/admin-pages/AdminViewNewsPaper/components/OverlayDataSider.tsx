@@ -116,10 +116,10 @@ const OverlayDataSiderProps = ({ overlayId, close }: OverlayDataSiderPropsProps)
 
       <Tabs defaultActiveKey="2" centered style={{ marginTop: '10px' }}>
         {/* Notes panel */}
-        <Tabs.TabPane tab="Notes" key="1">
+        <Tabs.TabPane tab="ملاحظات" key="1">
           <div className={style.tabPanelBody}>
             <div>{initialNote}</div>
-            <h2>Notes</h2>
+            <h2>ملاحظات</h2>
             <div className={style.scroll}>
               {notesData?.notes?.map(({ text }, index) => (
                 <div key={index} className={style.commentDiv}>
@@ -145,7 +145,7 @@ const OverlayDataSiderProps = ({ overlayId, close }: OverlayDataSiderPropsProps)
                 onClick={updateOverlayNote}
                 style={{ margin: 'auto', marginTop: '20px' }}
               >
-                Update
+                تعديل
               </Button>
             </div>
           </div>
@@ -226,7 +226,7 @@ const OverlayDataSiderProps = ({ overlayId, close }: OverlayDataSiderPropsProps)
               onClick={() => updateArticleText()}
               style={{ margin: 'auto', marginTop: '10px' }}
             >
-              Update text
+              تعديل المحتوى
             </Button>
           </div>
         </Tabs.TabPane>

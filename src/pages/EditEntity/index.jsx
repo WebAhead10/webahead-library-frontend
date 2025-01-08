@@ -444,7 +444,7 @@ const EditEntity = () => {
               type="primary"
               size="large"
             >
-              Enable mouse
+             وضع التنقل
             </Button>
             <Button
               onClick={() => updateDrawingStatus(STATUS_DRAWING, false)}
@@ -452,7 +452,7 @@ const EditEntity = () => {
               type="primary"
               size="large"
             >
-              Enable Draw
+              وضع الرسم
             </Button>
           </Space>
           <br />
@@ -483,10 +483,10 @@ const EditEntity = () => {
       <br />
       <Space>
         <Button type="primary" size="large" onClick={() => onSubmit(overlays, params.id)}>
-          Submit
+          إدخـال
         </Button>
         <Button type="primary" size="large" onClick={drawOverly}>
-          Draw
+          إرسـم
         </Button>
       </Space>
     </div>

@@ -98,7 +98,7 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
 
       <Tabs defaultActiveKey="2" centered>
         {/* Notes panel */}
-        <Tabs.TabPane tab="Notes" key="1">
+        <Tabs.TabPane tab="ملاحظات" key="1">
           <div
             className={style.tabPanelBody}
             style={{
@@ -134,7 +134,7 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
                   onClick={updateOverlayNote}
                   style={{ margin: 'auto', marginTop: '20px' }}
                 >
-                  Update
+                  تعديل
                 </Button>
               </div>
             ) : (
@@ -144,11 +144,11 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
         </Tabs.TabPane>
 
         {/* Main panel */}
-        <Tabs.TabPane tab="Content" key="2">
+        <Tabs.TabPane tab="المحتوى" key="2">
           {user.role === 'admin' ? (
             <Flex style={{ direction: 'ltr', padding: '20px 10px' }}>
               <Space style={{ direction: 'ltr', fontSize: '20px' }}>
-                <b style={{ direction: 'ltr' }}>Owner:</b>
+                {/* <b style={{ direction: 'ltr' }}>Owner:</b> */}
                 <span>{textData?.userName}</span>
               </Space>
 
