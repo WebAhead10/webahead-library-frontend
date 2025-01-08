@@ -58,7 +58,7 @@ function App() {
     return (
       <div className="App">
         <ConfigProvider direction="ltr">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<div>...تحميل</div>}>
             <Router basename="/a/admin">
               <AdminApp />
             </Router>
@@ -72,7 +72,7 @@ function App() {
     <div className="App">
       <ConfigProvider direction="rtl" locale={locale}>
         <Router>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<div>...تحميل</div>}>
             <HeaderInfo />
             <NavBar />
             <Switch>

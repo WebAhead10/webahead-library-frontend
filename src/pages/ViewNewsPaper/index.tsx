@@ -216,7 +216,7 @@ const ViewNewsPaper = () => {
             }}
             icon={<EditOutlined />}
           >
-            Edit mode
+            وضع التحرير
           </Button>
         </div>
       ) : (

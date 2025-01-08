@@ -125,7 +125,7 @@ const Sidebar = ({
           history.goBack()
         }}
       >
-        Back to view mode
+        العودة الى وضع التصفح
       </Button>
       <h1>قائمة المقالات</h1>
 
