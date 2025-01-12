@@ -8,6 +8,7 @@ import Sidebar from './components/Sidebar'
 import EditDataSidebar from './components/EditDataSidebar'
 import style from './style.module.css'
 import { useOverlayCoords } from '../../api-hooks/overlay.hooks'
+import OpenSeadragon from 'openseadragon'
 
 const STATUS_NAVIGATING = 'nagivating'
 const STATUS_DRAWING = 'drawing'
@@ -208,16 +209,13 @@ const EditEntity = () => {
 
           overlayElement.addEventListener('mouseout', mouseOutWrapper)
 
-          overlayElement.addEventListener(
-            'click',
-            (e) => {
+          new OpenSeadragon.MouseTracker({
+            element: overlayElement,
+            clickHandler: function (event) {
               if (status === 'closed') return
               moveToOverlay(overlay, articleId)
-            },
-            {
-              once: true
             }
-          )
+          }).setTracking(true)
 
           viewer.addOverlay(overlayElement, new OpenSeadragon.Rect(overlay.x, overlay.y, overlay.width, overlay.height))
         })
@@ -444,7 +442,7 @@ const EditEntity = () => {
               type="primary"
               size="large"
             >
-             وضع التنقل
+              وضع التنقل
             </Button>
             <Button
               onClick={() => updateDrawingStatus(STATUS_DRAWING, false)}

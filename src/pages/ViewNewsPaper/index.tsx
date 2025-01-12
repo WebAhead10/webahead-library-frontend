@@ -9,6 +9,7 @@ import { userAtom } from 'utils/recoil/atoms'
 import { useRecoilValue } from 'recoil'
 import { IUser } from 'types'
 import { Button } from 'antd'
+import OpenSeadragon from 'openseadragon'
 
 const ViewNewsPaper = () => {
   const [viewer, setViewer] = useState(null)
@@ -42,7 +43,8 @@ const ViewNewsPaper = () => {
           collectionTileMargin: -150,
           collectionLayout: 'horizontal',
           showNavigator: false,
-          gestureSettingsMouse: { clickToZoom: false }
+          gestureSettingsMouse: { clickToZoom: false },
+          crossOriginPolicy: 'Anonymous'
         })
       )
     } catch (error) {
@@ -89,21 +91,22 @@ const ViewNewsPaper = () => {
       const mouseEnter = () => mouseEnterListener(id)
       const mouseLeave = () => mouseOutListener(id)
 
+      const onClick = () => {
+        const elements = document.getElementsByClassName(id) as HTMLCollectionOf<HTMLElement>
+        for (var i = 0; i < overlays.length; i++) {
+          elements[i].removeEventListener('mouseenter', mouseEnter)
+          elements[i].removeEventListener('mouseout', mouseLeave)
+          elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
+          elements[i].style.border = '1px solid rgba(255,0,0,0.6)'
+        }
+        setSelectedId(id)
+      }
+
       for (var j = 0; j < overlays.length; j++) {
         overlays[j].addEventListener('mouseenter', mouseEnter)
         overlays[j].addEventListener('mouseout', mouseLeave)
 
-        // eslint-disable-next-line no-loop-func
-        overlays[j].addEventListener('click', () => {
-          const elements = document.getElementsByClassName(id) as HTMLCollectionOf<HTMLElement>
-          for (var i = 0; i < overlays.length; i++) {
-            elements[i].removeEventListener('mouseenter', mouseEnter)
-            elements[i].removeEventListener('mouseout', mouseLeave)
-            elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
-            elements[i].style.border = '1px solid rgba(255,0,0,0.6)'
-          }
-          setSelectedId(id)
-        })
+        overlays[j].addEventListener('click', onClick)
       }
     })
   }, [])
@@ -149,6 +152,18 @@ const ViewNewsPaper = () => {
           const mouseEnter = () => mouseEnterListener(id)
           const mouseLeave = () => mouseOutListener(id)
 
+          const onClick = (e) => {
+            resetOverlaysToOriginal(coordsArr, id)
+            const elements = document.getElementsByClassName(id) as HTMLCollectionOf<HTMLElement>
+            for (var i = 0; i < overlays.length; i++) {
+              elements[i].removeEventListener('mouseenter', mouseEnter)
+              elements[i].removeEventListener('mouseout', mouseLeave)
+              elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
+              elements[i].style.border = '1px solid rgba(255,0,0,0.6)'
+            }
+            setSelectedId(id)
+          }
+
           for (var j = 0; j < overlays.length; j++) {
             // first add the mouse enter that will highlight the overlay
             overlays[j].addEventListener('mouseenter', mouseEnter)
@@ -159,18 +174,11 @@ const ViewNewsPaper = () => {
             // then add the click event that will set the selected id (id of the article)
             // and then remove the mouse enter and mouse leave event listeners from all the overlays
             // that belong to the same article
-            // eslint-disable-next-line no-loop-func
-            overlays[j].addEventListener('click', () => {
-              resetOverlaysToOriginal(coordsArr, id)
-              const elements = document.getElementsByClassName(id) as HTMLCollectionOf<HTMLElement>
-              for (var i = 0; i < overlays.length; i++) {
-                elements[i].removeEventListener('mouseenter', mouseEnter)
-                elements[i].removeEventListener('mouseout', mouseLeave)
-                elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
-                elements[i].style.border = '1px solid rgba(255,0,0,0.6)'
-              }
-              setSelectedId(id)
-            })
+
+            new OpenSeadragon.MouseTracker({
+              element: overlays[j],
+              clickHandler: onClick
+            }).setTracking(true)
           }
         })
       } catch (error) {
@@ -185,7 +193,7 @@ const ViewNewsPaper = () => {
     if (viewer) {
       fetchCoords(newspaperId)
     }
-  }, [viewer])
+  }, [viewer, fetchCoords, params.id])
 
   const hasAnyEditPermission =
     (user.role === 'contributor' && user.permissions.includes('overlay-cut')) ||

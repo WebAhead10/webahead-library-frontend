@@ -7,6 +7,14 @@ export const userAtom = atom({
   default: {} as IUser
 })
 
+export const languageAtom = atom({
+  key: 'language',
+  default: {
+    language: 'en',
+    isRtl: false
+  }
+})
+
 export const documentSearchAtom = atom({
   key: 'documentSearch',
   default: {} as IDocumentSearch

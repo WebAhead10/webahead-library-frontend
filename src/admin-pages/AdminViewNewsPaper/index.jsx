@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import style from './style.module.css'
 import OverlayDataSider from './components/OverlayDataSider'
+import OpenSeadragon from 'openseadragon'
 
 const ViewNewsPaper = () => {
   const [viewer, setViewer] = useState(null)
@@ -83,16 +84,19 @@ const ViewNewsPaper = () => {
 
             overlayElement.addEventListener('mouseout', mouseOutListener)
 
-            overlayElement.addEventListener('click', () => {
-              const elements = document.getElementsByClassName(id)
+            new OpenSeadragon.MouseTracker({
+              element: overlayElement,
+              clickHandler: (event) => {
+                const elements = document.getElementsByClassName(id)
 
-              for (var i = 0; i < elements.length; i++) {
-                elements[i].removeEventListener('mouseenter', mouseEnterListener)
-                elements[i].removeEventListener('mouseout', mouseOutListener)
-                elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
+                for (var i = 0; i < elements.length; i++) {
+                  elements[i].removeEventListener('mouseenter', mouseEnterListener)
+                  elements[i].removeEventListener('mouseout', mouseOutListener)
+                  elements[i].style.backgroundColor = 'rgba(0,0,0,0)'
+                }
+
+                setSelectedId(id)
               }
-
-              setSelectedId(id)
             })
 
             viewer.addOverlay(

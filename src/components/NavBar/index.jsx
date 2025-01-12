@@ -18,6 +18,7 @@ function NavBar() {
           <NavLink to="/about">من نحن</NavLink>
           <NavLink to="/contact-us">تواصل معنا</NavLink>
         </NavMenu>
+
         {/* <div className="header__search">
           <SearchIcon className="header__searchIcon" />
           <input type="text" className="header__searchInput" />

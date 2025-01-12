@@ -1,18 +1,23 @@
 import React from 'react'
 import './style.css'
 import { Link } from 'react-router-dom'
-import { UserOutlined } from '@ant-design/icons'
-import { useRecoilState } from 'recoil'
-import { userAtom } from 'utils/recoil/atoms'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { languageAtom, userAtom } from 'utils/recoil/atoms'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'utils/axios'
-import { useHistory } from 'react-router-dom'
+import LanguageSelect from 'components/LanguageSelect'
+import { FormattedMessage, useIntl } from 'react-intl'
+import { Space } from 'antd'
 
 function HeaderInfo(props) {
   const { refetch } = useQuery(['logout'], () => axios.get('/user/logout'), { enabled: false })
   // const queryClient = useQueryClient()
   // const history = useHistory()
   const [user, setUser] = useRecoilState(userAtom)
+
+  const intl = useIntl()
+  const languageObj = useRecoilValue(languageAtom)
+  console.log(languageObj)
 
   const signout = () => {
     refetch()
@@ -25,6 +30,12 @@ function HeaderInfo(props) {
 
   return (
     <div className="headerInfo">
+      <LanguageSelect bordered />
+
+      <Space>
+        <FormattedMessage id="title" />
+        {intl.formatMessage({ id: 'title' })}
+      </Space>
       <div className="headerInfo__nav">
         {/* <UserOutlined
           style={{
