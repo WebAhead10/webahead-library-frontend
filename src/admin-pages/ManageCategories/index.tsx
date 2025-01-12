@@ -74,7 +74,6 @@ const ManageCategories = () => {
             key={category.id}
             name={category.name}
             style={{
-              objectFit: (index + 1) % 4 === 0 ? 'cover' : 'fill',
               background: (index + 1) % 5 === 0 ? 'white' : ''
             }}
             logo={category.logo}
