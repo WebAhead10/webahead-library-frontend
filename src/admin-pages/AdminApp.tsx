@@ -44,7 +44,7 @@ function AdminApp() {
     <Layout dir="ltr">
       <Header className="header">
         <div>
-          <h2 style={{ color: 'white', margin: '0 10px 0 -30px' }}>Webahead library</h2>
+          <h2 style={{ color: 'white', margin: '0 10px 0 -30px' }}>Nabesh Project</h2>
         </div>
       </Header>
       <Layout className="site-layout" style={{ minHeight: '90vh' }}>
