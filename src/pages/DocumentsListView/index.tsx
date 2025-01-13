@@ -5,6 +5,7 @@ import axios from 'utils/axios'
 import { useHistory, useParams } from 'react-router-dom'
 import { IDocument, ITagInput } from 'types'
 import { useState } from 'react'
+import { FormattedMessage } from 'react-intl'
 const { Text } = Typography
 
 const DocumentsListView = () => {
@@ -38,7 +39,7 @@ const DocumentsListView = () => {
     >
       <div className={style.topForm}>
         <div className={style.inputContainer}>
-          <Text className={style.inputLabel}>وسوم:</Text>
+          <Text className={style.inputLabel}><FormattedMessage id="general_text-tags" />:</Text>
           <Select
             mode="tags"
             style={{ width: '100%' }}

@@ -1,12 +1,12 @@
-import style from './style.module.css'
+import { FormattedMessage } from "react-intl"
 
 const ContactUs = () => {
   return (
     <div>
-      <h1>تواصل معنا</h1>
+      <h1><FormattedMessage id="contact_us_page-contact-us" /></h1>
 
       <p>
-        <h3>بريد الاكتروني - nabeshproject@gmail.com</h3>
+        <h3><FormattedMessage id="general_text-email" /> - nabeshproject@gmail.com</h3>
       </p>
     </div>
   )

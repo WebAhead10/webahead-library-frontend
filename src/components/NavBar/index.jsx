@@ -1,5 +1,6 @@
 import React from 'react'
 import { Nav, NavLink, NavMenu } from './NavbarElements'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 function NavBar() {
   return (
@@ -14,9 +15,9 @@ function NavBar() {
               objectFit: 'contain'
             }}
           />
-          <NavLink to="/">الصفحة الرئيسية</NavLink>
-          <NavLink to="/about">من نحن</NavLink>
-          <NavLink to="/contact-us">تواصل معنا</NavLink>
+          <NavLink to="/"><FormattedMessage id="home_page-home"></FormattedMessage></NavLink>
+          <NavLink to="/about"><FormattedMessage id="home_page-about" /></NavLink>
+          <NavLink to="/contact-us"><FormattedMessage id="home_page-contact-us" /></NavLink>
         </NavMenu>
 
         {/* <div className="header__search">

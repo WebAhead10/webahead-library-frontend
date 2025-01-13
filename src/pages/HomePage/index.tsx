@@ -9,10 +9,12 @@ import { IDocumentSearch } from 'utils/recoil/types'
 import { useHistory } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Row, Col, Select, Form, Input, Divider, Button, Card, Typography, message } from 'antd'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const { Text } = Typography
 
 function HomePage() {
+  const intl = useIntl();
   const [documentSearch, setDocumentSearch] = useRecoilState<IDocumentSearch>(documentSearchAtom)
   const [filteredArticles, setFilteredArticles] = useState([])
   const history = useHistory()
@@ -74,7 +76,7 @@ function HomePage() {
                   setFilteredArticles(data)
 
                   if (!data.length) {
-                    message.warning('لا توجد نتائج')
+                    message.warning(intl.formatMessage({ id: 'home_page-no-search-results' }))
                   }
                 }
               })
@@ -83,7 +85,7 @@ function HomePage() {
         >
           <Row justify="center" align="bottom" wrap style={{ margin: '0 120px' }}>
             <Col span={6}>
-              <Form.Item label="وسوم" name="tags">
+              <Form.Item label={intl.formatMessage({ id: 'general_text-tags' })} name="tags">
                 <Select mode="tags" loading={isLoading} optionFilterProp="children">
                   {tags.map((tag: ITagInput) => (
                     <Select.Option key={tag.id} value={tag.id}>
@@ -94,7 +96,7 @@ function HomePage() {
               </Form.Item>
             </Col>
             <Col span={6} offset={1}>
-              <Form.Item label="عنوان" name="title">
+              <Form.Item label={intl.formatMessage({ id: 'general_text-title' })} name="title">
                 <Input />
               </Form.Item>
             </Col>
@@ -102,7 +104,7 @@ function HomePage() {
             <Col offset={1}>
               <Form.Item>
                 <Button type="primary" htmlType="submit">
-                  بحث
+                  <FormattedMessage id="general_text-search" />
                 </Button>
               </Form.Item>
             </Col>
