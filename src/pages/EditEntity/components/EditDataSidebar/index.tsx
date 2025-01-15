@@ -6,7 +6,8 @@ import { ITagInput, IUser } from 'types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import Editor from 'pages/Editor'
 import { useRecoilValue } from 'recoil'
-import { userAtom } from 'utils/recoil/atoms'
+import { userAtom, languageAtom } from 'utils/recoil/atoms'
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface EditDataSidebarProps {
   editStatus: string
@@ -24,6 +25,9 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
 
   const formText = Form.useWatch('text', form)
   const user = useRecoilValue<IUser>(userAtom)
+  const languageObj = useRecoilValue(languageAtom)
+  const lang = languageObj.language || 'en';
+  const intl = useIntl();
 
   const { data: overlayData, refetch } = useQuery<{
     id: number
@@ -161,14 +165,14 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
         <Row wrap gutter={[16, 0]}>
           {isTextEditAllow && (
             <Col span={22} offset={1}>
-              <Form.Item label="عنوان" name="title">
+              <Form.Item label={intl.formatMessage({ id: 'edit_article_page_side_bar_form-title' })} name="title">
                 <Input />
               </Form.Item>
             </Col>
           )}
           {isTagEditAllow && (
             <Col offset={1} span={22}>
-              <Form.Item label="وسوم" name="tags">
+              <Form.Item label={intl.formatMessage({ id: 'edit_article_page_side_bar_form-tags' })} name="tags">
                 <Select
                   loading={isAttachingTag || isDetachingTag}
                   mode="tags"
@@ -185,7 +189,7 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
                     if (tag) {
                       attachTag(value, {
                         onSuccess: () => {
-                        message.success('تم اضافة التصنيف بنجاح');
+                        message.success(intl.formatMessage({ id: 'edit_article_page_side_bar_form-tag-added-successfully' }));
                         // refetch();
                         },
                       });
@@ -196,7 +200,7 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
                     if (tag) {
                       detachTag(value, {
                         onSuccess: () => {
-                          message.success('تم حذف التصنيف بنجاح');
+                          message.success(intl.formatMessage({ id: 'edit_article_page_side_bar_form-tag-deleted-successfully' }));
                           // refetch();
                         },
                       });
@@ -210,14 +214,14 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
         </Row>
         <Row>
           <Col offset={1} span={22}>
-            <Form.Item label="ملاحظة أساسية" name="mainNote">
+            <Form.Item label={intl.formatMessage({ id: 'edit_article_page_side_bar_form-main-comment' })} name="mainNote">
               <Input.TextArea cols={120} rows={5} />
             </Form.Item>
           </Col>
         </Row>
         <Row>
           <Col offset={1} span={24}>
-            <Form.Item label="النوع" name="status">
+            <Form.Item label={intl.formatMessage({ id: 'edit_article_page_side_bar_form-type' })} name="status">
               <Radio.Group
                 style={{
                   display: 'flex',

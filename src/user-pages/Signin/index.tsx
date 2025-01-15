@@ -3,10 +3,12 @@ import axios from 'utils/axios'
 import { useHistory, Link } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { Form, Input, Button, message, Typography, Row, Col } from 'antd'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const { Title } = Typography
 
 const Signin = () => {
+  const intl = useIntl();
   const queryClient = useQueryClient()
 
   const history = useHistory()
@@ -29,12 +31,12 @@ const Signin = () => {
   return (
     <Row wrap={true} align="middle" justify="center" gutter={[0, 30]} style={{ marginTop: '20px' }}>
       <Col span={24}>
-        <Title level={2}>تسجيل دخول المستخدم</Title>
+        <Title level={2}><FormattedMessage id="user_sign_in-title" /></Title>
       </Col>
       <Col>
         <Form onFinish={onFinish} layout="vertical">
           <Form.Item
-            label="البريد الالكتروني"
+            label={intl.formatMessage({ id: 'general_text-email' })}
             name="email"
             rules={[{ required: true, message: 'Please input your email!' }]}
             style={{ width: '400px' }}
@@ -43,7 +45,7 @@ const Signin = () => {
           </Form.Item>
 
           <Form.Item
-            label="كلمة المرور"
+            label={intl.formatMessage({ id: 'general_text-password' })}
             name="password"
             rules={[{ required: true, message: 'Please input your password!' }]}
             style={{ width: '400px' }}
@@ -53,11 +55,11 @@ const Signin = () => {
 
           <Form.Item>
             <Button type="primary" htmlType="submit" size="large">
-              دخول
+              <FormattedMessage id="user_sign_in-sign-in" />
             </Button>
           </Form.Item>
         </Form>
-        <Link to="/forget-password">نسيت كلمة المرور؟</Link>
+        <Link to="/forget-password"><FormattedMessage id="user_sign_in-forget-password" /> </Link>
       </Col>
     </Row>
   )

@@ -9,6 +9,7 @@ import EditDataSidebar from './components/EditDataSidebar'
 import style from './style.module.css'
 import { useOverlayCoords } from '../../api-hooks/overlay.hooks'
 import OpenSeadragon from 'openseadragon'
+import { FormattedMessage } from 'react-intl'
 
 const STATUS_NAVIGATING = 'nagivating'
 const STATUS_DRAWING = 'drawing'
@@ -442,7 +443,7 @@ const EditEntity = () => {
               type="primary"
               size="large"
             >
-              وضع التنقل
+              <FormattedMessage id="edit_article_page-mouse-able-mode" />            
             </Button>
             <Button
               onClick={() => updateDrawingStatus(STATUS_DRAWING, false)}
@@ -450,7 +451,7 @@ const EditEntity = () => {
               type="primary"
               size="large"
             >
-              وضع الرسم
+              <FormattedMessage id="edit_article_page-draw-mode" />            
             </Button>
           </Space>
           <br />
@@ -481,10 +482,10 @@ const EditEntity = () => {
       <br />
       <Space>
         <Button type="primary" size="large" onClick={() => onSubmit(overlays, params.id)}>
-          إدخـال
+          <FormattedMessage id="general_text-submit" />
         </Button>
         <Button type="primary" size="large" onClick={drawOverly}>
-          إرسـم
+         <FormattedMessage id="general_text-draw" />
         </Button>
       </Space>
     </div>

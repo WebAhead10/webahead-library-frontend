@@ -10,6 +10,7 @@ import { useRecoilValue } from 'recoil'
 import { IUser } from 'types'
 import { Button } from 'antd'
 import OpenSeadragon from 'openseadragon'
+import { FormattedMessage } from 'react-intl'
 
 const ViewNewsPaper = () => {
   const [viewer, setViewer] = useState(null)
@@ -224,7 +225,7 @@ const ViewNewsPaper = () => {
             }}
             icon={<EditOutlined />}
           >
-            وضع التحرير
+            <FormattedMessage id="edit_article_page-edit-mode" />
           </Button>
         </div>
       ) : (

@@ -1,8 +1,8 @@
 import React from 'react'
 import './style.css'
 import { Link } from 'react-router-dom'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { languageAtom, userAtom } from 'utils/recoil/atoms'
+import { useRecoilState } from 'recoil'
+import { userAtom } from 'utils/recoil/atoms'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'utils/axios'
 import LanguageSelect from 'components/LanguageSelect'
@@ -13,8 +13,6 @@ function HeaderInfo(props) {
   const { refetch } = useQuery(['logout'], () => axios.get('/user/logout'), { enabled: false })
   const [user, setUser] = useRecoilState(userAtom)
 
-  const languageObj = useRecoilValue(languageAtom)
-  console.log(languageObj)
 
   const signout = () => {
     refetch()

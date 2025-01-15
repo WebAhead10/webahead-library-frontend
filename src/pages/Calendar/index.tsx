@@ -4,21 +4,9 @@ import { useHistory, useParams } from 'react-router-dom'
 import axios from 'utils/axios'
 import { INewspaperParams, IRandomKeys } from 'types'
 import { Breadcrumb } from 'antd'
-
-const monthNameToNumber: IRandomKeys = {
-  'كانون ثاني': '01',
-  شباط: '02',
-  آذار: '03',
-  نيسان: '04',
-  أيار: '05',
-  حزيران: '06',
-  تموز: '07',
-  آب: '08',
-  أيلول: '09',
-  " تشرين أول": '10',
-  "تشرين ثاني": '11',
-  "كانون أول": '12'
-}
+import { useIntl } from 'react-intl'
+import { useRecoilValue } from 'recoil'
+import { languageAtom } from 'utils/recoil/atoms'
 
 interface INewspaperDay {
   id: number
@@ -26,10 +14,46 @@ interface INewspaperDay {
 }
 
 function Calendar_() {
+  const intl = useIntl();
+  const languageObj = useRecoilValue(languageAtom)
+  const lang = languageObj.language || 'en';
   const history = useHistory()
-  const { categoryId, year, month } = useParams<INewspaperParams>()
+  let { categoryId, year, month } = useParams<INewspaperParams>()
   const [publishedDays, setPublishedDays] = useState([])
   const [breadcrumbs, setBreadcrumbs] = useState([])
+
+  console.log('lang=', lang);
+
+  const monthsIntl = {
+    january: intl.formatMessage({ id: 'calendar_months-january' }),
+    february: intl.formatMessage({ id: 'calendar_months-february' }),
+    march: intl.formatMessage({ id: 'calendar_months-march' }),
+    april: intl.formatMessage({ id: 'calendar_months-april' }),
+    may: intl.formatMessage({ id: 'calendar_months-may' }),
+    june: intl.formatMessage({ id: 'calendar_months-june' }),
+    july: intl.formatMessage({ id: 'calendar_months-july' }),
+    august: intl.formatMessage({ id: 'calendar_months-august' }),
+    september: intl.formatMessage({ id: 'calendar_months-september' }),
+    october: intl.formatMessage({ id: 'calendar_months-october' }),
+    november: intl.formatMessage({ id: 'calendar_months-november' }),
+    december: intl.formatMessage({ id: 'calendar_months-december' }),
+  };
+
+
+  const monthNameToNumber: IRandomKeys = {
+    [monthsIntl.january]: '01',
+    [monthsIntl.february]: '02',
+    [monthsIntl.march]: '03',
+    [monthsIntl.april]: '04',
+    [monthsIntl.may]: '05',
+    [monthsIntl.june]: '06',
+    [monthsIntl.july]: '07',
+    [monthsIntl.august]: '08',
+    [monthsIntl.september]: '09',
+    [monthsIntl.october]: '10',
+    [monthsIntl.november]: '11',
+    [monthsIntl.december]: '12',
+  };
 
   const fetchPublishDates = useCallback(async () => {
     if (!categoryId || !year || !month) {
@@ -37,6 +61,32 @@ function Calendar_() {
     }
 
     try {
+      if (month === 'January') {
+        month = 'كانون الثاني';
+      } else if (month === 'February') {
+        month = 'شباط';
+      } else if (month === 'March') {
+        month = 'آذار';
+      } else if (month === 'April') {
+        month = 'نيسان';
+      } else if (month === 'May') {
+        month = 'أيار';
+      } else if (month === 'June') {
+        month = 'حزيران';
+      } else if (month === 'July') {
+        month = 'تموز';
+      } else if (month === 'August') {
+        month = 'آب';
+      } else if (month === 'September') {
+        month = 'أيلول';
+      } else if (month === 'October') {
+        month = 'تشرين الأول';
+      } else if (month === 'November') {
+        month = 'تشرين الثاني';
+      } else if (month === 'December') {
+        month = 'كانون الأول';
+      }
+      
       const result = await axios.get(`/document/publish/dates/${categoryId}/${year}/${month}`)
 
       setPublishedDays(result.data.data)
@@ -75,9 +125,9 @@ function Calendar_() {
         <span>{context.value.month}</span>
       </div> */}
       <Calendar
-        locale="ar"
+        locale={lang}
         activeStartDate={new Date(+year, +monthNameToNumber[month] - 1, 1)}
-        calendarType="Arabic"
+        calendarType={lang === 'en' ? 'US' : 'Arabic'}
         showNavigation={false}
         onClickDay={(value) => {
           const newspaperDay: INewspaperDay | any = publishedDays.find(({ day }) => +day === value.getDate())

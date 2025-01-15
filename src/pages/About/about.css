@@ -1,25 +1,51 @@
 /* About.css */
-body, div {
+.about-container-rtl {
     direction: rtl;
     text-align: right;
     font-family: Arial, sans-serif;
     line-height: 1.6;
+    margin: 20px;
 }
 
-h1, h2 {
+.about-container-rtl h1,
+.about-container-rtl h2 {
     text-align: right;
     margin-top: 20px;
     color: #333;
-    margin-right: 20px;
 }
 
-p {
+.about-container-rtl p {
     margin-bottom: 15px;
-    margin-right: 30px;
 }
 
-ul {
+.about-container-rtl ul {
     margin-bottom: 15px;
     padding-right: 20px;
+    list-style-type: disc;
+}
+
+/* About.css */
+.about-container-ltr {
+    direction: ltr;
+    text-align: left;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+}
+
+.about-container-ltr h1,
+.about-container-ltr h2 {
+    text-align: left;
+    margin-top: 20px;
+    color: #333;
+}
+
+.about-container-ltr p {
+    margin-bottom: 15px;
+}
+
+.about-container-ltr ul {
+    margin-bottom: 15px;
+    padding-left: 20px;
     list-style-type: disc;
 }

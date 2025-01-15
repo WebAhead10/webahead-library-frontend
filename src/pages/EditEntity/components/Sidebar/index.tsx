@@ -15,6 +15,9 @@ import {
 import axios from 'utils/axios'
 import { Button, Collapse, Flex, Modal } from 'antd'
 import { useHistory } from 'react-router-dom'
+import { FormattedMessage, useIntl } from 'react-intl'
+import { useRecoilValue } from 'recoil'
+import { languageAtom } from 'utils/recoil/atoms'
 interface Overlay {
   x: number
   y: number
@@ -69,6 +72,8 @@ const Sidebar = ({
   const history = useHistory()
   const [openDimensions, setOpenDimensions] = useState('')
   const [overlayDimensions, setOverlayDimensions] = useState<Overlay | null>(null)
+  const languageObj = useRecoilValue(languageAtom)
+  const lang = languageObj.language || 'en';
 
   const deleteOverlay = async (overlayId: string, articleId: number) => {
     try {
@@ -80,6 +85,8 @@ const Sidebar = ({
       console.log(error)
     }
   }
+
+  const intl = useIntl();
 
   // when editOverlayId changes we should scroll to the collpase
   useEffect(() => {
@@ -125,9 +132,9 @@ const Sidebar = ({
           history.goBack()
         }}
       >
-        العودة الى وضع التصفح
+        <FormattedMessage id="edit_article_page-back-to-view-mode"/>
       </Button>
-      <h1>قائمة المقالات</h1>
+      <h1><FormattedMessage id="edit_article_page-article-list"/></h1>
 
       <div className={style.articleWrapper}>
         {(articles || [])
@@ -170,7 +177,7 @@ const Sidebar = ({
                             paddingRight: '10px'
                           }}
                         >
-                          {title || 'بدون عنوان'}
+                          {title || <FormattedMessage id="edit_article_page-untitled-article"/>}
                         </span>
                       </div>
                       {editStatus === 'drawing' && status !== 'closed' && (
@@ -201,7 +208,7 @@ const Sidebar = ({
                             borderRadius: '0'
                           }}
                         >
-                          حتلن البيانات
+                          <FormattedMessage id="edit_article_page-edit-data"/>
                         </Button>
                         {coords.map(({ id: coordId, overlay }, index) => (
                           <div
@@ -221,24 +228,24 @@ const Sidebar = ({
                           >
                             <Flex vertical align="center">
                               <Flex justify="space-between">
-                                <span>قصاصة رقم {index + 1}</span>
+                                <span><FormattedMessage id="edit_article_page-layout-number"/> {index + 1}</span>
                                 <span
                                   className={style.deleteOverlay}
                                   onClick={(e) => {
                                     e.stopPropagation()
                                     confirm({
                                       title: (
-                                        <div style={{ direction: 'rtl', textAlign: 'right' }}>
-                                             هل أنت متأكد انك تريد حذف هذه القصاصة؟
+                                        <div style={{ direction: lang === 'ar'? 'rtl': 'ltr', textAlign: lang === 'ar'? 'right': 'left' }}>
+                                          {intl.formatMessage({ id: 'edit_article_page-delete-layout-message-title' })}
                                         </div>
                                       ),
                                       content: (
-                                        <div style={{ direction: 'rtl', textAlign: 'right' }}>
-                                           اذا كانت اجابتك نعم فلا يمكن التراجع عن هذا القرار                                                 
+                                        <div style={{ direction: lang === 'ar'? 'rtl': 'ltr', textAlign: lang === 'ar'? 'right': 'left' }}>
+                                           {intl.formatMessage({ id: 'edit_article_page-delete-layout-message-info' })}
                                         </div> 
                                       ),
-                                      okText: 'نعم',
-                                      cancelText: 'لا',
+                                      okText: intl.formatMessage({ id: 'general_text-yes' }),
+                                      cancelText: intl.formatMessage({ id: 'general_text-no' }),
                                       onOk() {
                               
                                         deleteOverlay(coordId, id);
@@ -408,7 +415,7 @@ const Sidebar = ({
                                       // then refetch
                                     }}
                                   >
-                                    حفظ
+                                    <FormattedMessage id="general_text-save"/>
                                   </Button>
                                 </Flex>
                               ) : (

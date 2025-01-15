@@ -2,31 +2,51 @@ import { useState, useEffect, useCallback } from 'react'
 import style from './style.module.css'
 import { useHistory, useParams } from 'react-router-dom'
 import axios from 'utils/axios'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { INewspaperParams } from 'types'
 import { Breadcrumb } from 'antd'
+import { useRecoilValue } from 'recoil'
+import { languageAtom } from 'utils/recoil/atoms'
 
-const months = [
-  'كانون ثاني',
-  'شباط',
-  'آذار',
-  'نيسان',
-  'أيار',
-  'حزيران',
-  'تموز',
-  'آب',
-  'أيلول',
-  'تشرين أول',
-  'تشرين ثاني',
-  'كانون أول'
-]
 
 function ChooseYearMonth() {
+  const intl = useIntl();
   const history = useHistory()
   const params = useParams<INewspaperParams>()
   const [year, setYear] = useState('')
   const [month, setMonth] = useState('')
   const [publishedDocs, setPublishedDocs] = useState<{ [key: string]: string[] }>({})
   const [breadcrumb, setBreadcrumb] = useState([])
+  const monthsIntl = {
+    january: intl.formatMessage({ id: 'calendar_months-january' }),
+    february: intl.formatMessage({ id: 'calendar_months-february' }),
+    march: intl.formatMessage({ id: 'calendar_months-march' }),
+    april: intl.formatMessage({ id: 'calendar_months-april' }),
+    may: intl.formatMessage({ id: 'calendar_months-may' }),
+    june: intl.formatMessage({ id: 'calendar_months-june' }),
+    july: intl.formatMessage({ id: 'calendar_months-july' }),
+    august: intl.formatMessage({ id: 'calendar_months-august' }),
+    september: intl.formatMessage({ id: 'calendar_months-september' }),
+    october: intl.formatMessage({ id: 'calendar_months-october' }),
+    november: intl.formatMessage({ id: 'calendar_months-november' }),
+    december: intl.formatMessage({ id: 'calendar_months-december' }),
+  };
+  const months = [
+    monthsIntl.january,
+    monthsIntl.february,
+    monthsIntl.march,
+    monthsIntl.april,
+    monthsIntl.may,
+    monthsIntl.june,
+    monthsIntl.july,
+    monthsIntl.august,
+    monthsIntl.september,
+    monthsIntl.october,
+    monthsIntl.november,
+    monthsIntl.december,
+  ];
+  const languageObj = useRecoilValue(languageAtom)
+      const lang = languageObj.language || 'en';
 
   const fetchPublishDates = useCallback(async () => {
     if (!params.categoryId) {
@@ -34,7 +54,42 @@ function ChooseYearMonth() {
     }
 
     try {
-      const result = await axios.get(`/document/publish/dates/${params.categoryId}`)
+      const result = await axios.get(`/document/publish/dates/${params.categoryId}`);
+      if (lang === 'en') {
+        console.log('result=', result);
+      
+        const arabicToEnglishMonths: Record<string, string> = {
+          'كانون ثاني': 'January',
+          'شباط': 'February',
+          'آذار': 'March',
+          'نيسان': 'April',
+          'أيار': 'May',
+          'حزيران': 'June',
+          'تموز': 'July',
+          'آب': 'August',
+          'أيلول': 'September',
+          'تشرين أول': 'October',
+          'تشرين ثاني': 'November',
+          'كانون أول': 'December',
+        };
+      
+        // Transform Arabic month names to English for all year keys
+        result.data.data = Object.fromEntries(
+          Object.entries(result.data.data).map(([year, months]) => {
+            // Check if the key is a valid year and the value is an array
+            if (/^\d{4}$/.test(year) && Array.isArray(months)) {
+              return [
+                year,
+                months.map((month) => arabicToEnglishMonths[month] || month), // Convert month names
+              ];
+            }
+            return [year, months]; // Keep non-year keys or invalid data as is
+          })
+        );
+      
+        console.log('Updated result.data.data:', result.data.data);
+      }
+      
 
       setPublishedDocs(result.data.data)
       setBreadcrumb(result.data.breadcrumbs || [])
@@ -75,7 +130,7 @@ function ChooseYearMonth() {
 
       <div className={style['choose-year-top']}>
         <label className={style['date-dropdown-container']} htmlFor="dropdown-year">
-          <span>سنة: </span>
+          <span><FormattedMessage id="general_text-year"/>: </span>
           <select
             className={style['date-dropdown']}
             id="dropdown-year"
@@ -91,7 +146,7 @@ function ChooseYearMonth() {
           </select>
         </label>
         <label className={style['date-dropdown-container']} htmlFor="dropdown-month">
-          <span>شهر: </span>
+          <span><FormattedMessage id="general_text-month"/>: </span>
           <select
             className={style['date-dropdown']}
             id="dropdown-month"
@@ -114,7 +169,7 @@ function ChooseYearMonth() {
             history.push(`/calendar/${params.categoryId}/${year}/${month}`)
           }}
         >
-          اذهب
+          <FormattedMessage id="general_text-go"/>
         </button>
       </div>
       <div>

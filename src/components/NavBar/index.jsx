@@ -1,6 +1,6 @@
 import React from 'react'
 import { Nav, NavLink, NavMenu } from './NavbarElements'
-import { FormattedMessage, useIntl } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 
 function NavBar() {
   return (
