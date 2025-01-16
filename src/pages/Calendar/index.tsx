@@ -61,7 +61,7 @@ function Calendar_() {
 
     try {
       if (month === 'January') {
-        month = 'كانون الثاني';
+        month = 'كانون ثاني';
       } else if (month === 'February') {
         month = 'شباط';
       } else if (month === 'March') {
@@ -79,11 +79,11 @@ function Calendar_() {
       } else if (month === 'September') {
         month = 'أيلول';
       } else if (month === 'October') {
-        month = 'تشرين الأول';
+        month = 'تشرين أول';
       } else if (month === 'November') {
-        month = 'تشرين الثاني';
+        month = 'تشرين ثاني';
       } else if (month === 'December') {
-        month = 'كانون الأول';
+        month = 'كانون أول';
       }
       
       const result = await axios.get(`/document/publish/dates/${categoryId}/${year}/${month}`);
