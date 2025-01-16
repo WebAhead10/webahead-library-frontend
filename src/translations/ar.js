@@ -36,6 +36,8 @@ const ar = {
   'user_sign_in-title': 'تسجيل الدخول',
   'user_sign_in-sign-in': 'دخول',
   'user_sign_in-forget-password': 'نسيت كلمة المرور؟',
+  'user_sign_in-input-your-email':'الرجاء إدخال بريدك الإلكتروني',
+  'user_sign_in-input-your-password':'الرجاء إدخال كلمة المرور',
   'user_sign_up-title': 'تسجيل مستخدم جديد',
   'user_sign_up-confirm-password': 'تأكيد كلمة المرور',
   'user_sign_up-sign-up': 'تسجيل',
@@ -56,7 +58,16 @@ const ar = {
   'edit_article_page-draw-mode':'وضع الرسم',
   'edit_article_page-delete-layout-message-title':'هل أنت متأكد انك تريد حذف هذه القصاصة؟',
   'edit_article_page-delete-layout-message-info':'اذا كانت اجابتك نعم فلا يمكن التراجع عن هذا القرار',
-  '':'أغلق المقالة للتعديلات',
+  'edit_article_page_side_bar_form-type':'النوع',
+  'edit_article_page_side_bar_form-main-comment':'ملاحظة رئيسية',
+  'edit_article_page_side_bar_form-tag-deleted-successfully':'تم حذف الوسم بنجاح',
+  'edit_article_page_side_bar_form-tags':'الوسوم',
+  'edit_article_page_side_bar_form-title':'العنوان',
+  'edit_article_page_side_bar_form-text':'النص',
+  'edit_article_page_side_bar_form-close-for-edit':'أغلق المقالة للتعديلات',
+  'edit_article_page_side_bar_form-keep-open-for-edit':'إبقاء مفتوحة للتعديلات',
+  'edit_article_page_side_bar_form-ready-for-review':'جاهزة للمراجعة',
+  'bread_crumb-home':'الصفحة الرئيسية',
 }
 
 export default ar

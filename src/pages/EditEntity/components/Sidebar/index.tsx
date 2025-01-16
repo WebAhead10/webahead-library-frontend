@@ -143,7 +143,7 @@ const Sidebar = ({
             <Collapse
               key={index}
               style={{
-                direction: 'rtl',
+                direction: lang === 'ar'? 'rtl': 'ltr',
                 borderRadius: '0px',
                 backgroundColor: currentlyHovered === id || editOverlayId === id ? 'yellow' : 'white',
                 padding: '0px'

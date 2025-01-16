@@ -8,16 +8,21 @@ function NavBar() {
       <Nav>
         <NavMenu>
           <img
-            src="https://user-images.githubusercontent.com/24195641/236838136-a7d0dd66-3077-4e1e-b39c-dc2af1bebae9.jpeg"
+            src="/images/nabesh_with_english_below_adjusted.jpeg"
             alt="logo"
             style={{
               height: '60px',
               objectFit: 'contain'
             }}
           />
-          <NavLink to="/"><FormattedMessage id="home_page-home"></FormattedMessage></NavLink>
-          <NavLink to="/about"><FormattedMessage id="home_page-about" /></NavLink>
-          <NavLink to="/contact-us"><FormattedMessage id="home_page-contact-us" /></NavLink>
+          <NavLink to="/" 
+            isActive={(match, location) => match && location.pathname === "/"} 
+            style={({ isActive }) => ({ backgroundColor: isActive ? "blue" : "transparent" })}><FormattedMessage id="home_page-home"/></NavLink>
+          <NavLink to="/about" 
+            style={({ isActive }) => ({ backgroundColor: isActive ? "blue" : "transparent" })}
+            ><FormattedMessage id="home_page-about" /></NavLink>
+          <NavLink to="/contact-us" 
+            style={({ isActive }) => ({ backgroundColor: isActive ? "blue" : "transparent" })}><FormattedMessage id="home_page-contact-us" /></NavLink>
         </NavMenu>
 
         {/* <div className="header__search">

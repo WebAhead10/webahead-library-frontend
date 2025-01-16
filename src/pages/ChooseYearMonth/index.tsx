@@ -107,11 +107,13 @@ function ChooseYearMonth() {
       <Breadcrumb
         style={{
           margin: '20px',
-          fontSize: '18px'
+          fontSize: '18px',
+          textAlign: lang === 'ar' ? 'right' : 'left',
+          direction: lang === 'ar' ? 'rtl' : 'ltr',
         }}
       >
         <Breadcrumb.Item>
-          <a href="/">الرئيسية</a>
+          <a href="/"><FormattedMessage id="bread_crumb-home"/></a>
         </Breadcrumb.Item>
         {breadcrumb.map(
           (

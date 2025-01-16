@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import axios from 'utils/axios'
 import { INewspaperParams, IRandomKeys } from 'types'
 import { Breadcrumb } from 'antd'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { useRecoilValue } from 'recoil'
 import { languageAtom } from 'utils/recoil/atoms'
 
@@ -22,7 +22,6 @@ function Calendar_() {
   const [publishedDays, setPublishedDays] = useState([])
   const [breadcrumbs, setBreadcrumbs] = useState([])
 
-  console.log('lang=', lang);
 
   const monthsIntl = {
     january: intl.formatMessage({ id: 'calendar_months-january' }),
@@ -87,7 +86,7 @@ function Calendar_() {
         month = 'كانون الأول';
       }
       
-      const result = await axios.get(`/document/publish/dates/${categoryId}/${year}/${month}`)
+      const result = await axios.get(`/document/publish/dates/${categoryId}/${year}/${month}`);
 
       setPublishedDays(result.data.data)
       setBreadcrumbs(result.data.breadcrumbs || [])
@@ -105,11 +104,13 @@ function Calendar_() {
       <Breadcrumb
         style={{
           margin: '20px',
-          fontSize: '18px'
+          fontSize: '18px',
+          textAlign: lang === 'ar' ? 'right' : 'left',
+          direction: lang === 'ar' ? 'rtl' : 'ltr',
         }}
       >
         <Breadcrumb.Item>
-          <a href="/">الرئيسية</a>
+          <a href="/"><FormattedMessage id="bread_crumb-home"/></a>
         </Breadcrumb.Item>
         {breadcrumbs.map(({ path, name }: { path: string; name: string }, index: number) => (
           <Breadcrumb.Item key={index}>

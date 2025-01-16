@@ -38,7 +38,7 @@ const Signin = () => {
           <Form.Item
             label={intl.formatMessage({ id: 'general_text-email' })}
             name="email"
-            rules={[{ required: true, message: 'Please input your email!' }]}
+            rules={[{ required: true, message: intl.formatMessage({ id: 'user_sign_in-input-your-email' }) }]}
             style={{ width: '400px' }}
           >
             <Input size="large" style={{ direction: 'ltr' }} />
@@ -47,7 +47,7 @@ const Signin = () => {
           <Form.Item
             label={intl.formatMessage({ id: 'general_text-password' })}
             name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
+            rules={[{ required: true, message: intl.formatMessage({ id: 'user_sign_in-input-your-password' }) }]}
             style={{ width: '400px' }}
           >
             <Input.Password size="large" style={{ direction: 'ltr' }} />

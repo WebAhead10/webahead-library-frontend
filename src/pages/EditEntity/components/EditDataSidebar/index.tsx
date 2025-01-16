@@ -226,12 +226,13 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
                 style={{
                   display: 'flex',
                   flexDirection: 'row',
-                  flexWrap: 'wrap'
+                  flexWrap: 'wrap',
+                  justifyContent: lang === 'ar' ? 'flex-start' : 'flex-end',
                 }}
-              >
-                <Radio value="close-article">أغلق المقالة للتعديلات</Radio>
-                <Radio value="open-article">إبقاء مفتوحة للتعديلات</Radio>
-                <Radio value="ready-for-review">جاهزة للمراجعة</Radio>
+               >
+                <Radio  style={{direction: lang === 'en' ? 'ltr' : 'rtl'}} value="close-article">{intl.formatMessage({ id: 'edit_article_page_side_bar_form-close-for-edit' })}</Radio>
+                <Radio style={{direction: lang === 'en' ? 'ltr' : 'rtl'}} value="open-article">{intl.formatMessage({ id: 'edit_article_page_side_bar_form-keep-open-for-edit' })}</Radio>
+                <Radio style={{direction: lang === 'en' ? 'ltr' : 'rtl'}} value="ready-for-review">{intl.formatMessage({ id: 'edit_article_page_side_bar_form-ready-for-review' })}</Radio>
               </Radio.Group>
             </Form.Item>
           </Col>
@@ -239,7 +240,7 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
         {isTextEditAllow && (
           <Row>
             <Col offset={1} span={22}>
-              <Form.Item label="نص" name="text">
+              <Form.Item label={intl.formatMessage({ id: 'edit_article_page_side_bar_form-text' })} name="text">
                 <div
                   style={{
                     height: '300px',
@@ -260,7 +261,7 @@ const EditDataSidebar = ({ editOverlayId: overlayId, editStatus, refreshCoords }
           </Row>
         )}
         <Button type="primary" loading={isSubmittingOverlayData} htmlType="submit">
-          حـفـظ
+          {intl.formatMessage({ id: 'general_text-save' })}
         </Button>
       </Form>
     </div>

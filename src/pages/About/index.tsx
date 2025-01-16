@@ -69,7 +69,7 @@ const About = () => {
       </header>
       <section>
         <p>
-          "Nabesh" is a community initiative that seeks to dig into Palestine's written history before the development of digital computing, focusing on the late Ottoman period and the entire British Mandate period. The goal is to make it more accessible and usable for research, education, creativity, and production purposes. The initiative was founded in 2022 by a group of independent Palestinian activists. It aims to digitize and transform archival materials, such as old newspapers and statistical bulletins, into searchable and usable digital resources that can be leveraged for various projects.
+          "Nabesh" is a community initiative that seeks to dig into Palestine's written history before the development of digital computing, focusing on the late Ottoman period and the entire British Mandate period. The goal is to make it more accessible and usable for research, education, creativity, and knowledge production purposes. The initiative was founded in 2022 by a group of independent Palestinian activists. It aims to digitize and transform archival materials, such as old newspapers and statistical bulletins, into searchable and usable digital resources that can be leveraged for various projects.
         </p>
       </section>
       <section>
