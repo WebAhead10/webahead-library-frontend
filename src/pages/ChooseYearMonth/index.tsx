@@ -56,10 +56,9 @@ function ChooseYearMonth() {
     try {
       const result = await axios.get(`/document/publish/dates/${params.categoryId}`);
       if (lang === 'en') {
-        console.log('result=', result);
       
         const arabicToEnglishMonths: Record<string, string> = {
-          'كانون ثاني': 'January',
+          'كانون الثاني': 'January',
           'شباط': 'February',
           'آذار': 'March',
           'نيسان': 'April',
@@ -68,11 +67,12 @@ function ChooseYearMonth() {
           'تموز': 'July',
           'آب': 'August',
           'أيلول': 'September',
-          'تشرين أول': 'October',
+          'تشرين الأول': 'October',
           'تشرين ثاني': 'November',
-          'كانون أول': 'December',
+          'كانون الأول': 'December',
         };
       
+        console.log('result.data.data', result.data.data);  
         // Transform Arabic month names to English for all year keys
         result.data.data = Object.fromEntries(
           Object.entries(result.data.data).map(([year, months]) => {
@@ -85,9 +85,7 @@ function ChooseYearMonth() {
             }
             return [year, months]; // Keep non-year keys or invalid data as is
           })
-        );
-      
-        console.log('Updated result.data.data:', result.data.data);
+        );      
       }
       
 

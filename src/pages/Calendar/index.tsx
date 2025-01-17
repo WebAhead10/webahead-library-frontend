@@ -60,30 +60,30 @@ function Calendar_() {
     }
 
     try {
-      if (month === 'January') {
-        month = 'كانون ثاني';
-      } else if (month === 'February') {
-        month = 'شباط';
-      } else if (month === 'March') {
-        month = 'آذار';
-      } else if (month === 'April') {
-        month = 'نيسان';
-      } else if (month === 'May') {
-        month = 'أيار';
-      } else if (month === 'June') {
-        month = 'حزيران';
-      } else if (month === 'July') {
-        month = 'تموز';
-      } else if (month === 'August') {
-        month = 'آب';
-      } else if (month === 'September') {
-        month = 'أيلول';
-      } else if (month === 'October') {
-        month = 'تشرين أول';
-      } else if (month === 'November') {
-        month = 'تشرين ثاني';
-      } else if (month === 'December') {
-        month = 'كانون أول';
+      if (month === 'January' || month === 'كانون الثاني') {
+        month = '01';
+      } else if (month === 'February' || month === 'شباط') {
+        month = '02';
+      } else if (month === 'March' || month === 'آذار') {
+        month = '03';
+      } else if (month === 'April' || month === 'نيسان') {
+        month = '04';
+      } else if (month === 'May' || month === 'أيار') {
+        month = '05';
+      } else if (month === 'June' || month === 'حزيران') {
+        month = '06';
+      } else if (month === 'July' || month === 'تموز') {
+        month = '07';
+      } else if (month === 'August' || month === 'آب') {
+        month = '09';
+      } else if (month === 'September' || month === 'أيلول') {
+        month = '09';
+      } else if (month === 'October' || month === 'تشرين الأول') {
+        month = '10';
+      } else if (month === 'November' || month === 'تشرين ثاني') {
+        month = '11';
+      } else if (month === 'December' || month === 'كانون الأول') {
+        month = '12';
       }
       
       const result = await axios.get(`/document/publish/dates/${categoryId}/${year}/${month}`);
