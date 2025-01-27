@@ -47,6 +47,7 @@ const LanguageSelect = ({ bordered }: IProps) => {
               isRtl: false
             })
           }
+          localStorage.setItem('language', key);
         }
       }}
       overlayStyle={{
