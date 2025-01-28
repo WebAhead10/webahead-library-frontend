@@ -31,7 +31,7 @@ const ar = {
   'calendar_months-august': 'آب',
   'calendar_months-september': 'أيلول',
   'calendar_months-october': 'تشرين الأول',
-  'calendar_months-november': 'تشرين الثاني',
+  'calendar_months-november': 'تشرين ثاني',
   'calendar_months-december': 'كانون الأول',
   'user_sign_in-title': 'تسجيل الدخول',
   'user_sign_in-sign-in': 'دخول',
