@@ -11,6 +11,7 @@ export interface IMainCategory {
   name: string
   logo: string
   viewType: string
+  order?: number
 }
 
 export interface ITagInput {

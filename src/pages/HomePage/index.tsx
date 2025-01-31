@@ -160,21 +160,7 @@ function HomePage() {
   <div className={style['news-container']}>
     {categories
       .filter((category: IMainCategory) => category.name !== 'Category-1-324') // Filter out "Category-1-324"
-      .sort((a: IMainCategory, b: IMainCategory) => {
-        const order = ['فلسطين', 'الكرمل', 'الدفاع','الإتحاد',
-                        'مرآة الشرق','الجامعة العربية','الجامعة الإسلامية','لسان العرب',
-                        'صوت الشعب','الزهور','اليرموك','الصراط المستقيم',
-                        'الشعب','السلام','الوحدة','النفير',
-                        'اللواء','الحياة','الإتحاد العربي','الجزيرة',
-                        'الجهاد','القدس','الفجر','جداول ورسوم بيانية',];
-        const indexA = order.indexOf(a.name);
-        const indexB = order.indexOf(b.name);
-
-        if (indexA === -1 && indexB === -1) return 0; // Both names are not in the order array
-        if (indexA === -1) return 1; // "a" is not prioritized
-        if (indexB === -1) return -1; // "b" is not prioritized
-        return indexA - indexB; // Sort based on the order array
-      })
+      .sort((a: IMainCategory, b: IMainCategory) => a.order - b.order)
       .map((category: IMainCategory, index: number) => (
         <MainCategorySquare
           name={category.name}
