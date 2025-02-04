@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import MainCategorySquare from 'components/MainCategorySquare'
-import { IMainCategory, IViewTypeRadio } from 'types'
+import { IViewTypeRadio } from 'types'
 import { viewTypes } from 'consts'
 import { Button, Modal, Form, Input, Radio, message } from 'antd'
-
+import { SortableContainer, SortableElement } from 'react-sortable-hoc'
+import { arrayMoveImmutable } from 'array-move'
 import style from './style.module.css'
-
 import axios from 'utils/axios'
 import { useState } from 'react'
 import ImageInput from 'components/ImageInput'
@@ -19,6 +19,8 @@ const ManageCategories = () => {
     const res = await axios.get('/categories')
     return res.data.categories
   })
+
+  const [categories, setCategories] = useState(data || []);
 
   const showModal = () => {
     setIsModalVisible(true)
@@ -53,6 +55,72 @@ const ManageCategories = () => {
     return null
   }
 
+  const SortableItem = SortableElement(({ category, index, onClick }) => (
+    <MainCategorySquare
+      key={category.id}
+      name={category.name}
+      style={{
+        background: (index + 1) % 5 === 0 ? 'white' : ''
+      }}
+      logo={category.logo}
+      onClick={() => onClick(category)}
+    />
+  ))
+
+  const SortableList = SortableContainer(({ items = [], onClick }) => {
+    return (
+      <div className={style['categoriesContainer']}>
+        {items.map((category, index) => (
+          <SortableItem
+            key={category.id}
+            index={index}
+            category={category}
+            onClick={onClick}
+          />
+        ))}
+      </div>
+    )
+  })
+
+  const sendNewOrderToServer = async (newOrder) => {
+    try {
+      const response = await axios.post('/categories/updateOrder', {
+        categories: newOrder.map((c, index) => ({ id: c.id, position: index }))
+      })
+  
+      console.log("Order updated successfully", response.data)
+    } catch (error) {
+      console.error('Failed to update category order:', error)
+    }
+  }
+  
+  
+
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    if (oldIndex !== newIndex) {
+      const newOrder = arrayMoveImmutable(categories, oldIndex, newIndex)
+      setCategories(newOrder)
+
+      console.log({ newOrder });
+      
+      // Send API request here with newOrder
+      sendNewOrderToServer(newOrder)
+    }
+  }
+  
+  const handleCategoryClick = (category) => {
+    form.setFieldsValue({
+      name: category.name,
+      logo: category.logo,
+      id: category.id,
+      viewType: category.viewType
+    })
+  
+    showModal()
+  }
+  
+  
+
   return (
     <div>
       <h1>Manage Categories</h1>
@@ -68,28 +136,13 @@ const ManageCategories = () => {
         Add new
       </Button>
 
-      <div className={style['categoriesContainer']}>
-        {data.map((category: IMainCategory, index: number) => (
-          <MainCategorySquare
-            key={category.id}
-            name={category.name}
-            style={{
-              background: (index + 1) % 5 === 0 ? 'white' : ''
-            }}
-            logo={category.logo}
-            onClick={() => {
-              form.setFieldsValue({
-                name: category.name,
-                logo: category.logo,
-                id: category.id,
-                viewType: category.viewType
-              })
+      { categories.length > 0  && <SortableList
+        items={categories}
+        onSortEnd={onSortEnd}
+        onClick={handleCategoryClick}
+        axis="xy"
+      /> }
 
-              showModal()
-            }}
-          />
-        ))}
-      </div>
       <Modal
         confirmLoading={loading}
         title="Basic Modal"
