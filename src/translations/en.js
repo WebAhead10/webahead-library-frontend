@@ -33,6 +33,7 @@ const en = {
   'calendar_months-october': 'October',
   'calendar_months-november': 'November',
   'calendar_months-december': 'December',
+  'calendar_months-number-of-documents': 'Number of documents: ',
   'user_sign_in-title': 'Sign In',
   'user_sign_in-sign-in': 'Sign In',
   'user_sign_in-forget-password': 'Forget Password?',

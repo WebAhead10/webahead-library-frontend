@@ -15,7 +15,7 @@ function ChooseYearMonth() {
   const params = useParams<INewspaperParams>()
   const [year, setYear] = useState('')
   const [month, setMonth] = useState('')
-  const [publishedDocs, setPublishedDocs] = useState<{ [key: string]: string[] }>({})
+  const [publishedDocs, setPublishedDocs] = useState<{ [key: string]: any[] }>({})
   const [breadcrumb, setBreadcrumb] = useState([])
   const monthsIntl = {
     january: intl.formatMessage({ id: 'calendar_months-january' }),
@@ -80,7 +80,12 @@ function ChooseYearMonth() {
             if (/^\d{4}$/.test(year) && Array.isArray(months)) {
               return [
                 year,
-                months.map((month) => arabicToEnglishMonths[month] || month), // Convert month names
+                months.map((month) => {
+                  return {
+                    name: arabicToEnglishMonths[month.name] || month.name, 
+                    numberOfDocuments: month.numberOfDocuments
+                  };
+                }), // Convert month names
               ];
             }
             return [year, months]; // Keep non-year keys or invalid data as is
@@ -155,7 +160,8 @@ function ChooseYearMonth() {
           >
             <option value=""></option>
             {months.map((currentMonth, i) => (
-              <option key={i} value={currentMonth} disabled={!year || !publishedDocs[year].includes(currentMonth)}>
+              <option key={i} value={currentMonth} disabled={!year || !publishedDocs[year]?.some((doc) => doc.name === currentMonth)
+              }>
                 {currentMonth}
               </option>
             ))}
@@ -182,13 +188,14 @@ function ChooseYearMonth() {
                   <li
                     key={index}
                     className={
-                      style[!publishedDocs[currentYear].includes(currentMonth) ? 'disabled__nav__item' : 'nav__item']
+                      style[!(publishedDocs[currentYear] ?? []).some((doc) => doc.name === currentMonth) ? 'disabled__nav__item' : 'nav__item']
                     }
                     onClick={() => {
                       history.push(`/calendar/${params.categoryId}/${currentYear}/${currentMonth}`)
                     }}
                   >
                     {currentMonth}
+                    {publishedDocs[currentYear]?.find((c) => c.name === currentMonth) && <div className={style["month-subtext"]}>(<FormattedMessage id="calendar_months-number-of-documents" />{publishedDocs[currentYear]?.find((c) => c.name === currentMonth)?.numberOfDocuments})</div>}
                   </li>
                 ))}
               </ul>
