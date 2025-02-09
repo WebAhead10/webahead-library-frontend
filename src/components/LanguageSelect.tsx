@@ -1,11 +1,7 @@
-// import { languageOptions } from '@/lib/constants'
-// import { languageAtom } from '@/lib/recoil/atoms'
 import { GlobalOutlined } from '@ant-design/icons'
 import { Dropdown, Flex } from 'antd'
 import { useRecoilState } from 'recoil'
 import { languageAtom } from 'utils/recoil/atoms'
-// import { LanguageDirection } from 'types'
-// import Image from 'next/image'
 
 interface IProps {
   bordered?: boolean
@@ -57,7 +53,7 @@ const LanguageSelect = ({ bordered }: IProps) => {
     >
       <Flex
         align="center"
-        justify="space-between"
+        justify="space-evenly"
         style={{
           cursor: 'pointer',
           border: bordered ? '1px solid #E5E5E5' : 'none',
