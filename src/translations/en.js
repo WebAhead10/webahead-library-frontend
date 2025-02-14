@@ -1,7 +1,9 @@
 const en = {
+  'header_component-welcome': 'Welcome',
   'home_page-contact-us': 'Contact us',
   'home_page-about': 'About',
   'home_page-home': 'Home',
+  'home_page-learn-and-support': 'Learn & support',
   'home_page-login': 'Login',
   'home_page-log-out': 'Log out',
   'home_page-register': 'Register',

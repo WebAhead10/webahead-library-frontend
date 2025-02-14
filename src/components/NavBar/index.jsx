@@ -1,6 +1,6 @@
 import React from 'react'
 import { Nav, NavLink, NavMenu } from './NavbarElements'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage } from 'react-intl';
 
 function NavBar() {
   return (
@@ -18,6 +18,9 @@ function NavBar() {
           <NavLink to="/" 
             isActive={(match, location) => match && location.pathname === "/"} 
             style={({ isActive }) => ({ backgroundColor: isActive ? "blue" : "transparent" })}><FormattedMessage id="home_page-home"/></NavLink>
+          {/* <NavLink to="/learn-and-support" 
+            style={({ isActive }) => ({ backgroundColor: isActive ? "blue" : "transparent" })}
+            ><FormattedMessage id="home_page-learn-and-support" /></NavLink> */}
           <NavLink to="/about" 
             style={({ isActive }) => ({ backgroundColor: isActive ? "blue" : "transparent" })}
             ><FormattedMessage id="home_page-about" /></NavLink>

@@ -48,7 +48,6 @@ function AdminApp() {
         </div>
       </Header>
       <Layout className="site-layout" style={{ minHeight: '90vh' }}>
-        {/* <Header className="site-layout-background" style={{ padding: 0 }} /> */}
         <Sider collapsible collapsed={collapse} onCollapse={setCollapse}>
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
             <Menu.Item key="2" onClick={() => history.push('/tags')} icon={<DesktopOutlined />}>

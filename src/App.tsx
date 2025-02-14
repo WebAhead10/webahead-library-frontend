@@ -22,6 +22,7 @@ const ChooseYearMonth = React.lazy(() => import('./pages/ChooseYearMonth'))
 const ViewNewsPaper = React.lazy(() => import('./pages/ViewNewsPaper'))
 const Calendar = React.lazy(() => import('./pages/Calendar'))
 const About = React.lazy(() => import('./pages/About'))
+const LearnAndSupport = React.lazy(() => import('./pages/LearnAndSupport'));
 const ContactUs = React.lazy(() => import('./pages/ContactUs'))
 const EditEntity = React.lazy(() => import('./pages/EditEntity'))
 const DocumentsListView = React.lazy(() => import('./pages/DocumentsListView'))
@@ -117,6 +118,7 @@ function App() {
                 <ProtectedRoute admin={false} path="/edit/newspaper/:id" component={EditEntity} />
                 <Route path="/calendar/:categoryId/:year/:month" component={Calendar} />
                 <Route path="/about" component={About} />
+                <Route path="/learn-and-support" component={LearnAndSupport} />
                 <Route path="/contact-us" component={ContactUs} />
                 <Route path="/user-signin">
                   <UserSignin />

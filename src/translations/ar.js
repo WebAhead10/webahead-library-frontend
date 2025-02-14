@@ -1,7 +1,9 @@
 const ar = {
+  'header_component-welcome': 'مرحباً',
   'home_page-contact-us': 'تواصل معنا',
   'home_page-about': 'من نحن',
   'home_page-home': 'الصفحة الرئيسية',
+  'home_page-learn-and-support': 'تعلم وساهم',
   'home_page-login': 'تسجيل الدخول',
   'home_page-log-out': 'تسجيل الخروج',
   'home_page-register': 'تسجيل',
