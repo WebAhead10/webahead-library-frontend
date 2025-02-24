@@ -2,6 +2,7 @@
 import axios from 'utils/axios'
 import { useHistory, Link } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
+import styled from 'styled-components'
 import { Form, Input, Button, message, Typography, Row, Col } from 'antd'
 import { FormattedMessage, useIntl } from 'react-intl'
 
@@ -28,6 +29,19 @@ const Signin = () => {
     }
   }
 
+
+const StyledPassword = styled(Input.Password)`
+  input {
+    background-color: transparent;
+    border-color: red;
+    color: white;
+    padding: 10px;
+    height: auto;
+    border-radius: 3px;
+    direction: ltr;
+  }
+`;
+
   return (
     <Row wrap={true} align="middle" justify="center" gutter={[0, 30]} style={{ marginTop: '20px' }}>
       <Col span={24}>
@@ -50,7 +64,7 @@ const Signin = () => {
             rules={[{ required: true, message: intl.formatMessage({ id: 'user_sign_in-input-your-password' }) }]}
             style={{ width: '400px' }}
           >
-            <Input.Password size="large" style={{ direction: 'ltr' }} />
+            <StyledPassword size="large" style={{ direction: 'ltr' }} />
           </Form.Item>
 
           <Form.Item>
