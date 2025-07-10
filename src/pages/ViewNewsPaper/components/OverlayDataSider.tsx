@@ -10,6 +10,7 @@ import { useOverlayNotes, useOverlayTags, useOverlayText } from 'api-hooks/overl
 import { useTags } from 'api-hooks/general.hook'
 import { useRecoilValue } from 'recoil'
 import { userAtom } from 'utils/recoil/atoms'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 interface OverlayDataSiderProps {
   overlayId: number
@@ -22,6 +23,7 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
   const [note, setNote] = useState('')
   const [initialNote, setInitialNote] = useState('')
   const user = useRecoilValue<IUser>(userAtom)
+  const intl = useIntl();
 
   const {
     data: notesData = {
@@ -98,14 +100,14 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
 
       <Tabs defaultActiveKey="2" centered>
         {/* Notes panel */}
-        <Tabs.TabPane tab="ملاحظات" key="1">
+        <Tabs.TabPane tab={intl.formatMessage({ id: 'edit_article_page-comments' })} key="1">
           <div
             className={style.tabPanelBody}
             style={{
               height: user.role === 'admin' ? 'calc(100vh - 300px)' : 'calc(100vh - 170px)'
             }}
           >
-            <h2>ملاحظات</h2>
+            <h2><FormattedMessage id="edit_article_page-comments" /></h2>
             <div>{initialNote}</div>
             <div className={style.scroll}>
               {notesData?.notes?.map(({ text }, index) => (
@@ -117,13 +119,12 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
             {isNoteEditAllow ? (
               <div className="autocomplete-container" style={{ width: '100%' }}>
                 <label>
-                  <span className={style.addNote}>اضافة ملاحظه</span>
+                  <span className={style.addNote}><FormattedMessage id="edit_article_page-comments-adding-comment-title" /></span>
                   <textarea
                     rows={5}
                     cols={40}
                     value={note}
-                    placeholder={`هل لديك ملاحظه؟
-هل لديك تصنيفات جديدة لاقتراحها؟`}
+                    placeholder={intl.formatMessage({ id: 'edit_article_page-comments-hint' })}
                     onChange={(e) => setNote(e.target.value)}
                   />
                 </label>
@@ -134,7 +135,7 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
                   onClick={updateOverlayNote}
                   style={{ margin: 'auto', marginTop: '20px' }}
                 >
-                  تعديل
+                  <FormattedMessage id="general_text-submit" />
                 </Button>
               </div>
             ) : (
@@ -144,7 +145,7 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
         </Tabs.TabPane>
 
         {/* Main panel */}
-        <Tabs.TabPane tab="المحتوى" key="2">
+        <Tabs.TabPane tab={intl.formatMessage({ id: 'edit_article_page-content' })} key="2">
           {user.role === 'admin' ? (
             <Flex style={{ direction: 'ltr', padding: '20px 10px' }}>
               <Space style={{ direction: 'ltr', fontSize: '20px' }}>

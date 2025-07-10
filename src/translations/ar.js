@@ -71,6 +71,10 @@ const ar = {
   'edit_article_page_side_bar_form-close-for-edit':'أغلق المقالة للتعديلات',
   'edit_article_page_side_bar_form-keep-open-for-edit':'إبقاء مفتوحة للتعديلات',
   'edit_article_page_side_bar_form-ready-for-review':'جاهزة للمراجعة',
+  'edit_article_page-comments': 'ملاحظات',
+  'edit_article_page-content': 'المحتوى',
+  'edit_article_page-comments-adding-comment-title':'اضافة ملاحظة',
+  'edit_article_page-comments-hint': 'هل لديك ملاحظه؟ هل لديك تصنيفات جديدة لاقتراحها؟',
   'bread_crumb-home':'الصفحة الرئيسية',
 }
 

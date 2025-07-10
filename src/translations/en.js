@@ -71,6 +71,10 @@ const en = {
   'edit_article_page_side_bar_form-close-for-edit':'Close for edits',
   'edit_article_page_side_bar_form-keep-open-for-edit':'Keep open for edits',
   'edit_article_page_side_bar_form-ready-for-review':'Ready for review',
+  'edit_article_page-comments': 'Comments',
+  'edit_article_page-content': 'Content',
+  'edit_article_page-comments-adding-comment-title':'Adding comment',
+  'edit_article_page-comments-hint': 'Do you have a comment? Do you have new categories to suggest?',
   'bread_crumb-home':'Home',
 }
 
