@@ -36,6 +36,7 @@ const ar = {
   'calendar_months-november': 'تشرين ثاني',
   'calendar_months-december': 'كانون الأول',
   'calendar_months-number-of-documents': 'عدد الملفات: ',
+  'calendar_open-file-error-not-registered-user': 'الملفات متاحة للمستخدمين المسجّلين فقط.',
   'user_sign_in-title': 'تسجيل الدخول',
   'user_sign_in-sign-in': 'دخول',
   'user_sign_in-forget-password': 'نسيت كلمة المرور؟',

@@ -1,4 +1,3 @@
-import React, { Suspense } from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { IUser } from 'types'

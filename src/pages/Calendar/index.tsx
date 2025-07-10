@@ -6,6 +6,8 @@ import { INewspaperParams, IRandomKeys } from 'types'
 import { Breadcrumb } from 'antd'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { useRecoilValue } from 'recoil'
+import { IUser } from 'types'
+import { userAtom } from 'utils/recoil/atoms'
 import { languageAtom } from 'utils/recoil/atoms'
 
 interface INewspaperDay {
@@ -21,6 +23,8 @@ function Calendar_() {
   let { categoryId, year, month } = useParams<INewspaperParams>()
   const [publishedDays, setPublishedDays] = useState([])
   const [breadcrumbs, setBreadcrumbs] = useState([])
+  const user = useRecoilValue<IUser>(userAtom)
+  const isAuthenticated = !!user.id
 
 
   const monthsIntl = {
@@ -133,8 +137,10 @@ function Calendar_() {
         onClickDay={(value) => {
           const newspaperDay: INewspaperDay | any = publishedDays.find(({ day }) => +day === value.getDate())
 
-          if (newspaperDay) {
+          if (newspaperDay && isAuthenticated) {
             history.push(`/view/newspaper/${newspaperDay.id}`)
+          }else if (newspaperDay && !isAuthenticated) {
+            alert(intl.formatMessage({ id: 'calendar_open-file-error-not-registered-user'}));
           }
         }}
         tileClassName="day-tile"

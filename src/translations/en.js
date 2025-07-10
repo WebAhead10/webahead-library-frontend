@@ -36,6 +36,7 @@ const en = {
   'calendar_months-november': 'November',
   'calendar_months-december': 'December',
   'calendar_months-number-of-documents': 'Number of documents: ',
+  'calendar_open-file-error-not-registered-user': 'The files are viewable for registered users only.',
   'user_sign_in-title': 'Sign In',
   'user_sign_in-sign-in': 'Sign In',
   'user_sign_in-forget-password': 'Forget Password?',
