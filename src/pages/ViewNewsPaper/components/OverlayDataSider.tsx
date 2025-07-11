@@ -41,6 +41,8 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
 
   const { data: tags } = useTags()
 
+  const lang = localStorage.getItem('language') || 'en'
+
   useEffect(() => {
     setText(textData?.content)
   }, [textData])
@@ -94,7 +96,7 @@ const OverlayDataSider = ({ overlayId, close, documentId }: OverlayDataSiderProp
 
   return (
     <div className={style.showTextDiv}>
-      <div className={style.closeButton} onClick={() => close()} style={{ cursor: 'pointer', zIndex: 2 }}>
+      <div className={style.closeButton} onClick={() => close()} style={{ cursor: 'pointer', zIndex: 2, paddingLeft: lang === 'en' ? '950px' : undefined  }}>
         <CloseCircleFilled style={{ fontSize: '35px' }} />
       </div>
 
