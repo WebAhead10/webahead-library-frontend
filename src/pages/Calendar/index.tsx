@@ -25,6 +25,8 @@ function Calendar_() {
   const [breadcrumbs, setBreadcrumbs] = useState([])
   const user = useRecoilValue<IUser>(userAtom)
   const isAuthenticated = !!user.id
+  const userIsGuest =
+    user.role !== 'contributor' &&  user.role !== 'admin'
 
 
   const monthsIntl = {
@@ -137,9 +139,9 @@ function Calendar_() {
         onClickDay={(value) => {
           const newspaperDay: INewspaperDay | any = publishedDays.find(({ day }) => +day === value.getDate())
 
-          if (newspaperDay && isAuthenticated) {
+          if (newspaperDay && isAuthenticated && !userIsGuest) {
             history.push(`/view/newspaper/${newspaperDay.id}`)
-          }else if (newspaperDay && !isAuthenticated) {
+          }else if (newspaperDay && (!isAuthenticated || userIsGuest)) {
             alert(intl.formatMessage({ id: 'calendar_open-file-error-not-registered-user'}));
           }
         }}
